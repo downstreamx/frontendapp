@@ -224,7 +224,9 @@ export function ResourceIndexPage({
                 : undefined
             }
             onDelete={
-              (supportsMutations || editPath) && row.id != null
+              (supportsMutations || editPath) &&
+              row.id != null &&
+              !Boolean(row.is_system)
                 ? () => setDeleteId(Number(row.id))
                 : undefined
             }

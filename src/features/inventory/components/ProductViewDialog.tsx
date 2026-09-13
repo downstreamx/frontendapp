@@ -39,18 +39,20 @@ export function ProductViewDialog({ productId, open, onOpenChange, onEdit, onDel
     auth.user?.type,
     'edit-product-service-item',
   )
-  const canDelete = hasPermission(
-    auth.permissions,
-    auth.roles,
-    auth.user?.type,
-    'delete-product-service-item',
-  )
 
   const { data: product, isLoading, error } = useQuery({
     queryKey: ['product', productId],
     queryFn: () => getProduct(productId!),
     enabled: open && productId != null,
   })
+
+  const canDelete =
+    hasPermission(
+      auth.permissions,
+      auth.roles,
+      auth.user?.type,
+      'delete-product-service-item',
+    ) && !product?.is_system
 
   const { deleteState, openDeleteDialog, closeDeleteDialog, confirmDelete, isDeleting } =
     useDeleteHandler({

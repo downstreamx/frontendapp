@@ -270,13 +270,16 @@ export function ProductsIndexPage() {
           deletePermission="delete-product-service-item"
           onView={() => openView(row)}
           onEdit={() => navigate(paths.inventory.productEdit(row.id))}
-          onDelete={() =>
-            openDeleteDialog(
-              row.id,
-              t('Are you sure you want to delete "{{name}}"? This action cannot be undone.', {
-                name: row.name,
-              }),
-            )
+          onDelete={
+            row.is_system
+              ? undefined
+              : () =>
+                  openDeleteDialog(
+                    row.id,
+                    t('Are you sure you want to delete "{{name}}"? This action cannot be undone.', {
+                      name: row.name,
+                    }),
+                  )
           }
         />
       ),

@@ -30,6 +30,7 @@ import { getApiErrorMessage } from '@/lib/errors'
 import { usePageChromeState } from '@/contexts/page-chrome-context'
 import { cn } from '@/lib/utils'
 import { leaveImpersonation } from '@/features/admin/admin-api'
+import { queryKeys } from '@/lib/query-keys'
 
 function LayoutChrome() {
   const pageChrome = usePageChromeState()
@@ -50,7 +51,10 @@ function LayoutChrome() {
     mutationFn: leaveImpersonation,
     onSuccess: (result) => {
       setAuthToken(result.token)
-      queryClient.setQueryData(['me'], result.me)
+      queryClient.setQueryData(queryKeys.auth.me(), {
+        ...result.me,
+        impersonating: false,
+      })
       toast.success(t('Returned to your account'))
     },
     onError: (error) => toast.error(getApiErrorMessage(error, t('Failed to leave impersonation'))),

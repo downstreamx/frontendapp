@@ -34,6 +34,7 @@ import { SubscribePlanPage } from '@/features/plans/pages/SubscribePlanPage'
 import { OrderShowPage } from '@/features/orders/pages/OrderShowPage'
 import { BankTransferPaymentsIndexPage } from '@/features/bank-transfer/pages/BankTransferPaymentsIndexPage'
 import { BillingOverviewPage } from '@/features/billing/pages/BillingOverviewPage'
+import { CompanyProvisioningAdminPage } from '@/features/admin/pages/CompanyProvisioningAdminPage'
 
 export const platformRoutes = (
   <>
@@ -42,6 +43,7 @@ export const platformRoutes = (
     <Route path={paths.users.index} element={<UsersIndexPage />} />
     <Route path={paths.users.create} element={<Navigate to={paths.users.index} replace />} />
     <Route path="/users/:id/edit" element={<Navigate to={paths.users.index} replace />} />
+    <Route path="/users/:userId/provisioning" element={<CompanyProvisioningAdminPage />} />
     <Route path="/users/:id/change-password" element={<UserChangePasswordPage />} />
     <Route path={paths.users.loginHistory} element={<UserLoginHistoryPage />} />
     <Route path={paths.roles.index} element={<RolesIndexPage />} />

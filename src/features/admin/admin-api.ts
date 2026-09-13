@@ -12,8 +12,10 @@ export type UserListRow = PersonNameFields & {
   mobile_no: string | null
   type: string
   avatar: string | null
+  company_id?: number | null
   company_name?: string
   company_logo?: string | null
+  needs_provisioning?: boolean
   is_enable_login: boolean
   is_disable: boolean
 }
@@ -168,7 +170,9 @@ export async function createUser(payload: PersonNameFields & {
   company_state?: string
   company_country?: string
 }) {
-  const { data } = await api.post<ApiSuccess<{ id: number }>>('/users', payload)
+  const { data } = await api.post<
+    ApiSuccess<{ id: number; company_id?: number | null; needs_provisioning?: boolean }>
+  >('/users', payload)
   return data.data
 }
 

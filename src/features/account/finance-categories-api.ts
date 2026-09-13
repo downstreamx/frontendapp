@@ -7,6 +7,7 @@ export type FinanceCategory = {
   category_code: string
   description?: string | null
   is_active: boolean
+  is_system?: boolean
   gl_account_id?: number | null
   gl_account?: { id: number; account_code: string; account_name: string } | null
 }

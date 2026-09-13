@@ -13,7 +13,7 @@ import InputError from '@/components/ui/input-error'
 import { AuthLayout } from '@/layouts/auth-layout'
 import { useLoginMutation } from '../hooks'
 import { paths } from '@/lib/paths'
-import { resolveDefaultLandingPath } from '@/lib/resolve-default-landing-path'
+import { resolvePostAuthPath } from '@/lib/resolve-post-auth-path'
 import { useAppContext } from '@/contexts/app-context'
 import { isDemoEnvironment } from '@/lib/brand-defaults'
 import { getApiErrorMessage } from '@/lib/errors'
@@ -87,7 +87,7 @@ export function LoginPage() {
   const submitLogin = async (values: FormValues) => {
     try {
       const { me } = await loginMutation.mutateAsync(values)
-      navigate(resolveDefaultLandingPath(me))
+      navigate(resolvePostAuthPath(me))
     } catch {
       // Error surfaced via loginMutation.isError / apiError
     }
@@ -105,7 +105,7 @@ export function LoginPage() {
         password,
         remember: form.getValues('remember'),
       })
-      navigate(resolveDefaultLandingPath(me))
+      navigate(resolvePostAuthPath(me))
     } finally {
       setQuickLoading(null)
     }

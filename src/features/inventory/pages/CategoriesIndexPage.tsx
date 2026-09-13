@@ -26,6 +26,7 @@ export type ProductCategory = {
   id: number
   name: string
   color?: string
+  is_system?: boolean
 }
 
 const LIST_KEY = 'product-service/categories'
@@ -164,7 +165,7 @@ export function CategoriesIndexPage() {
                 </TooltipContent>
               </Tooltip>
             ) : null}
-            {mayDelete ? (
+            {mayDelete && !row.is_system ? (
               <Tooltip delayDuration={0}>
                 <TooltipTrigger asChild>
                   <Button

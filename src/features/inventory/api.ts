@@ -49,6 +49,7 @@ export type ProductItem = {
   images?: string[] | string
   type?: string
   is_active?: boolean
+  is_system?: boolean
   created_at?: string
   updated_at?: string
   category?: { id: number; name: string }

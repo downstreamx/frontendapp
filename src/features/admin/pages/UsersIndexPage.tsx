@@ -9,6 +9,7 @@ import {
   Key,
   Lock,
   Plus,
+  Settings2,
   Trash2,
   User as UserIcon,
   UserCheck,
@@ -47,6 +48,8 @@ import { useListToolbar } from '@/hooks/use-list-toolbar'
 import { getApiErrorMessage } from '@/lib/errors'
 import { setAuthToken } from '@/lib/api'
 import { paths } from '@/lib/paths'
+import { queryKeys } from '@/lib/query-keys'
+import { resolvePostAuthPath } from '@/lib/resolve-post-auth-path'
 import { TableAvatarMedia, UserAvatar } from '@/features/shared/components/table-avatar-cells'
 import {
   createUser,
@@ -247,9 +250,12 @@ export function UsersIndexPage() {
     mutationFn: impersonateUser,
     onSuccess: (result) => {
       setAuthToken(result.token)
-      queryClient.setQueryData(['me'], result.me)
+      queryClient.setQueryData(queryKeys.auth.me(), {
+        ...result.me,
+        impersonating: true,
+      })
       toast.success(t('You are now login as user :name', { name: result.me.user.name }))
-      navigate(paths.dashboard)
+      navigate(resolvePostAuthPath(result.me), { replace: true })
     },
     onError: (err) => toast.error(getApiErrorMessage(err, t('Failed to impersonate user'))),
   })
@@ -301,14 +307,26 @@ export function UsersIndexPage() {
       }
       return createUser(payload)
     },
-    onSuccess: () => {
+    onSuccess: (result) => {
       toast.success(
         isEdit
           ? t('The user details are updated successfully.')
-          : t('The user has been created successfully.'),
+          : companiesContext
+            ? t('Company created. Continuing setup…')
+            : t('The user has been created successfully.'),
       )
       void queryClient.invalidateQueries({ queryKey: ['users'] })
       closeUserDialog()
+      if (
+        !isEdit &&
+        companiesContext &&
+        result &&
+        'company_id' in result &&
+        result.company_id != null &&
+        result.needs_provisioning
+      ) {
+        navigate(paths.users.provisioning(result.id, result.company_id))
+      }
     },
     onError: (error) =>
       toast.error(
@@ -424,6 +442,24 @@ export function UsersIndexPage() {
 
     return (
       <div className="flex gap-1">
+        {companiesContext && row.needs_provisioning && row.company_id != null ? (
+          <Tooltip delayDuration={0}>
+            <TooltipTrigger asChild>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                className="h-8 w-8 p-0 text-emerald-700 hover:text-emerald-800"
+                onClick={() => navigate(paths.users.provisioning(row.id, row.company_id!))}
+              >
+                <Settings2 className="h-4 w-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{t('Continue setup')}</p>
+            </TooltipContent>
+          </Tooltip>
+        ) : null}
         {canImpersonate && row.id !== auth.user?.id ? (
           <Tooltip delayDuration={0}>
             <TooltipTrigger asChild>

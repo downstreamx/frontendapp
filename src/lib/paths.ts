@@ -2,6 +2,8 @@ export const paths = {
   home: '/',
   login: '/login',
   register: '/register',
+  onboardingProvisioning: '/onboarding/provisioning',
+  accountBeingPrepared: '/onboarding/account-preparing',
   forgotPassword: '/forgot-password',
   resetPassword: '/reset-password',
   careers: '/careers',
@@ -22,6 +24,8 @@ export const paths = {
     index: '/users',
     create: '/users/create',
     edit: (id: string | number) => `/users/${id}/edit`,
+    provisioning: (id: string | number, companyId: string | number) =>
+      `/users/${id}/provisioning?company_id=${companyId}`,
     changePassword: (id: string | number) => `/users/${id}/change-password`,
     loginHistory: '/users/login-history',
   },

@@ -13,6 +13,7 @@ export type Depot = {
   phone?: string | null
   email?: string | null
   is_active: boolean
+  is_system?: boolean
 }
 
 export type DepotProductStock = {

@@ -2,7 +2,7 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import { DefaultLandingRedirect } from '@/components/default-landing-redirect'
 import { paths } from '@/lib/paths'
 import { LoginPage } from '@/features/auth/pages/LoginPage'
-import { RegisterPage } from '@/features/auth/pages/RegisterPage'
+import { AccountBeingPreparedPage } from '@/features/auth/pages/AccountBeingPreparedPage'
 import { ForgotPasswordPage } from '@/features/auth/pages/ForgotPasswordPage'
 import { ResetPasswordPage } from '@/features/auth/pages/ResetPasswordPage'
 import { AuthenticatedShell } from '@/routes/AuthenticatedShell'
@@ -48,7 +48,7 @@ export function AppRoutes() {
     <Routes>
       <Route element={<GuestShell />}>
         <Route path={paths.login} element={<LoginPage />} />
-        <Route path={paths.register} element={<RegisterPage />} />
+        <Route path={paths.register} element={<Navigate to={paths.login} replace />} />
         <Route path={paths.forgotPassword} element={<ForgotPasswordPage />} />
         <Route path={paths.resetPassword} element={<ResetPasswordPage />} />
       </Route>
@@ -56,6 +56,8 @@ export function AppRoutes() {
       {publicCareerRoutes}
 
       <Route element={<ProtectedRoute />}>
+        <Route path={paths.accountBeingPrepared} element={<AccountBeingPreparedPage />} />
+        <Route path={paths.onboardingProvisioning} element={<Navigate to={paths.accountBeingPrepared} replace />} />
         <Route element={<AuthenticatedShell />}>
           <Route path={paths.dashboard} element={<DashboardPage />} />
           {dashboardRoutes}

@@ -26,6 +26,7 @@ export type ProductTax = {
   id: number
   tax_name: string
   rate: number | string
+  is_system?: boolean
 }
 
 const LIST_KEY = 'product-service/taxes'
@@ -169,7 +170,7 @@ export function TaxesIndexPage() {
                 </TooltipContent>
               </Tooltip>
             ) : null}
-            {mayDelete ? (
+            {mayDelete && !row.is_system ? (
               <Tooltip delayDuration={0}>
                 <TooltipTrigger asChild>
                   <Button

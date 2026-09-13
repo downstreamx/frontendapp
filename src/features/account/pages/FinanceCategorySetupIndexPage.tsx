@@ -141,7 +141,7 @@ export function FinanceCategorySetupIndexPage({ kind }: Props) {
                 </TooltipContent>
               </Tooltip>
             ) : null}
-            {canDelete ? (
+            {canDelete && !row.is_system ? (
               <Tooltip delayDuration={0}>
                 <TooltipTrigger asChild>
                   <Button

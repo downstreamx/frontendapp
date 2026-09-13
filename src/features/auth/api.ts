@@ -20,11 +20,18 @@ export type MePayload = {
     avatar?: string | null
     lang?: string
     permissions?: string[]
+    welcome_completed?: boolean
   }
   roles: string[]
   permissions: string[]
   activated_modules?: string[]
-  company?: { id: number; name: string; slug: string }
+  company?: {
+    id: number
+    name: string
+    slug: string
+    needs_provisioning?: boolean
+    provisioned_at?: string | null
+  }
   company_settings?: Record<string, string>
   admin_settings?: Record<string, string>
   image_url_prefix?: string
@@ -63,16 +70,10 @@ export async function fetchMe() {
   return data.data
 }
 
-export async function register(payload: PersonNameFields & {
-  email: string
-  password: string
-  password_confirmation: string
-}) {
-  const { data } = await api.post<ApiSuccess<{ token: string; me: MePayload }>>('/auth/register', {
-    ...payload,
-    device_name: 'spa',
-  })
-  setAuthToken(data.data.token)
+export async function completeWelcome() {
+  const { data } = await api.post<ApiSuccess<{ welcome_completed: boolean }>>(
+    '/auth/welcome/complete',
+  )
   return data.data
 }
 

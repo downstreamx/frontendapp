@@ -25,6 +25,7 @@ import { hasPermission } from '@/lib/permissions'
 export type ProductUnit = {
   id: number
   unit_name: string
+  is_system?: boolean
 }
 
 const LIST_KEY = 'product-service/units'
@@ -151,7 +152,7 @@ export function UnitsIndexPage() {
                 </TooltipContent>
               </Tooltip>
             ) : null}
-            {mayDelete ? (
+            {mayDelete && !row.is_system ? (
               <Tooltip delayDuration={0}>
                 <TooltipTrigger asChild>
                   <Button
