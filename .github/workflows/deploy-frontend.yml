@@ -1,0 +1,119 @@
+name: Deploy Frontend
+
+# Production SPA: https://app.downstreamx.com
+# Staging SPA:    https://staging.downstreamx.com
+
+on:
+  push:
+    branches: [main, staging]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-frontend-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build (production → app.downstreamx.com)
+        if: github.ref_name == 'main'
+        env:
+          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL_PROD }}
+          VITE_APP_NAME: ${{ secrets.VITE_APP_NAME_PROD }}
+        run: |
+          echo "Building production SPA for https://app.downstreamx.com"
+          echo "API base: ${VITE_API_BASE_URL}"
+          npm run build
+          ls -la dist/
+          find dist -type f | wc -l
+
+      - name: Build (staging → staging.downstreamx.com)
+        if: github.ref_name == 'staging'
+        env:
+          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL_STAGING }}
+          VITE_APP_NAME: ${{ secrets.VITE_APP_NAME_STAGING }}
+        run: |
+          echo "Building staging SPA for https://staging.downstreamx.com"
+          echo "API base: ${VITE_API_BASE_URL}"
+          npm run build
+          ls -la dist/
+          find dist -type f | wc -l
+
+      - name: Validate production FTP settings
+        if: github.ref_name == 'main'
+        env:
+          FTP_HOST: ${{ secrets.FTP_HOST_PROD }}
+          FTP_USER: ${{ secrets.FTP_USERNAME_PROD }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD_PROD }}
+          FTP_PORT: ${{ secrets.FTP_PORT_PROD || '21' }}
+          FTP_PROTOCOL: ${{ secrets.FTP_PROTOCOL_PROD || 'ftp' }}
+          FTP_SERVER_DIR: ${{ secrets.FTP_SERVER_DIR_PROD || '/public_html/' }}
+        run: |
+          if [ -z "$FTP_HOST" ]; then echo "::error::Missing FTP_HOST_PROD"; exit 1; fi
+          if [ -z "$FTP_USER" ]; then echo "::error::Missing FTP_USERNAME_PROD"; exit 1; fi
+          if [ -z "$FTP_PASSWORD" ]; then echo "::error::Missing FTP_PASSWORD_PROD"; exit 1; fi
+          echo "Production deploy target: https://app.downstreamx.com"
+          echo "FTP host=$FTP_HOST port=$FTP_PORT protocol=$FTP_PROTOCOL dir=$FTP_SERVER_DIR"
+
+      - name: Validate staging FTP settings
+        if: github.ref_name == 'staging'
+        env:
+          FTP_HOST: ${{ secrets.FTP_HOST_STAGING }}
+          FTP_USER: ${{ secrets.FTP_USERNAME_STAGING }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD_STAGING }}
+          FTP_PORT: ${{ secrets.FTP_PORT_STAGING || '21' }}
+          FTP_PROTOCOL: ${{ secrets.FTP_PROTOCOL_STAGING || 'ftp' }}
+          FTP_SERVER_DIR: ${{ secrets.FTP_SERVER_DIR_STAGING || '/public_html/' }}
+        run: |
+          if [ -z "$FTP_HOST" ]; then echo "::error::Missing FTP_HOST_STAGING"; exit 1; fi
+          if [ -z "$FTP_USER" ]; then echo "::error::Missing FTP_USERNAME_STAGING"; exit 1; fi
+          if [ -z "$FTP_PASSWORD" ]; then echo "::error::Missing FTP_PASSWORD_STAGING"; exit 1; fi
+          echo "Staging deploy target: https://staging.downstreamx.com"
+          echo "FTP host=$FTP_HOST port=$FTP_PORT protocol=$FTP_PROTOCOL dir=$FTP_SERVER_DIR"
+
+      - name: Deploy production via FTP (app.downstreamx.com)
+        if: github.ref_name == 'main'
+        uses: SamKirkland/FTP-Deploy-Action@v4.4.0
+        with:
+          server: ${{ secrets.FTP_HOST_PROD }}
+          username: ${{ secrets.FTP_USERNAME_PROD }}
+          password: ${{ secrets.FTP_PASSWORD_PROD }}
+          port: ${{ secrets.FTP_PORT_PROD || 21 }}
+          protocol: ${{ secrets.FTP_PROTOCOL_PROD || 'ftp' }}
+          security: loose
+          timeout: 120000
+          local-dir: ./dist/
+          server-dir: ${{ secrets.FTP_SERVER_DIR_PROD || '/public_html/' }}
+          dangerous-clean-slate: false
+          log-level: verbose
+
+      - name: Deploy staging via FTP (staging.downstreamx.com)
+        if: github.ref_name == 'staging'
+        uses: SamKirkland/FTP-Deploy-Action@v4.4.0
+        with:
+          server: ${{ secrets.FTP_HOST_STAGING }}
+          username: ${{ secrets.FTP_USERNAME_STAGING }}
+          password: ${{ secrets.FTP_PASSWORD_STAGING }}
+          port: ${{ secrets.FTP_PORT_STAGING || 21 }}
+          protocol: ${{ secrets.FTP_PROTOCOL_STAGING || 'ftp' }}
+          security: loose
+          timeout: 120000
+          local-dir: ./dist/
+          server-dir: ${{ secrets.FTP_SERVER_DIR_STAGING || '/public_html/' }}
+          dangerous-clean-slate: false
+          log-level: verbose
