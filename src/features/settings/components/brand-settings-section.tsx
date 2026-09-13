@@ -44,10 +44,10 @@ function buildInitial(userSettings: Record<string, string>): BrandSettings {
     logo_dark: userSettings.logo_dark || '',
     logo_light: userSettings.logo_light || '',
     favicon: userSettings.favicon || '',
-    titleText: userSettings.titleText || 'WorkDo',
+    titleText: userSettings.titleText || 'DownstreamX',
     footerText:
       userSettings.footerText ||
-      `© ${new Date().getFullYear()} WorkDo. All rights reserved.`,
+      `© ${new Date().getFullYear()} DownstreamX. All rights reserved.`,
     sidebarVariant: userSettings.sidebarVariant || 'inset',
     sidebarStyle: userSettings.sidebarStyle || 'plain',
     navigationLayout: userSettings.navigationLayout || 'mega-menu',
@@ -268,7 +268,7 @@ export function BrandSettingsSection() {
                       name="titleText"
                       value={settings.titleText}
                       onChange={handleInputChange}
-                      placeholder="WorkDo"
+                      placeholder="DownstreamX"
                       disabled={!canEditSection}
                     />
                     <p className="text-xs text-muted-foreground">
@@ -283,7 +283,7 @@ export function BrandSettingsSection() {
                       value={settings.footerText}
                       onChange={handleInputChange}
                       placeholder={t(
-                        `© ${new Date().getFullYear()} WorkDo. All rights reserved.`,
+                        `© ${new Date().getFullYear()} DownstreamX. All rights reserved.`,
                       )}
                       disabled={!canEditSection}
                     />

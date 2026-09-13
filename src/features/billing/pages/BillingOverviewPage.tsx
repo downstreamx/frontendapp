@@ -32,7 +32,7 @@ const links = [
   },
   {
     title: 'Modules',
-    description: 'Activate or deactivate Workdo modules',
+    description: 'Activate or deactivate DownstreamX modules',
     href: paths.modules,
     icon: Package,
   },

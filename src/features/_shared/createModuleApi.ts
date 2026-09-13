@@ -1,6 +1,6 @@
 import { api, type ApiSuccess } from '@/lib/api'
 
-/** Shared TanStack Query helpers for Workdo module REST endpoints. */
+/** Shared TanStack Query helpers for Downstreamx module REST endpoints. */
 export function createModuleListQuery<T>(path: string, queryKey: string[]) {
   return {
     queryKey,

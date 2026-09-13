@@ -126,8 +126,8 @@ const getImagePath = (path: string, pageProps?: any): string => {
   if (!path || typeof path !== 'string') return '';
   if (path.startsWith('http')) return path;
 
-  // If path already contains storage/media, just prepend domain (unless it's workdo path)
-  if (path.includes('storage/media') && !path.includes('packages/workdo/')) {
+  // If path already contains storage/media, just prepend domain (unless it's a package media path)
+  if (path.includes('storage/media') && !path.includes('packages/downstreamx/') && !path.includes('packages/workdo/')) {
     return path.startsWith('/') ? `${window.location.origin}${path}` : `${window.location.origin}/${path}`;
   }
 
@@ -147,10 +147,13 @@ const getImagePath = (path: string, pageProps?: any): string => {
     if (!imageUrlPrefix.includes('storage/media')) {
       imageUrlPrefix = imageUrlPrefix.endsWith('/') ? imageUrlPrefix + 'storage/media/' : imageUrlPrefix + '/storage/media/';
     }
-    // Detect workdo path
-    const isWorkdoPath = path.startsWith('packages/workdo/') || path.startsWith('/packages/workdo/');
+    const isPackagePath =
+      path.startsWith('packages/downstreamx/') ||
+      path.startsWith('/packages/downstreamx/') ||
+      path.startsWith('packages/workdo/') ||
+      path.startsWith('/packages/workdo/');
 
-    if (isWorkdoPath) {
+    if (isPackagePath) {
       // Strip storage/media if present in prefix
       imageUrlPrefix = imageUrlPrefix.replace(/\/?storage\/media\/?$/, '');
     } else if (!imageUrlPrefix.includes('storage/media')) {
@@ -171,13 +174,17 @@ const getImagePath = (path: string, pageProps?: any): string => {
     }
   } catch {
     let fallbackPrefix;
-    const isWorkdoPath = path.startsWith('packages/workdo/') || path.startsWith('/packages/workdo/');
+    const isPackagePath =
+      path.startsWith('packages/downstreamx/') ||
+      path.startsWith('/packages/downstreamx/') ||
+      path.startsWith('packages/workdo/') ||
+      path.startsWith('/packages/workdo/');
 
     // Split path and drop the last segment (current page)
     const segments = window.location.pathname.split('/').filter(Boolean);
     const basePath = segments.slice(0, -1).join('/'); // everything except the last part
 
-    if (isWorkdoPath) {
+    if (isPackagePath) {
       fallbackPrefix = `${window.location.origin}/${basePath}/`;
     } else {
       fallbackPrefix = `${window.location.origin}/${basePath}/storage/media/`;

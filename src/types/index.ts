@@ -20,7 +20,7 @@ export interface NavItem {
   parent?: string
   name?: string
   order?: number
-  /** Workdo module names — section hidden unless at least one is in activated_modules */
+  /** Downstreamx module names — section hidden unless at least one is in activated_modules */
   modules?: string[]
   /** Mega menu column header when children are flat leaves */
   megaMenuGroup?: string

@@ -44,7 +44,7 @@ for (const mod of fs.readdirSync(legacyWorkdo)) {
     if (!fs.existsSync(dest)) {
       fs.writeFileSync(
         dest,
-        `/** Ported from Workdo/${mod} */\nexport default function Placeholder() { return <div>${mod}/${rel}</motion.div> }\n`,
+        `/** Ported from Downstreamx/${mod} */\nexport default function Placeholder() { return <div>${mod}/${rel}</motion.div> }\n`,
       )
       count++
     }

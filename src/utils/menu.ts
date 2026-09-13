@@ -47,7 +47,7 @@ const getCustomMenuItems = (_userRoles: string[], customMenus: unknown[], t: (ke
 }
 
 /**
- * Hide optional Workdo sections when the module is not activated for the company.
+ * Hide optional Downstreamx sections when the module is not activated for the company.
  * Core petroleum sections (dashboard, depots, users, settings) have no `modules` key.
  */
 export function filterByActiveModules(items: NavItem[], activatedModules: string[]): NavItem[] {

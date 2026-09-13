@@ -27,10 +27,16 @@ export function normalizeSelectedMediaPath(url: string): string {
   return path
 }
 
-function buildStorageMediaBase(prefix: string, isWorkdo = false): string {
+function isPackageMediaPath(mediaPath: string): boolean {
+  const relative = mediaPath.replace(/^\//, '')
+
+  return relative.startsWith('packages/downstreamx/') || relative.startsWith('packages/workdo/')
+}
+
+function buildStorageMediaBase(prefix: string, isPackagePath = false): string {
   const normalized = prefix.endsWith('/') ? prefix : `${prefix}/`
 
-  if (isWorkdo) {
+  if (isPackagePath) {
     return normalized.replace(/\/?storage\/media\/?$/, '').replace(/\/?storage\/?$/, '')
   }
 
@@ -101,7 +107,7 @@ export function resolveMediaUrl(path: string, imageUrlPrefix?: string): string {
   if (path.startsWith('http://') || path.startsWith('https://')) {
     return path.includes('/storage/') ? rewriteStorageUrl(path, imageUrlPrefix) : path
   }
-  const isWorkdo = path.startsWith('packages/workdo/') || path.startsWith('/packages/workdo/')
+  const isPackagePath = isPackageMediaPath(path)
 
   if (path.includes('storage/media') || path.startsWith('/storage/')) {
     if (prefix.startsWith('http')) {
@@ -122,13 +128,13 @@ export function resolveMediaUrl(path: string, imageUrlPrefix?: string): string {
   }
 
   let relativePath = path.replace(/^\//, '')
-  if (!isWorkdo && relativePath.startsWith('media/')) {
+  if (!isPackagePath && relativePath.startsWith('media/')) {
     relativePath = relativePath.slice('media/'.length)
-  } else if (!isWorkdo && relativePath.includes('/')) {
+  } else if (!isPackagePath && relativePath.includes('/')) {
     relativePath = relativePath.split('/').pop() ?? relativePath
   }
 
-  const base = buildStorageMediaBase(prefix, isWorkdo)
+  const base = buildStorageMediaBase(prefix, isPackagePath)
   const joined = base.endsWith('/') ? `${base}${relativePath}` : `${base}/${relativePath}`
 
   if (prefix.startsWith('http')) {
@@ -137,7 +143,7 @@ export function resolveMediaUrl(path: string, imageUrlPrefix?: string): string {
 
   const apiPrefix = getApiStoragePrefix()
   if (apiPrefix.startsWith('http')) {
-    const apiBase = buildStorageMediaBase(apiPrefix, isWorkdo)
+    const apiBase = buildStorageMediaBase(apiPrefix, isPackagePath)
     const apiJoined = apiBase.endsWith('/') ? `${apiBase}${relativePath}` : `${apiBase}/${relativePath}`
     return collapseSlashes(apiJoined)
   }

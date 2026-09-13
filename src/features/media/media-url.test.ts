@@ -40,6 +40,20 @@ describe('resolveMediaUrl', () => {
 
     vi.unstubAllEnvs()
   })
+
+  it('resolves current packages/downstreamx media paths against the API origin', () => {
+    expect(
+      resolveMediaUrl('packages/downstreamx/Account/src/Resources/assets/logo.png', apiPrefix),
+    ).toBe(
+      'https://api.downstreamx.local/packages/downstreamx/Account/src/Resources/assets/logo.png',
+    )
+  })
+
+  it('still resolves stored packages/workdo media paths against the API origin', () => {
+    expect(
+      resolveMediaUrl('packages/workdo/Account/src/Resources/assets/logo.png', apiPrefix),
+    ).toBe('https://api.downstreamx.local/packages/workdo/Account/src/Resources/assets/logo.png')
+  })
 })
 
 describe('normalizeSelectedMediaPath', () => {
