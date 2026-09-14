@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
@@ -68,6 +68,9 @@ import {
   type UserFormState,
 } from '../components/UserFormFields'
 import { CompanyProvisioningDialog } from '../components/CompanyProvisioningDialog'
+import { CompanyDeletePinDialog } from '../components/CompanyDeletePinDialog'
+import { CompanyDeletionDialog } from '../components/CompanyDeletionDialog'
+import { startAdminCompanyDeletion } from '../admin-deletion-api'
 import { toE164Mobile, toNationalMobile } from '@/lib/phone-country'
 
 type AppliedFilters = {
@@ -143,6 +146,13 @@ export function UsersIndexPage() {
   const [editingId, setEditingId] = useState<number | null>(null)
   const [form, setForm] = useState<UserFormState>(() => emptyUserForm())
   const [provisionCompanyId, setProvisionCompanyId] = useState<number | null>(null)
+  const [deletePinOpen, setDeletePinOpen] = useState(false)
+  const [pendingDeleteCompanyId, setPendingDeleteCompanyId] = useState<number | null>(null)
+  const [pendingDeleteCompanyName, setPendingDeleteCompanyName] = useState<string | null>(null)
+  const [deletionCompanyId, setDeletionCompanyId] = useState<number | null>(null)
+  const [deletionCompanyName, setDeletionCompanyName] = useState<string | null>(null)
+  const [isStartingDeletion, setIsStartingDeletion] = useState(false)
+  const advancingToDeletePinRef = useRef(false)
 
   const page = Number(searchParams.get('page') ?? '1') || 1
   const sortField = searchParams.get('sort') ?? ''
@@ -365,13 +375,69 @@ export function UsersIndexPage() {
   const { deleteState, openDeleteDialog, closeDeleteDialog, confirmDelete, isDeleting } =
     useDeleteHandler({
       routeName: 'users.destroy',
-      defaultMessage: t('Are you sure you want to delete this user?'),
+      defaultMessage: companiesContext
+        ? t('Are you sure you want to delete this company? This removes the company workspace and its data.')
+        : t('Are you sure you want to delete this user?'),
       onSuccess: () => {
-        toast.success(t('The user has been deleted.'))
+        toast.success(
+          companiesContext ? t('The company has been deleted.') : t('The user has been deleted.'),
+        )
         void queryClient.invalidateQueries({ queryKey: ['users'] })
       },
-      onError: (err) => toast.error(getApiErrorMessage(err, t('Failed to delete user'))),
+      onError: (err) =>
+        toast.error(
+          getApiErrorMessage(
+            err,
+            companiesContext ? t('Failed to delete company') : t('Failed to delete user'),
+          ),
+        ),
     })
+
+  const clearPendingDeleteCompany = () => {
+    setPendingDeleteCompanyId(null)
+    setPendingDeleteCompanyName(null)
+  }
+
+  const handleDeleteConfirm = async () => {
+    if (companiesContext) {
+      if (pendingDeleteCompanyId == null) {
+        toast.error(t('Missing company id for deletion.'))
+        closeDeleteDialog()
+        clearPendingDeleteCompany()
+        return
+      }
+      advancingToDeletePinRef.current = true
+      closeDeleteDialog()
+      window.setTimeout(() => {
+        setDeletePinOpen(true)
+        advancingToDeletePinRef.current = false
+      }, 150)
+      return
+    }
+    await confirmDelete()
+  }
+
+  const handleCompanyDeleteWithPin = async (pin: string) => {
+    if (pendingDeleteCompanyId == null) return
+    setIsStartingDeletion(true)
+    try {
+      await startAdminCompanyDeletion(pendingDeleteCompanyId, pin)
+      const companyId = pendingDeleteCompanyId
+      const companyName = pendingDeleteCompanyName
+      setDeletePinOpen(false)
+      setPendingDeleteCompanyId(null)
+      setPendingDeleteCompanyName(null)
+      window.setTimeout(() => {
+        setDeletionCompanyId(companyId)
+        setDeletionCompanyName(companyName)
+      }, 150)
+    } catch (err) {
+      toast.error(getApiErrorMessage(err, t('Failed to delete company')))
+      throw err
+    } finally {
+      setIsStartingDeletion(false)
+    }
+  }
 
   const rows = data?.rows ?? []
   const pagination = data?.meta
@@ -551,7 +617,11 @@ export function UsersIndexPage() {
                 variant="ghost"
                 size="sm"
                 className="h-8 w-8 p-0 text-destructive hover:text-destructive"
-                onClick={() => openDeleteDialog(row.id)}
+                onClick={() => {
+                  setPendingDeleteCompanyId(row.company_id ?? null)
+                  setPendingDeleteCompanyName(row.company_name ?? row.name ?? null)
+                  openDeleteDialog(row.id)
+                }}
               >
                 <Trash2 className="h-4 w-4" />
               </Button>
@@ -829,13 +899,43 @@ export function UsersIndexPage() {
 
       <ConfirmationDialog
         open={deleteState.isOpen}
-        onOpenChange={(open) => !open && closeDeleteDialog()}
-        title={t('Delete User')}
+        onOpenChange={(open) => {
+          if (!open) {
+            closeDeleteDialog()
+            if (companiesContext && !advancingToDeletePinRef.current) {
+              clearPendingDeleteCompany()
+            }
+          }
+        }}
+        title={companiesContext ? t('Delete Company') : t('Delete User')}
         message={deleteState.message}
         variant="destructive"
-        confirmText={t('Delete')}
-        onConfirm={confirmDelete}
+        confirmText={companiesContext ? t('Continue') : t('Delete')}
+        onConfirm={handleDeleteConfirm}
         loading={isDeleting}
+      />
+
+      <CompanyDeletePinDialog
+        open={deletePinOpen}
+        onOpenChange={(open) => {
+          setDeletePinOpen(open)
+          if (!open && deletionCompanyId == null) {
+            clearPendingDeleteCompany()
+          }
+        }}
+        onConfirm={handleCompanyDeleteWithPin}
+        loading={isStartingDeletion}
+      />
+
+      <CompanyDeletionDialog
+        open={deletionCompanyId != null}
+        companyId={deletionCompanyId}
+        companyName={deletionCompanyName}
+        onClose={() => {
+          setDeletionCompanyId(null)
+          setDeletionCompanyName(null)
+          void queryClient.invalidateQueries({ queryKey: ['users'] })
+        }}
       />
 
       <CompanyProvisioningDialog

@@ -4,9 +4,12 @@ import { Button } from '@/components/ui/button'
 import type { ProvisionStatus } from '@/features/admin/admin-provision-api'
 import { cn } from '@/lib/utils'
 
+type ProgressStatus = Pick<ProvisionStatus, 'steps' | 'percent' | 'done' | 'next_step' | 'completed'>
+
 type Props = {
-  status: ProvisionStatus | null
+  status: ProgressStatus | null
   currentLabel: string
+  subtitle?: string
   error?: string | null
   onRetry?: () => void
   footer?: React.ReactNode
@@ -15,6 +18,7 @@ type Props = {
 export function ProvisionProgressPanel({
   status,
   currentLabel,
+  subtitle,
   error,
   onRetry,
   footer,
@@ -22,6 +26,7 @@ export function ProvisionProgressPanel({
   const { t } = useTranslation()
   const percent = status?.percent ?? 0
   const activeStepId = status?.done ? null : status?.next_step ?? null
+  const helperText = subtitle ?? t('Setting up modules for this company workspace')
 
   return (
     <div className="space-y-8">
@@ -29,9 +34,7 @@ export function ProvisionProgressPanel({
         <div className="flex items-start justify-between gap-4">
           <div className="min-w-0 space-y-1">
             <p className="text-lg font-semibold leading-snug text-foreground">{currentLabel}</p>
-            <p className="text-sm text-muted-foreground">
-              {t('Setting up modules for this company workspace')}
-            </p>
+            <p className="text-sm text-muted-foreground">{helperText}</p>
           </div>
           <span className="shrink-0 text-base font-semibold tabular-nums text-foreground">
             {percent}%
