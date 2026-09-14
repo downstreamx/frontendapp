@@ -17,6 +17,7 @@ import {
 import { useMenuItems } from '@/utils/menu'
 import { useBrand } from '@/contexts/brand-context'
 import { route } from '@/lib/route'
+import { DEFAULT_BRAND_FAVICON_URL, DEFAULT_BRAND_LOGO_URL } from '@/lib/brand-assets'
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { t } = useTranslation()
@@ -26,8 +27,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const sidebarProps = getCompleteSidebarProps()
   const isDark = typeof document !== 'undefined' && document.documentElement.classList.contains('dark')
   const currentLogo = isDark ? settings.logo_light : settings.logo_dark
-  const displayUrl = currentLogo ? getPreviewUrl(currentLogo) : ''
-  const displayFavicon = settings.favicon ? getPreviewUrl(settings.favicon) : ''
+  const displayUrl = currentLogo ? getPreviewUrl(currentLogo) : DEFAULT_BRAND_LOGO_URL
+  const displayFavicon = settings.favicon
+    ? getPreviewUrl(settings.favicon)
+    : DEFAULT_BRAND_FAVICON_URL
 
   return (
     <Sidebar
@@ -44,22 +47,18 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <SidebarMenuButton size="lg" asChild>
               <Link to={route('dashboard')} className="flex items-center !py-4 h-auto justify-center">
                 <div className="group-data-[collapsible=icon]:hidden flex items-center">
-                  {displayUrl ? (
-                    <img src={displayUrl} alt="Logo" className="w-auto max-w-[180px] transition-all duration-200" />
-                  ) : (
-                    <div className="h-12 text-inherit font-semibold flex items-center text-lg tracking-tight">
-                      {settings.titleText || 'DownstreamX'}
-                    </div>
-                  )}
+                  <img
+                    src={displayUrl}
+                    alt={settings.titleText || 'DownstreamX'}
+                    className="w-auto max-h-12 max-w-[180px] object-contain transition-all duration-200"
+                  />
                 </div>
                 <div className="h-8 w-8 hidden group-data-[collapsible=icon]:block">
-                  {displayFavicon ? (
-                    <img src={displayFavicon} alt="Icon" className="h-8 w-8 transition-all duration-200" />
-                  ) : (
-                    <div className="h-8 w-8 bg-primary text-white rounded flex items-center justify-center font-bold shadow-sm">
-                      D
-                    </div>
-                  )}
+                  <img
+                    src={displayFavicon}
+                    alt=""
+                    className="h-8 w-8 object-contain transition-all duration-200"
+                  />
                 </div>
               </Link>
             </SidebarMenuButton>

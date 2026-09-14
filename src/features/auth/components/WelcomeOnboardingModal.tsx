@@ -15,10 +15,15 @@ import { completeWelcome, fetchMe } from '@/features/auth/api'
 import { queryKeys } from '@/lib/query-keys'
 import { getApiErrorMessage } from '@/lib/errors'
 import { toast } from 'sonner'
+import {
+  WelcomeTourIllustration,
+  type WelcomeIllustrationKey,
+} from '@/features/auth/components/welcome-tour-illustrations'
 
 type Card = {
   title: string
   body: string
+  illustration: WelcomeIllustrationKey
   video?: boolean
 }
 
@@ -37,36 +42,42 @@ export function WelcomeOnboardingModal({ open }: Props) {
       {
         title: t('Welcome to DownstreamX'),
         body: t(
-          'Your petroleum downstream workspace is ready. This short tour highlights what is already set up for your company.',
+          'Your company workspace is ready. Here is a quick look at what is already waiting for you.',
         ),
+        illustration: 'welcome',
       },
       {
         title: t('Roles & System Admin'),
         body: t(
-          'Your account is the System Admin. Oil & gas roles are ready — procurement, sales, finance, depot, logistics, HR, and more — so you can invite your team with the right access.',
+          'You are the System Admin. Roles for procurement, sales, finance, depot, logistics, HR, and more are ready — invite your team with the right access.',
         ),
+        illustration: 'roles',
       },
       {
         title: t('Products & Main Depot'),
         body: t(
-          'PMS, AGO, DPK, LPG, LFPO, and Engine Oil are seeded with units and VAT. A Main Depot is ready so you can start stock and operations without blank setup screens.',
+          'Common products like PMS, AGO, DPK, LPG, LFPO, and Engine Oil are ready, with units and tax set. A Main Depot is in place so you can start stock and daily operations right away.',
         ),
+        illustration: 'products',
       },
       {
         title: t('Accounting foundations'),
         body: t(
-          'Chart of accounts, account types, and revenue/expense categories are mapped to sensible GLs so books and postings start from a solid template.',
+          'Your books start with a ready chart of accounts and categories for income and expenses, so finance work has a clear place to begin.',
         ),
+        illustration: 'accounting',
       },
       {
         title: t('People, fleet & suppliers'),
         body: t(
-          'Head Office, departments (including HSE and QC/Lab), designations, fleet fuel/compliance types, and supplier categories are in place as editable defaults.',
+          'Head Office, departments (including HSE and QC/Lab), job titles, fleet types, and supplier categories are ready for you to adjust.',
         ),
+        illustration: 'people',
       },
       {
         title: t('See DownstreamX in action'),
-        body: t('Watch a short overview of how daily ops flow across depot, commercial, and finance.'),
+        body: t('Watch a short overview of how daily work flows across depot, commercial, and finance.'),
+        illustration: 'tour',
         video: true,
       },
     ],
@@ -107,7 +118,7 @@ export function WelcomeOnboardingModal({ open }: Props) {
       }}
     >
       <DialogContent
-        className="sm:max-w-lg overflow-hidden"
+        className="sm:max-w-2xl overflow-hidden"
         onPointerDownOutside={(e) => e.preventDefault()}
         onEscapeKeyDown={(e) => {
           e.preventDefault()
@@ -115,34 +126,28 @@ export function WelcomeOnboardingModal({ open }: Props) {
         }}
       >
         <DialogHeader>
-          <DialogTitle className="text-xl">{card.title}</DialogTitle>
-          <DialogDescription className="text-base leading-relaxed pt-1">
+          <DialogTitle className="text-2xl">{card.title}</DialogTitle>
+          <DialogDescription className="text-base leading-relaxed pt-2">
             {card.body}
           </DialogDescription>
         </DialogHeader>
 
         <div
           key={card.title}
-          className="min-h-[160px] animate-in fade-in-0 slide-in-from-right-2 duration-300"
+          className="animate-in fade-in-0 slide-in-from-right-2 duration-300"
         >
           {card.video ? (
-            <div className="relative aspect-video overflow-hidden rounded-md border bg-muted">
-              <div className="flex h-full w-full flex-col items-center justify-center gap-2 bg-muted px-6 text-center">
+            <div className="space-y-3">
+              <WelcomeTourIllustration kind="tour" className="h-[200px] w-full" />
+              <div className="rounded-lg border bg-muted/40 px-4 py-3 text-center">
                 <p className="text-sm font-medium text-foreground">{t('Product tour video')}</p>
-                <p className="text-xs text-muted-foreground">
-                  {t('Placeholder — a short DownstreamX walkthrough will appear here.')}
+                <p className="mt-1 text-xs text-muted-foreground">
+                  {t('A short DownstreamX walkthrough will appear here soon.')}
                 </p>
               </div>
             </div>
           ) : (
-            <div className="flex h-40 items-end rounded-md border bg-gradient-to-br from-muted/80 via-background to-muted/40 p-4">
-              <p className="text-sm text-muted-foreground">
-                {t('Card {{current}} of {{total}}', {
-                  current: index + 1,
-                  total: cards.length,
-                })}
-              </p>
-            </div>
+            <WelcomeTourIllustration kind={card.illustration} className="h-[200px] w-full" />
           )}
         </div>
 

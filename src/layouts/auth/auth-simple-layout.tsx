@@ -7,7 +7,7 @@ import ApplicationLogo from '@/components/application-logo'
 import CookieConsent from '@/components/cookie-consent'
 import { useAppContext } from '@/contexts/app-context'
 import { paths } from '@/lib/paths'
-import loginBg from '@/assets/login-bg-01.jpg'
+import { AuthBackground } from '@/layouts/auth/auth-background'
 
 interface AuthLayoutProps {
   title?: string
@@ -30,7 +30,7 @@ export function AuthSimpleLayout({
   const primaryColor = getPrimaryColor()
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-slate-950">
+    <div className="relative min-h-screen overflow-hidden bg-[#070d14]">
       <style>{`
         .auth-primary {
           background-color: ${primaryColor} !important;
@@ -44,17 +44,7 @@ export function AuthSimpleLayout({
         }
       `}</style>
 
-      <div aria-hidden className="absolute inset-0">
-        <img src={loginBg} alt="" className="h-full w-full object-cover" />
-        <div className="absolute inset-0 bg-slate-950/45" />
-        <div
-          className="absolute inset-0 opacity-30"
-          style={{
-            backgroundImage: `radial-gradient(circle at 30% 70%, ${primaryColor} 1px, transparent 1px)`,
-            backgroundSize: '80px 80px',
-          }}
-        />
-      </div>
+      <AuthBackground primaryColor={primaryColor} />
 
       <div className="relative z-10 flex min-h-screen items-center justify-center p-6">
         <div className="w-full max-w-md">
@@ -70,15 +60,15 @@ export function AuthSimpleLayout({
 
             <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-800 lg:p-8 lg:pt-5">
               <div className="mb-6 text-center">
-                <Link to={paths.dashboard} className="inline-block max-w-[220px]">
+                <Link to={paths.dashboard} className="inline-block max-w-[260px]">
                   {logoSrc ? (
                     <img
                       src={getImagePath(logoSrc, imageUrlPrefix)}
                       alt={settings.titleText || 'Logo'}
-                      className="mx-auto max-h-14 w-auto"
+                      className="mx-auto max-h-14 w-auto object-contain"
                     />
                   ) : (
-                    <ApplicationLogo className="mx-auto h-10 w-10 auth-text-primary" />
+                    <ApplicationLogo className="mx-auto max-h-14" alt={settings.titleText || 'DownstreamX'} />
                   )}
                 </Link>
               </div>

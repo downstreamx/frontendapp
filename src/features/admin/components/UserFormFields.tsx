@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/ui/password-input'
 import { Label } from '@/components/ui/label'
 import { PhoneInputComponent } from '@/components/ui/phone-input'
+import { PrefixedPhoneInput } from '@/components/ui/prefixed-phone-input'
 import {
   Select,
   SelectContent,
@@ -12,6 +13,10 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { MediaPicker } from '@/features/media/components/MediaPicker'
+import {
+  DEFAULT_NIGERIA_COUNTRY,
+  NigeriaStateCityFields,
+} from '@/components/forms/nigeria-state-city-fields'
 import { paths } from '@/lib/paths'
 
 export function avatarForUserForm(avatar: string | null | undefined): string {
@@ -25,6 +30,7 @@ export type UserFormState = {
   company_city: string
   company_state: string
   company_country: string
+  company_logo: string
   first_name: string
   middle_name: string
   last_name: string
@@ -67,6 +73,15 @@ export function UserFormFields({ form, onChange, isEdit, companiesContext, roles
               required
             />
           </div>
+          <MediaPicker
+            id="company_logo"
+            label={t('Company logo')}
+            value={form.company_logo}
+            onChange={(value) =>
+              setField('company_logo', Array.isArray(value) ? (value[0] ?? '') : value)
+            }
+            placeholder={t('Select company logo')}
+          />
           <div className="space-y-1">
             <Label htmlFor="company_address">{t('Company Address')}</Label>
             <Input
@@ -77,33 +92,17 @@ export function UserFormFields({ form, onChange, isEdit, companiesContext, roles
             />
           </div>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-            <div className="space-y-1">
-              <Label htmlFor="company_city">{t('City')}</Label>
-              <Input
-                id="company_city"
-                value={form.company_city}
-                onChange={(e) => setField('company_city', e.target.value)}
-                placeholder={t('Enter city')}
-              />
-            </div>
-            <div className="space-y-1">
-              <Label htmlFor="company_state">{t('State')}</Label>
-              <Input
-                id="company_state"
-                value={form.company_state}
-                onChange={(e) => setField('company_state', e.target.value)}
-                placeholder={t('Enter state')}
-              />
-            </div>
-            <div className="space-y-1">
-              <Label htmlFor="company_country">{t('Country')}</Label>
-              <Input
-                id="company_country"
-                value={form.company_country}
-                onChange={(e) => setField('company_country', e.target.value)}
-                placeholder={t('Enter country')}
-              />
-            </div>
+            <NigeriaStateCityFields
+              idPrefix="company"
+              stateName={form.company_state}
+              cityName={form.company_city}
+              country={form.company_country || DEFAULT_NIGERIA_COUNTRY}
+              onStateNameChange={(stateName) => setField('company_state', stateName)}
+              onCityNameChange={(cityName) => setField('company_city', cityName)}
+              onCountryChange={(country) => setField('company_country', country)}
+              countryEditable
+              className="space-y-1"
+            />
           </div>
         </div>
       ) : null}
@@ -151,12 +150,21 @@ export function UserFormFields({ form, onChange, isEdit, companiesContext, roles
             required
           />
         </div>
-        <PhoneInputComponent
-          label={t('Mobile Number')}
-          value={form.mobile_no}
-          onChange={(value) => setField('mobile_no', value)}
-          placeholder="+1234567890"
-        />
+        {companiesContext ? (
+          <PrefixedPhoneInput
+            label={t('Mobile Number')}
+            country={form.company_country || DEFAULT_NIGERIA_COUNTRY}
+            value={form.mobile_no}
+            onChange={(value) => setField('mobile_no', value)}
+          />
+        ) : (
+          <PhoneInputComponent
+            label={t('Mobile Number')}
+            value={form.mobile_no}
+            onChange={(value) => setField('mobile_no', value)}
+            placeholder="+1234567890"
+          />
+        )}
         {!companiesContext ? (
           <MediaPicker
             id="avatar"
@@ -247,6 +255,7 @@ export const emptyUserForm = (): UserFormState => ({
   company_city: '',
   company_state: '',
   company_country: 'Nigeria',
+  company_logo: '',
   first_name: '',
   middle_name: '',
   last_name: '',

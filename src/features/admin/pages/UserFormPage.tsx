@@ -21,6 +21,7 @@ import {
   UserFormFields,
   type UserFormState,
 } from '../components/UserFormFields'
+import { toE164Mobile, toNationalMobile } from '@/lib/phone-country'
 
 /** @deprecated Use modal on UsersIndexPage; routes redirect to the list. */
 export function UserFormPage() {
@@ -29,7 +30,7 @@ export function UserFormPage() {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { auth } = useAppContext()
-  const [form, setForm] = useState<UserFormState>(emptyUserForm)
+  const [form, setForm] = useState<UserFormState>(() => emptyUserForm())
 
   const isSuperAdmin = auth.user?.type === 'superadmin'
 
@@ -81,34 +82,42 @@ export function UserFormPage() {
   useEffect(() => {
     if (!isEdit || !editMeta) return
     const profile = editMeta.company_profile
+    const country = profile?.company_country || 'Nigeria'
     setForm({
       company_name: profile?.company_name ?? '',
       company_address: profile?.company_address ?? '',
       company_city: profile?.company_city ?? '',
       company_state: profile?.company_state ?? '',
-      company_country: profile?.company_country || 'Nigeria',
+      company_country: country,
+      company_logo: profile?.company_logo ?? '',
       first_name: editMeta.user.first_name ?? '',
       middle_name: editMeta.user.middle_name ?? '',
       last_name: editMeta.user.last_name ?? '',
       email: editMeta.user.email,
-      mobile_no: editMeta.user.mobile_no ?? '',
+      mobile_no: companiesContext
+        ? toNationalMobile(editMeta.user.mobile_no ?? '', country)
+        : (editMeta.user.mobile_no ?? ''),
       password: '',
       password_confirmation: '',
       role_id: editMeta.role_id ? String(editMeta.role_id) : '',
       avatar: avatarForUserForm(editMeta.user.avatar),
       is_enable_login: editMeta.user.is_enable_login,
     })
-  }, [editMeta, isEdit])
+  }, [companiesContext, editMeta, isEdit])
 
   const saveMutation = useMutation({
     mutationFn: async () => {
+      const mobilePayload = companiesContext
+        ? toE164Mobile(form.mobile_no, form.company_country || 'Nigeria')
+        : form.mobile_no || undefined
+
       if (isEdit) {
         return updateUser(id!, {
           first_name: form.first_name,
           middle_name: form.middle_name || null,
           last_name: form.last_name,
           email: form.email,
-          mobile_no: form.mobile_no || undefined,
+          mobile_no: mobilePayload,
           role_id: form.role_id ? Number(form.role_id) : undefined,
           is_enable_login: form.is_enable_login,
           ...(companiesContext
@@ -118,6 +127,7 @@ export function UserFormPage() {
                 company_city: form.company_city || undefined,
                 company_state: form.company_state || undefined,
                 company_country: form.company_country || 'Nigeria',
+                logo_dark: form.company_logo || '',
               }
             : { avatar: form.avatar || null }),
         })
@@ -127,7 +137,7 @@ export function UserFormPage() {
         middle_name: form.middle_name || null,
         last_name: form.last_name,
         email: form.email,
-        mobile_no: form.mobile_no || undefined,
+        mobile_no: mobilePayload,
         password: form.password,
         password_confirmation: form.password_confirmation,
         is_enable_login: form.is_enable_login,
@@ -138,6 +148,7 @@ export function UserFormPage() {
               company_city: form.company_city || undefined,
               company_state: form.company_state || undefined,
               company_country: form.company_country || 'Nigeria',
+              ...(form.company_logo ? { logo_dark: form.company_logo } : {}),
             }
           : { avatar: form.avatar || undefined }),
       }

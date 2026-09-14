@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
-import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import InputError from '@/components/ui/input-error'
 import {
@@ -144,19 +143,22 @@ export function NigeriaStateCityFields({
 
       <div className={cn(className)}>
         <Label htmlFor={`${idPrefix}-country`}>{t('Country')}</Label>
-        <Input
-          id={`${idPrefix}-country`}
-          value={displayCountry}
-          onChange={
-            countryEditable && onCountryChange
-              ? (e) => onCountryChange(e.target.value)
-              : undefined
-          }
-          readOnly={!countryEditable}
-          placeholder={t('Enter country')}
-          required={required}
-          disabled={disabled}
-        />
+        <Select
+          value={displayCountry || DEFAULT_NIGERIA_COUNTRY}
+          onValueChange={(value) => {
+            if (countryEditable) {
+              onCountryChange?.(value)
+            }
+          }}
+          disabled={disabled || !countryEditable}
+        >
+          <SelectTrigger id={`${idPrefix}-country`}>
+            <SelectValue placeholder={t('Select country')} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value={DEFAULT_NIGERIA_COUNTRY}>{DEFAULT_NIGERIA_COUNTRY}</SelectItem>
+          </SelectContent>
+        </Select>
         <InputError message={countryError} />
       </div>
     </>

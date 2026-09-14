@@ -130,33 +130,35 @@ export function CompanySettingsSection() {
             />
           </div>
 
-          <NigeriaStateCityFields
-            idPrefix="company"
-            stateName={settings.company_state}
-            cityName={settings.company_city}
-            country={settings.company_country}
-            onStateNameChange={(company_state) =>
-              setSettings((prev) => ({
-                ...prev,
-                company_state,
-                company_city: '',
-                company_country: DEFAULT_NIGERIA_COUNTRY,
-              }))
-            }
-            onCityNameChange={(company_city) =>
-              setSettings((prev) => ({
-                ...prev,
-                company_city,
-                company_country: DEFAULT_NIGERIA_COUNTRY,
-              }))
-            }
-            onCountryChange={(company_country) =>
-              setSettings((prev) => ({ ...prev, company_country }))
-            }
-            disabled={!canEditSection}
-            countryEditable
-            className="space-y-3"
-          />
+          <div className="md:col-span-2 grid grid-cols-1 gap-6 md:grid-cols-3">
+            <NigeriaStateCityFields
+              idPrefix="company"
+              stateName={settings.company_state}
+              cityName={settings.company_city}
+              country={settings.company_country}
+              onStateNameChange={(company_state) =>
+                setSettings((prev) => ({
+                  ...prev,
+                  company_state,
+                  company_city: '',
+                  company_country: DEFAULT_NIGERIA_COUNTRY,
+                }))
+              }
+              onCityNameChange={(company_city) =>
+                setSettings((prev) => ({
+                  ...prev,
+                  company_city,
+                  company_country: DEFAULT_NIGERIA_COUNTRY,
+                }))
+              }
+              onCountryChange={(company_country) =>
+                setSettings((prev) => ({ ...prev, company_country }))
+              }
+              disabled={!canEditSection}
+              countryEditable
+              className="space-y-3"
+            />
+          </div>
 
           <div className="space-y-3">
             <Label htmlFor="company_zipcode">{t('Zip Code')}</Label>

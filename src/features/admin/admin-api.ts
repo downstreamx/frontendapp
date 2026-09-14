@@ -169,6 +169,7 @@ export async function createUser(payload: PersonNameFields & {
   company_city?: string
   company_state?: string
   company_country?: string
+  logo_dark?: string
 }) {
   const { data } = await api.post<
     ApiSuccess<{ id: number; company_id?: number | null; needs_provisioning?: boolean }>
@@ -190,6 +191,7 @@ export async function updateUser(
     company_city?: string
     company_state?: string
     company_country?: string
+    logo_dark?: string
   },
 ) {
   const { data } = await api.put<ApiSuccess<{ id: number }>>(`/users/${id}`, payload)

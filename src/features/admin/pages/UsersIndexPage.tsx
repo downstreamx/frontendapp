@@ -67,6 +67,8 @@ import {
   UserFormFields,
   type UserFormState,
 } from '../components/UserFormFields'
+import { CompanyProvisioningDialog } from '../components/CompanyProvisioningDialog'
+import { toE164Mobile, toNationalMobile } from '@/lib/phone-country'
 
 type AppliedFilters = {
   email: string
@@ -139,11 +141,27 @@ export function UsersIndexPage() {
   const [appliedFilters, setAppliedFilters] = useState<AppliedFilters>(defaultFilters)
   const [dialogOpen, setDialogOpen] = useState(false)
   const [editingId, setEditingId] = useState<number | null>(null)
-  const [form, setForm] = useState<UserFormState>(emptyUserForm)
+  const [form, setForm] = useState<UserFormState>(() => emptyUserForm())
+  const [provisionCompanyId, setProvisionCompanyId] = useState<number | null>(null)
 
   const page = Number(searchParams.get('page') ?? '1') || 1
   const sortField = searchParams.get('sort') ?? ''
   const sortDirection = (searchParams.get('direction') ?? 'asc') as 'asc' | 'desc'
+  const provisionQueryId = searchParams.get('provision_company_id')
+
+  useEffect(() => {
+    if (!provisionQueryId) return
+    const id = Number(provisionQueryId)
+    if (!Number.isNaN(id) && id > 0) {
+      setProvisionCompanyId(id)
+    }
+    setSearchParams((prev) => {
+      if (!prev.has('provision_company_id')) return prev
+      const next = new URLSearchParams(prev)
+      next.delete('provision_company_id')
+      return next
+    }, { replace: true })
+  }, [provisionQueryId, setSearchParams])
 
   const canCreate = hasPermission(auth.permissions, auth.roles, auth.user?.type, 'create-users')
   const canEdit = hasPermission(auth.permissions, auth.roles, auth.user?.type, 'edit-users')
@@ -201,24 +219,28 @@ export function UsersIndexPage() {
   useEffect(() => {
     if (!dialogOpen || !isEdit || !editMeta) return
     const profile = editMeta.company_profile
+    const country = profile?.company_country || 'Nigeria'
     setForm({
       company_name: profile?.company_name ?? '',
       company_address: profile?.company_address ?? '',
       company_city: profile?.company_city ?? '',
       company_state: profile?.company_state ?? '',
-      company_country: profile?.company_country || 'Nigeria',
+      company_country: country,
+      company_logo: profile?.company_logo ?? '',
       first_name: editMeta.user.first_name ?? '',
       middle_name: editMeta.user.middle_name ?? '',
       last_name: editMeta.user.last_name ?? '',
       email: editMeta.user.email,
-      mobile_no: editMeta.user.mobile_no ?? '',
+      mobile_no: companiesContext
+        ? toNationalMobile(editMeta.user.mobile_no ?? '', country)
+        : (editMeta.user.mobile_no ?? ''),
       password: '',
       password_confirmation: '',
       role_id: editMeta.role_id ? String(editMeta.role_id) : '',
       avatar: avatarForUserForm(editMeta.user.avatar),
       is_enable_login: editMeta.user.is_enable_login,
     })
-  }, [dialogOpen, editMeta, isEdit])
+  }, [companiesContext, dialogOpen, editMeta, isEdit])
 
   usePageChrome({
     pageTitle: companiesContext ? t('Manage Companies') : t('Manage Users'),
@@ -262,13 +284,17 @@ export function UsersIndexPage() {
 
   const saveMutation = useMutation({
     mutationFn: async () => {
+      const mobilePayload = companiesContext
+        ? toE164Mobile(form.mobile_no, form.company_country || 'Nigeria')
+        : form.mobile_no || undefined
+
       if (isEdit && editingId != null) {
         const payload = {
           first_name: form.first_name,
           middle_name: form.middle_name || null,
           last_name: form.last_name,
           email: form.email,
-          mobile_no: form.mobile_no || undefined,
+          mobile_no: mobilePayload,
           role_id: form.role_id ? Number(form.role_id) : undefined,
           is_enable_login: form.is_enable_login,
           ...(companiesContext
@@ -278,6 +304,7 @@ export function UsersIndexPage() {
                 company_city: form.company_city || undefined,
                 company_state: form.company_state || undefined,
                 company_country: form.company_country || 'Nigeria',
+                logo_dark: form.company_logo || '',
               }
             : { avatar: form.avatar || null }),
         }
@@ -288,7 +315,7 @@ export function UsersIndexPage() {
         middle_name: form.middle_name || null,
         last_name: form.last_name,
         email: form.email,
-        mobile_no: form.mobile_no || undefined,
+        mobile_no: mobilePayload,
         password: form.password,
         password_confirmation: form.password_confirmation,
         is_enable_login: form.is_enable_login,
@@ -299,6 +326,7 @@ export function UsersIndexPage() {
               company_city: form.company_city || undefined,
               company_state: form.company_state || undefined,
               company_country: form.company_country || 'Nigeria',
+              ...(form.company_logo ? { logo_dark: form.company_logo } : {}),
             }
           : { avatar: form.avatar || undefined }),
       }
@@ -325,7 +353,7 @@ export function UsersIndexPage() {
         result.company_id != null &&
         result.needs_provisioning
       ) {
-        navigate(paths.users.provisioning(result.id, result.company_id))
+        setProvisionCompanyId(result.company_id)
       }
     },
     onError: (error) =>
@@ -450,7 +478,7 @@ export function UsersIndexPage() {
                 variant="ghost"
                 size="sm"
                 className="h-8 w-8 p-0 text-emerald-700 hover:text-emerald-800"
-                onClick={() => navigate(paths.users.provisioning(row.id, row.company_id!))}
+                onClick={() => setProvisionCompanyId(row.company_id!)}
               >
                 <Settings2 className="h-4 w-4" />
               </Button>
@@ -808,6 +836,15 @@ export function UsersIndexPage() {
         confirmText={t('Delete')}
         onConfirm={confirmDelete}
         loading={isDeleting}
+      />
+
+      <CompanyProvisioningDialog
+        open={provisionCompanyId != null}
+        companyId={provisionCompanyId}
+        onClose={() => {
+          setProvisionCompanyId(null)
+          void queryClient.invalidateQueries({ queryKey: ['users'] })
+        }}
       />
     </>
   )

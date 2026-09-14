@@ -8,6 +8,7 @@ import { useBrand } from '@/contexts/brand-context'
 import { paths } from '@/lib/paths'
 import { route } from '@/lib/route'
 import { cn } from '@/lib/utils'
+import { DEFAULT_BRAND_LOGO_URL } from '@/lib/brand-assets'
 import { MEGA_MENU_CSS_VARS, MEGA_MENU_TOP_BAR_BG, MEGA_MENU_TOP_BAR_BORDER } from './mega-menu-styles'
 
 type MegaMenuTopBarProps = {
@@ -24,7 +25,7 @@ export function MegaMenuTopBar({ isMobile = false, mobileMenuTrigger, className 
 
   const isDark = typeof document !== 'undefined' && document.documentElement.classList.contains('dark')
   const currentLogo = isDark ? settings.logo_light : settings.logo_dark
-  const displayUrl = currentLogo ? getPreviewUrl(currentLogo) : ''
+  const displayUrl = currentLogo ? getPreviewUrl(currentLogo) : DEFAULT_BRAND_LOGO_URL
   const firstName = auth.user?.name?.split(' ')[0] ?? auth.user?.name ?? ''
 
   return (
@@ -44,17 +45,11 @@ export function MegaMenuTopBar({ isMobile = false, mobileMenuTrigger, className 
           to={isClientUser ? paths.portal.dashboard : route('dashboard')}
           className="flex shrink-0 items-center"
         >
-          {displayUrl ? (
-            <img
-              src={displayUrl}
-              alt={settings.titleText || 'Logo'}
-              className={cn('w-auto object-contain', isMobile ? 'max-h-10 max-w-[180px]' : 'max-h-14 max-w-[280px]')}
-            />
-          ) : (
-            <span className="text-base font-semibold tracking-tight sm:text-lg">
-              {settings.titleText || 'DownstreamX'}
-            </span>
-          )}
+          <img
+            src={displayUrl}
+            alt={settings.titleText || 'DownstreamX'}
+            className={cn('w-auto object-contain', isMobile ? 'max-h-10 max-w-[180px]' : 'max-h-14 max-w-[280px]')}
+          />
         </Link>
         <span className="ml-2 text-xs text-muted-foreground">| DownstreamX v1.06</span>
       </div>
