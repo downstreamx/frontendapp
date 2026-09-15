@@ -5,13 +5,13 @@ type Translate = (key: string) => string
 
 const bridgingBadgeClasses: Record<PurchaseBridgingStatus, string> = {
   not_eligible:
-    'inline-flex rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground',
+    'inline-flex rounded-full bg-secondary px-2.5 py-0.5 text-xs font-medium text-secondary-foreground',
   unbridged:
-    'inline-flex rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-800 dark:bg-amber-950 dark:text-amber-200',
+    'inline-flex rounded-full bg-[var(--brand-orange-soft)] px-2.5 py-0.5 text-xs font-medium text-[color:var(--brand-orange)]',
   partially_bridged:
-    'inline-flex rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-800 dark:bg-blue-950 dark:text-blue-200',
+    'inline-flex rounded-full bg-accent px-2.5 py-0.5 text-xs font-medium text-accent-foreground',
   fully_bridged:
-    'inline-flex rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800 dark:bg-green-950 dark:text-green-200',
+    'inline-flex rounded-full bg-[var(--brand-green-soft)] px-2.5 py-0.5 text-xs font-medium text-accent-foreground',
 }
 
 export function purchaseBridgingStatusLabel(status: string | undefined, t: Translate): string {
@@ -39,8 +39,6 @@ export const TRUCK_LOAD_PHASE_LABELS: Record<string, string> = {
   in_transit_distribution: 'In transit (distribution)',
   delivered: 'Delivered',
   cancelled: 'Cancelled',
-  loaded: 'In transit (bridged)',
-  in_transit: 'In transit (distribution)',
 }
 
 export function truckLoadPhaseLabel(phase: string | undefined, t: Translate): string {
@@ -51,13 +49,13 @@ export function truckLoadPhaseLabel(phase: string | undefined, t: Translate): st
 
 const distributionBadgeClasses: Record<SalesDistributionStatus, string> = {
   not_eligible:
-    'inline-flex rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground',
+    'inline-flex rounded-full bg-secondary px-2.5 py-0.5 text-xs font-medium text-secondary-foreground',
   undistributed:
-    'inline-flex rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-800 dark:bg-amber-950 dark:text-amber-200',
+    'inline-flex rounded-full bg-[var(--brand-orange-soft)] px-2.5 py-0.5 text-xs font-medium text-[color:var(--brand-orange)]',
   partially_distributed:
-    'inline-flex rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-800 dark:bg-blue-950 dark:text-blue-200',
+    'inline-flex rounded-full bg-accent px-2.5 py-0.5 text-xs font-medium text-accent-foreground',
   fully_distributed:
-    'inline-flex rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800 dark:bg-green-950 dark:text-green-200',
+    'inline-flex rounded-full bg-[var(--brand-green-soft)] px-2.5 py-0.5 text-xs font-medium text-accent-foreground',
 }
 
 export function salesDistributionStatusLabel(status: string | undefined, t: Translate): string {
@@ -130,8 +128,6 @@ const phaseChipClasses: Record<string, string> = {
     'border-indigo-500/30 bg-indigo-500/10 text-indigo-900 dark:text-indigo-100',
   delivered: 'border-green-600/30 bg-green-600/10 text-green-800 dark:text-green-200',
   cancelled: 'border-border bg-muted/50 text-muted-foreground',
-  loaded: 'border-blue-500/30 bg-blue-500/10 text-blue-900 dark:text-blue-100',
-  in_transit: 'border-indigo-500/30 bg-indigo-500/10 text-indigo-900 dark:text-indigo-100',
 }
 
 export function operationalPanelPhaseChipClass(phase: string): string {

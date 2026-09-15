@@ -140,7 +140,6 @@ export type DistributionMeta = {
     plate_number: string
     make?: string
     truck_model?: string
-    fuel_capacity?: number
     capacity_litres?: number
     operational_status?: string
     default_driver_id?: number | null

@@ -1,4 +1,5 @@
 import { Navigate } from 'react-router-dom'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 import { useMeQuery } from '@/features/auth/hooks'
 import { resolveDefaultLandingPath } from '@/lib/resolve-default-landing-path'
 import { paths } from '@/lib/paths'
@@ -7,7 +8,7 @@ export function DefaultLandingRedirect() {
   const { data: me, isLoading } = useMeQuery()
 
   if (isLoading) {
-    return <p className="p-6 text-sm text-muted-foreground">Loading…</p>
+    return <PageContentLoader className="min-h-[12rem]" />
   }
 
   if (!me) {

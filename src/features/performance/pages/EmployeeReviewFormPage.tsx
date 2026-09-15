@@ -21,6 +21,7 @@ import { getApiErrorMessage } from '@/lib/errors'
 import { paths } from '@/lib/paths'
 import { createEmployeeReview, getEmployeeReview, updateEmployeeReview } from '../performance-api'
 import { useEmployeeReviewsIndexMeta } from '../hooks/use-performance-meta'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 
 export function EmployeeReviewFormPage() {
   const { id } = useParams<{ id: string }>()
@@ -91,7 +92,7 @@ export function EmployeeReviewFormPage() {
   })
 
   if (isEdit && reviewQuery.isLoading) {
-    return <p className="text-sm text-muted-foreground">{t('Loading…')}</p>
+    return <PageContentLoader className="min-h-[16rem]" />
   }
 
   return (

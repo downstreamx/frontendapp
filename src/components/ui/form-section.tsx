@@ -22,7 +22,7 @@ export function FormSection({
     <>
       {title ? (
         <div className="mb-4 space-y-1">
-          <h3 className="text-lg font-semibold leading-none tracking-tight">{title}</h3>
+          <h3 className="text-lg font-semibold leading-none tracking-tight text-foreground">{title}</h3>
           {description ? <p className="text-base text-muted-foreground">{description}</p> : null}
         </div>
       ) : null}

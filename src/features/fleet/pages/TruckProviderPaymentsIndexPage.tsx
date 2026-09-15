@@ -37,6 +37,7 @@ import { useListToolbar } from '@/hooks/use-list-toolbar'
 import { getApiErrorMessage } from '@/lib/errors'
 import { formatCurrency, formatDate } from '@/utils/helpers'
 import { FleetStatusBadge } from '../components/FleetStatusBadge'
+import { ForbiddenPage } from '@/components/status-page'
 import {
   createTruckProviderPayment,
   fetchTruckProviderPaymentsIndexMeta,
@@ -240,7 +241,7 @@ export function TruckProviderPaymentsIndexPage() {
   ]
 
   if (!canManage) {
-    return <p className="text-sm text-muted-foreground">{t('Permission denied')}</p>
+    return <ForbiddenPage />
   }
 
   return (

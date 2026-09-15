@@ -13,6 +13,7 @@ import { CrudFormDialog, type CrudFieldDef } from '@/features/shared/components/
 import { usePageChrome } from '@/contexts/page-chrome-context'
 import { UserAvatar } from '@/features/shared/components/table-avatar-cells'
 import { formatCurrency } from '@/utils/helpers'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 import {
   createSetSalaryAllowance,
   createSetSalaryDeduction,
@@ -283,7 +284,7 @@ export function SetSalaryShowPage() {
           : undefined
 
   if (isLoading) {
-    return <p className="text-sm text-muted-foreground">{t('Loading…')}</p>
+    return <PageContentLoader className="min-h-[16rem]" />
   }
 
   if (error || !employee) {

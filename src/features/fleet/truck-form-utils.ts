@@ -9,7 +9,7 @@ export type TruckFormState = {
   year: string
   color: string
   purchase_price: string
-  fuel_capacity: string
+  capacity_litres: string
   engine_size: string
   engine_hours: string
   axle_count: string
@@ -31,7 +31,7 @@ export const initialTruckFormState: TruckFormState = {
   year: String(new Date().getFullYear()),
   color: '',
   purchase_price: '0',
-  fuel_capacity: '0',
+  capacity_litres: '0',
   engine_size: '0',
   engine_hours: '0',
   axle_count: '0',
@@ -54,7 +54,7 @@ export function truckToFormState(truck: TruckRecord): TruckFormState {
     year: truck.year != null ? String(truck.year) : String(new Date().getFullYear()),
     color: truck.color ?? '',
     purchase_price: truck.purchase_price != null ? String(truck.purchase_price) : '0',
-    fuel_capacity: truck.fuel_capacity != null ? String(truck.fuel_capacity) : '0',
+    capacity_litres: truck.capacity_litres != null ? String(truck.capacity_litres) : '0',
     engine_size: truck.engine_size != null ? String(truck.engine_size) : '0',
     engine_hours: truck.engine_hours != null ? String(truck.engine_hours) : '0',
     axle_count: truck.axle_count != null ? String(truck.axle_count) : '0',
@@ -81,7 +81,7 @@ export function formStateToPayload(form: TruckFormState): TruckPayload {
     year: Number(form.year),
     color: form.color.trim() || null,
     purchase_price: form.purchase_price ? Number(form.purchase_price) : null,
-    fuel_capacity: Number(form.fuel_capacity) || 0,
+    capacity_litres: Number(form.capacity_litres) || 0,
     engine_size: form.engine_size ? Number(form.engine_size) : null,
     engine_hours: form.engine_hours ? Number(form.engine_hours) : null,
     axle_count: form.axle_count ? Number(form.axle_count) : null,

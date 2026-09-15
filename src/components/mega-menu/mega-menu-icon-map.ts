@@ -1,5 +1,6 @@
 import type { LucideIcon } from 'lucide-react'
 import {
+  Bell,
   CalendarRange,
   CircleHelp,
   ClipboardPenLine,
@@ -7,7 +8,9 @@ import {
   ImageIcon,
   Kanban,
   LayoutDashboard,
+  Mail,
   MessageSquareText,
+  Package,
   PackageSearch,
   PieChart,
   ScanBarcode,
@@ -45,5 +48,8 @@ export const MEGA_MENU_TOP_ICONS_BY_PERMISSION: Record<string, LucideIcon> = {
   'manage-messenger': MessageSquareText,
   'manage-helpdesk-tickets': CircleHelp,
   'manage-plans': Gem,
+  'manage-email-templates': Mail,
+  'manage-notification-templates': Bell,
+  'manage-add-on': Package,
   'manage-settings': Settings2,
 }

@@ -20,6 +20,7 @@ import { usePageChrome } from '@/contexts/page-chrome-context'
 import { getApiErrorMessage } from '@/lib/errors'
 import { formatDate } from '@/utils/helpers'
 import { paths } from '@/lib/paths'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 import {
   candidateFullName,
   fetchCandidatesIndexMeta,
@@ -104,7 +105,7 @@ export function CandidateShowPage() {
   })
 
   if (candidateQuery.isLoading) {
-    return <p className="text-sm text-muted-foreground">{t('Loading…')}</p>
+    return <PageContentLoader className="min-h-[16rem]" />
   }
   if (candidateQuery.error || !candidate) {
     return <p className="text-sm text-destructive">{t('Candidate not found.')}</p>

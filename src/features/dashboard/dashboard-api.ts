@@ -14,6 +14,21 @@ export type SuperAdminDashboard = {
     total_plans: number
     total_companies: number
   }
+  engagement: {
+    stats: {
+      active_subscriptions: number
+      inactive_subscriptions: number
+      trial_companies: number
+      expiring_soon: number
+      new_companies_this_month: number
+      companies_with_orders: number
+      logged_in_this_month: number
+    }
+    subscription_status: DashboardChartSlice[]
+    plan_distribution: DashboardChartSlice[]
+    company_registrations: Array<{ month: string; companies: number }>
+    company_logins: Array<{ month: string; logins: number }>
+  }
   chart_data: Array<{ month: string; orders: number; payments: number }>
 }
 

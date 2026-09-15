@@ -22,6 +22,7 @@ import { ProjectTaskChart } from '../components/ProjectTaskChart'
 import { ProjectTeamPanel } from '../components/ProjectTeamPanel'
 import { projectDeleteMessage, useProjectDelete } from '../hooks/useProjectDelete'
 import { ProjectKanbanPanel } from '../components/ProjectKanbanPanel'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 
 const TAB_VALUES = ['overview', 'tasks', 'bugs', 'milestones', 'team', 'files', 'activity'] as const
 type TabValue = (typeof TAB_VALUES)[number]
@@ -139,7 +140,7 @@ export function ProjectViewPage() {
   }
 
   if (isLoading) {
-    return <p className="text-sm text-muted-foreground">{t('Loading…')}</p>
+    return <PageContentLoader className="min-h-[16rem]" />
   }
   if (error || !project) {
     return <p className="text-sm text-destructive">{t('Project not found.')}</p>

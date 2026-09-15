@@ -7,12 +7,12 @@ export const defaultBrandSettings: AppSettings = {
   titleText: 'DownstreamX',
   footerText: `© ${new Date().getFullYear()} DownstreamX. All rights reserved.`,
   sidebarVariant: 'inset',
-  sidebarStyle: 'plain',
+  sidebarStyle: 'colored',
   navigationLayout: 'mega-menu',
   layoutDirection: 'ltr',
   themeMode: 'light',
   themeColor: 'green',
-  customColor: '#10b77f',
+  customColor: '#1b703a',
   enableRegistration: 'on',
 }
 

@@ -38,7 +38,7 @@ export function AwaitingFullTruckLoadDialog({
               'This truck is not fully loaded yet. Delivery can be confirmed only after the full truck capacity has been assigned through distribution.',
             )}
           </p>
-          <dl className="space-y-2 rounded-lg border border-border bg-muted/30 p-3">
+          <dl className="space-y-2 rounded-xl border border-border/50 bg-[hsl(var(--section-deep))]/80 p-3">
             <div className="flex justify-between gap-4">
               <dt className="text-muted-foreground">{t('Assigned to this invoice')}</dt>
               <dd className="font-medium">{formatQuantity(allocatedQty, { unit: 'L' })}</dd>

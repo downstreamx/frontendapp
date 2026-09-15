@@ -82,7 +82,7 @@ export function EmptyTrucksInTransitIndexPage() {
       key: 'capacity_litres',
       header: t('Capacity'),
       render: (_, row) => {
-        const litres = row.capacity_litres ?? row.fuel_capacity
+        const litres = row.capacity_litres
         return litres != null && litres !== '' ? formatQuantity(litres, { unit: 'L' }) : '—'
       },
     },

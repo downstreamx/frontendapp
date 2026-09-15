@@ -12,6 +12,7 @@ import { usePageChrome } from '@/contexts/page-chrome-context'
 import { getApiErrorMessage } from '@/lib/errors'
 import { paths } from '@/lib/paths'
 import { createFaq, getFaq, updateFaq } from '../support-api'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 
 export function FaqFormPage() {
   const { id } = useParams<{ id: string }>()
@@ -59,7 +60,7 @@ export function FaqFormPage() {
   })
 
   if (isEdit && faqQuery.isLoading) {
-    return <p className="text-sm text-muted-foreground">{t('Loading…')}</p>
+    return <PageContentLoader className="min-h-[16rem]" />
   }
 
   return (

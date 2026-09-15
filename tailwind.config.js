@@ -71,7 +71,11 @@ export default {
         },
       },
       boxShadow: {
-        card: '0 1px 3px rgba(0, 0, 0, 0.06), 0 4px 12px rgba(0, 0, 0, 0.04)',
+        card: 'var(--shadow-soft, 0 6px 20px rgba(28, 28, 28, 0.06))',
+        'card-lg': 'var(--shadow-card, 0 10px 28px rgba(28, 28, 28, 0.07))',
+      },
+      fontFamily: {
+        sans: ['"Plus Jakarta Sans"', 'system-ui', '-apple-system', 'Segoe UI', 'sans-serif'],
       },
       borderRadius: {
         control: 'var(--control-radius)',

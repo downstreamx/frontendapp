@@ -313,21 +313,21 @@ export function SalesOrdersIndexPage() {
     auth.permissions,
     auth.roles,
     auth.user?.type,
-    'create-sales-proposals',
+    'create-sales-orders',
   )
-  const canView = hasPermission(auth.permissions, auth.roles, auth.user?.type, 'view-sales-proposals')
-  const canEdit = hasPermission(auth.permissions, auth.roles, auth.user?.type, 'edit-sales-proposals')
+  const canView = hasPermission(auth.permissions, auth.roles, auth.user?.type, 'view-sales-orders')
+  const canEdit = hasPermission(auth.permissions, auth.roles, auth.user?.type, 'edit-sales-orders')
   const canDelete = hasPermission(
     auth.permissions,
     auth.roles,
     auth.user?.type,
-    'delete-sales-proposals',
+    'delete-sales-orders',
   )
-  const canSend = hasPermission(auth.permissions, auth.roles, auth.user?.type, 'sent-sales-proposals')
-  const canAccept = hasPermission(auth.permissions, auth.roles, auth.user?.type, 'accept-sales-proposals')
-  const canReject = hasPermission(auth.permissions, auth.roles, auth.user?.type, 'reject-sales-proposals')
-  const canConvert = hasPermission(auth.permissions, auth.roles, auth.user?.type, 'convert-sales-proposals')
-  const canPrint = hasPermission(auth.permissions, auth.roles, auth.user?.type, 'print-sales-proposals')
+  const canSend = hasPermission(auth.permissions, auth.roles, auth.user?.type, 'sent-sales-orders')
+  const canAccept = hasPermission(auth.permissions, auth.roles, auth.user?.type, 'accept-sales-orders')
+  const canReject = hasPermission(auth.permissions, auth.roles, auth.user?.type, 'reject-sales-orders')
+  const canConvert = hasPermission(auth.permissions, auth.roles, auth.user?.type, 'convert-sales-orders')
+  const canPrint = hasPermission(auth.permissions, auth.roles, auth.user?.type, 'print-sales-orders')
 
   const metaQuery = useQuery({
     queryKey: queryKeys.sales.orders.indexMeta(),
@@ -387,7 +387,7 @@ export function SalesOrdersIndexPage() {
     onError: (err) => toast.error(getApiErrorMessage(err, t('Failed to reject sales order'))),
   })
 
-  const [convertTarget, setConvertTarget] = useState<{ id: number; proposal_number: string } | null>(
+  const [convertTarget, setConvertTarget] = useState<{ id: number; order_number: string } | null>(
     null,
   )
 
@@ -402,7 +402,7 @@ export function SalesOrdersIndexPage() {
     onError: (err) => toast.error(getApiErrorMessage(err, t('Failed to convert sales order'))),
   })
 
-  const [deleteTarget, setDeleteTarget] = useState<{ id: number; proposal_number: string } | null>(
+  const [deleteTarget, setDeleteTarget] = useState<{ id: number; order_number: string } | null>(
     null,
   )
 
@@ -469,7 +469,7 @@ export function SalesOrdersIndexPage() {
 
   const columns: Column<SalesOrderRow>[] = [
     {
-      key: 'proposal_number',
+      key: 'order_number',
       header: t('Order Number'),
       sortable: true,
       render: (value, row) =>
@@ -479,10 +479,10 @@ export function SalesOrdersIndexPage() {
             className="text-primary hover:underline"
             onClick={() => navigate(paths.sales.orderShow(row.id))}
           >
-            {String(value)}
+            {String(value ?? row.order_number ?? row.id)}
           </button>
         ) : (
-          String(value)
+          String(value ?? row.order_number ?? row.id)
         ),
     },
     {
@@ -491,10 +491,10 @@ export function SalesOrdersIndexPage() {
       render: (_, row) => row.customer?.company_name || row.customer?.name || '—',
     },
     {
-      key: 'proposal_date',
+      key: 'order_date',
       header: t('Order Date'),
       sortable: true,
-      render: (value) => formatDate(String(value)),
+      render: (value, row) => formatDate(String(value ?? row.order_date ?? '')),
     },
     {
       key: 'due_date',
@@ -556,13 +556,13 @@ export function SalesOrdersIndexPage() {
           onView={() => navigate(paths.sales.orderShow(row.id))}
           onEdit={() => navigate(paths.sales.orderEdit(row.id))}
           onDelete={() =>
-            setDeleteTarget({ id: row.id, proposal_number: row.proposal_number })
+            setDeleteTarget({ id: row.id, order_number: row.order_number ?? String(row.id) })
           }
           onSend={() => sendMutation.mutate(row.id)}
           onAccept={() => acceptMutation.mutate(row.id)}
           onReject={() => rejectMutation.mutate(row.id)}
           onConvert={() =>
-            setConvertTarget({ id: row.id, proposal_number: row.proposal_number })
+            setConvertTarget({ id: row.id, order_number: row.order_number ?? String(row.id) })
           }
           onPrint={() =>
             window.open(`${paths.sales.orders}/${row.id}?print=1&download=pdf`, '_blank')
@@ -725,7 +725,7 @@ export function SalesOrdersIndexPage() {
               toolbar.applySearch(true)
               setSearchParams({ per_page: toolbar.perPage })
             }}
-            createPermission="create-sales-proposals"
+            createPermission="create-sales-orders"
             onCreateClick={() => navigate(paths.sales.orderCreate)}
             createButtonText={t('Create Sales Order')}
             className="h-auto py-8"
@@ -749,7 +749,7 @@ export function SalesOrdersIndexPage() {
         message={
           convertTarget
             ? t('Are you sure you want to convert sales order "{{number}}" to an invoice?', {
-                number: convertTarget.proposal_number,
+                number: convertTarget.order_number,
               })
             : ''
         }

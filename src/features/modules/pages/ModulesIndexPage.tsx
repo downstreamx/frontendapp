@@ -27,6 +27,7 @@ import { getApiErrorMessage } from '@/lib/errors'
 import { hasPermission } from '@/lib/permissions'
 import { getPackageAlias, getPackageFavicon } from '@/utils/helpers'
 import { fetchAddOnModules, toggleAddOnModule, type AddOnModuleRow } from '../modules-api'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 
 export function ModulesIndexPage() {
   const { t } = useTranslation()
@@ -95,7 +96,7 @@ export function ModulesIndexPage() {
       </CardHeader>
       <CardContent>
         {listQuery.isLoading ? (
-          <p className="text-sm text-muted-foreground">{t('Loading…')}</p>
+          <PageContentLoader className="min-h-[12rem]" />
         ) : filteredModules.length > 0 ? (
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6">
             {filteredModules.map((module) => (

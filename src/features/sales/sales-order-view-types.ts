@@ -27,8 +27,10 @@ export type SalesOrderLineItem = {
 
 export type SalesOrderDetail = {
   id: number
-  proposal_number: string
-  proposal_date: string
+  order_number: string
+  order_date: string
+  /** @deprecated Prefer order_number */
+  /** @deprecated Prefer order_date */
   due_date: string
   customer_id: number
   depot_id?: number | null

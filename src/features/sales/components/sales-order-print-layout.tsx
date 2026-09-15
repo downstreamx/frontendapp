@@ -36,14 +36,14 @@ export function SalesOrderPrintLayout({
       companySettings={companySettings}
       containerClassName="proposal-container"
       documentTitle={t('SALES ORDER')}
-      documentNumber={proposal.proposal_number}
+      documentNumber={(proposal.order_number)}
       autoPrint={autoPrint && !downloadPdf}
       downloadPdf={downloadPdf}
-      pdfFilename={`sales-order-${proposal.proposal_number}.pdf`}
+      pdfFilename={`sales-order-${(proposal.order_number)}.pdf`}
       meta={
         <>
           <p>
-            {t('Date')}: {formatDate(proposal.proposal_date)}
+            {t('Date')}: {formatDate(proposal.order_date)}
           </p>
           {proposal.due_date ? (
             <p>

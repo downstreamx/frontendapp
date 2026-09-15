@@ -1,6 +1,10 @@
 import * as React from "react"
 
 import { cn } from "@/lib/utils"
+import {
+  contentTitleFromChildren,
+  useRegisterContentTitle,
+} from "@/contexts/page-chrome-context"
 
 const Card = React.forwardRef<
   HTMLDivElement,
@@ -9,7 +13,7 @@ const Card = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "rounded-xl border border-border/60 bg-card text-card-foreground shadow-card",
+      "rounded-2xl border border-border/60 bg-card text-card-foreground shadow-none",
       className
     )}
     {...props}
@@ -32,16 +36,22 @@ CardHeader.displayName = "CardHeader"
 const CardTitle = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLHeadingElement>
->(({ className, ...props }, ref) => (
-  <h3
-    ref={ref}
-    className={cn(
-      "text-2xl font-semibold leading-none tracking-tight",
-      className
-    )}
-    {...props}
-  />
-))
+>(({ className, children, ...props }, ref) => {
+  useRegisterContentTitle(contentTitleFromChildren(children))
+
+  return (
+    <h3
+      ref={ref}
+      className={cn(
+        "text-2xl font-semibold leading-none tracking-tight",
+        className
+      )}
+      {...props}
+    >
+      {children}
+    </h3>
+  )
+})
 CardTitle.displayName = "CardTitle"
 
 const CardDescription = React.forwardRef<

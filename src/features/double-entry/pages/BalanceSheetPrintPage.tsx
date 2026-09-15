@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useAppContext } from '@/contexts/app-context'
 import { getBalanceSheet } from '../balance-sheets-api'
 import { BalanceSheetPrintLayout } from '../components/BalanceSheetPrintLayout'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 
 export function BalanceSheetPrintPage() {
   const { t } = useTranslation()
@@ -20,7 +21,7 @@ export function BalanceSheetPrintPage() {
   })
 
   if (isLoading) {
-    return <p className="p-8 text-sm text-muted-foreground">{t('Loading…')}</p>
+    return <PageContentLoader className="min-h-[16rem]" />
   }
 
   if (error || !data) {

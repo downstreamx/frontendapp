@@ -7,7 +7,7 @@ import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
-import { Skeleton } from '@/components/ui/skeleton'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 import { ConfirmationDialog } from '@/components/ui/confirmation-dialog'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { useAppContext } from '@/contexts/app-context'
@@ -143,43 +143,43 @@ export function SalesOrderViewPage() {
     auth.permissions,
     auth.roles,
     auth.user?.type,
-    'edit-sales-proposals',
+    'edit-sales-orders',
   )
   const canDelete = hasPermission(
     auth.permissions,
     auth.roles,
     auth.user?.type,
-    'delete-sales-proposals',
+    'delete-sales-orders',
   )
   const canSend = hasPermission(
     auth.permissions,
     auth.roles,
     auth.user?.type,
-    'sent-sales-proposals',
+    'sent-sales-orders',
   )
   const canAccept = hasPermission(
     auth.permissions,
     auth.roles,
     auth.user?.type,
-    'accept-sales-proposals',
+    'accept-sales-orders',
   )
   const canReject = hasPermission(
     auth.permissions,
     auth.roles,
     auth.user?.type,
-    'reject-sales-proposals',
+    'reject-sales-orders',
   )
   const canConvert = hasPermission(
     auth.permissions,
     auth.roles,
     auth.user?.type,
-    'convert-sales-proposals',
+    'convert-sales-orders',
   )
   const canPrint = hasPermission(
     auth.permissions,
     auth.roles,
     auth.user?.type,
-    'print-sales-proposals',
+    'print-sales-orders',
   )
 
   const proposalQuery = useQuery({
@@ -195,7 +195,7 @@ export function SalesOrderViewPage() {
 
   useSalesPageChrome(
     proposal
-      ? `${t('Sales Order')} #${proposal.proposal_number}`
+      ? `${t('Sales Order')} #${proposal.order_number}`
       : t('Sales Order Details'),
     t('Sales Orders'),
     { centerPageTitle: true },
@@ -258,9 +258,8 @@ export function SalesOrderViewPage() {
 
   if (proposalQuery.isLoading) {
     return (
-      <div className="mx-auto max-w-6xl space-y-4 p-6">
-        <Skeleton className="h-10 w-full" />
-        <Skeleton className="h-64 w-full" />
+      <div className="mx-auto max-w-6xl p-6">
+        <PageContentLoader className="min-h-[16rem]" />
       </div>
     )
   }
@@ -391,7 +390,7 @@ export function SalesOrderViewPage() {
         <Card className={commercialDetailHeaderCardClass}>
           <CardContent className="p-6">
             <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
-              <p className="text-lg text-muted-foreground">#{proposal.proposal_number}</p>
+              <p className="text-lg text-muted-foreground">#{proposal.order_number}</p>
               <div className="flex items-center gap-4">
                 <span className={getSalesOrderStatusBadgeClasses(proposal.display_status)}>
                   {statusLabel(proposal.display_status)}
@@ -427,7 +426,7 @@ export function SalesOrderViewPage() {
                 <div className="space-y-1 text-sm">
                   <div className="flex justify-between gap-4">
                     <span className="text-muted-foreground">{t('Order Date')}</span>
-                    <span>{formatDate(proposal.proposal_date)}</span>
+                    <span>{formatDate(proposal.order_date)}</span>
                   </div>
                   {proposal.due_date ? (
                     <div className="flex justify-between gap-4">

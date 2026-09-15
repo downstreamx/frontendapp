@@ -40,6 +40,7 @@ import { formatDate } from '@/utils/helpers'
 import { TableUserAvatarCell } from '@/features/shared/components/table-avatar-cells'
 import { fetchDriversIndexMeta, listDriversPaginated } from '../fleet-api'
 import { useCreateDialogFromQuery } from '@/hooks/use-create-dialog-from-query'
+import { ForbiddenPage } from '@/components/status-page'
 
 type AppliedFilters = {
   branch_id: string
@@ -286,7 +287,7 @@ export function DriversIndexPage() {
   ]
 
   if (!canManage) {
-    return <p className="text-sm text-muted-foreground">{t('Permission denied')}</p>
+    return <ForbiddenPage />
   }
 
   return (

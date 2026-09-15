@@ -32,6 +32,7 @@ import { EmployeeFormPage } from '@/features/hrm/pages/EmployeeFormPage'
 import { useCreateDialogFromQuery } from '@/hooks/use-create-dialog-from-query'
 import { personName } from '@/features/shared/lib/entity-labels'
 import { TableUserAvatarCell } from '@/features/shared/components/table-avatar-cells'
+import { ForbiddenPage } from '@/components/status-page'
 
 export function DepotRepsIndexPage() {
   const { t } = useTranslation()
@@ -107,7 +108,7 @@ export function DepotRepsIndexPage() {
   ]
 
   if (!canManage) {
-    return <p className="text-sm text-muted-foreground">{t('Permission denied')}</p>
+    return <ForbiddenPage />
   }
 
   return (

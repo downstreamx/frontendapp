@@ -79,7 +79,7 @@ function CustomerRowActions({
 
   return (
     <div className="flex gap-1">
-      {canViewReport && row.user_id ? (
+      {canViewReport && row.id ? (
         <Tooltip delayDuration={0}>
           <TooltipTrigger asChild>
             <Button
@@ -273,8 +273,8 @@ export function CustomersIndexPage() {
   }
 
   const openReport = (row: PartyRow) => {
-    if (!row.user_id) return
-    const params = new URLSearchParams({ customer: String(row.user_id) })
+    if (!row.id) return
+    const params = new URLSearchParams({ customer_id: String(row.id) })
     navigate(`${paths.account.reports}?${params.toString()}`)
   }
 

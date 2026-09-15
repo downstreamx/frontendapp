@@ -38,6 +38,7 @@ import { paths } from '@/lib/paths'
 import { getApiErrorMessage } from '@/lib/errors'
 import type { FormDialogCallbacks } from '@/features/shared/types/form-presentation'
 import { cn } from '@/lib/utils'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 
 type TabId = 'details' | 'pricing' | 'media' | 'depot'
 
@@ -186,7 +187,7 @@ export function ProductFormPage({
   const loading = metaLoading || (isEdit && productLoading)
 
   if (loading) {
-    return <p className="text-sm text-muted-foreground">{t('Loading…')}</p>
+    return <PageContentLoader className="min-h-[16rem]" />
   }
 
   const cancelButton = isDialog ? (

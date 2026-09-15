@@ -52,15 +52,7 @@ export type PartyRow = {
   available_credit_limit?: number
 }
 
-export type CustomerCreateMetaUser = {
-  id: number
-  name: string
-  email: string
-  mobile_no?: string | null
-}
-
 export type CustomerCreateMeta = {
-  users: CustomerCreateMetaUser[]
   payment_terms: SetupPaymentTermOption[]
   customer_categories: SetupCategoryOption[]
 }
@@ -72,7 +64,6 @@ export type CustomerEditMeta = {
 }
 
 export type SupplierCreateMeta = {
-  users: CustomerCreateMetaUser[]
   payment_terms: SetupPaymentTermOption[]
   supplier_categories: SetupCategoryOption[]
 }
@@ -83,8 +74,20 @@ export type SupplierEditMeta = {
   supplier_categories: SetupCategoryOption[]
 }
 
+export type PartyUserPayload = {
+  first_name: string
+  middle_name?: string
+  last_name: string
+  email: string
+  mobile_no?: string
+  password: string
+  password_confirmation: string
+  avatar?: string
+  is_enable_login?: boolean
+}
+
 export type PartyPayload = {
-  user_id?: number | null
+  user?: PartyUserPayload
   company_name: string
   company_logo?: string | null
   contact_person_name: string
@@ -92,6 +95,7 @@ export type PartyPayload = {
   contact_person_mobile?: string
   tax_number?: string
   payment_terms?: string
+  credit_limit?: number
   supplier_category_id?: number | null
   customer_category_id?: number | null
   notes?: string

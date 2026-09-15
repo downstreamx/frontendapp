@@ -12,6 +12,7 @@ import { usePageChrome } from '@/contexts/page-chrome-context'
 import { getApiErrorMessage, mapApiValidationErrors } from '@/lib/errors'
 import { paths } from '@/lib/paths'
 import { RolePermissionMatrix } from '../components/RolePermissionMatrix'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 import {
   createRole,
   fetchRoleCreateMeta,
@@ -112,7 +113,7 @@ export function RoleFormPage() {
   const isLoading = isEdit ? editLoading : createLoading
 
   if (isLoading) {
-    return <p className="text-sm text-muted-foreground">{t('Loading...')}</p>
+    return <PageContentLoader className="min-h-[16rem]" />
   }
 
   return (

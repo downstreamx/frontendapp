@@ -9,6 +9,7 @@ import { formatCurrency, formatDate } from '@/utils/helpers'
 import { route } from '@/lib/route'
 import { ProjectStatusBadge } from '../components/ProjectStatusBadge'
 import { fetchProjectReport } from '../taskly-api'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 
 export function ProjectReportShowPage() {
   const { id } = useParams<{ id: string }>()
@@ -37,7 +38,7 @@ export function ProjectReportShowPage() {
   }
 
   if (isLoading) {
-    return <p className="text-sm text-muted-foreground">{t('Loading…')}</p>
+    return <PageContentLoader className="min-h-[16rem]" />
   }
 
   if (error || !data || !project) {

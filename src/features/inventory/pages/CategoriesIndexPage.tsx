@@ -1,14 +1,13 @@
 import { useCallback, useMemo, useState } from 'react'
-import { Edit, Plus, Tag, Trash2 } from 'lucide-react'
+import { Edit, Tag, Trash2 } from 'lucide-react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
+import { ModuleListCard } from '@/features/shared/components/ModuleListCard'
 import { DataTable, type Column } from '@/components/ui/data-table'
 import { ConfirmationDialog } from '@/components/ui/confirmation-dialog'
 import { NoRecordsFound } from '@/components/no-records-found'
-import { Skeleton } from '@/components/ui/skeleton'
 import {
   Tooltip,
   TooltipContent,
@@ -134,7 +133,7 @@ export function CategoriesIndexPage() {
         render: (value) => (
           <div className="flex items-center gap-2">
             <div
-              className="h-6 w-6 rounded border border-gray-200"
+              className="h-6 w-6 rounded border border-border/60"
               style={{ backgroundColor: String(value ?? DEFAULT_COLOR) }}
             />
           </div>
@@ -206,35 +205,18 @@ export function CategoriesIndexPage() {
 
   return (
     <TooltipProvider>
-      <Card className="shadow-sm">
-        <CardContent className="p-6">
-          <div className="mb-6 flex items-center justify-between">
-            <h3 className="text-lg font-medium">{t('Category')}</h3>
-            {mayCreate ? (
-              <Tooltip delayDuration={0}>
-                <TooltipTrigger asChild>
-                  <Button size="sm" onClick={openCreate}>
-                    <Plus className="h-4 w-4" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>{t('Create')}</p>
-                </TooltipContent>
-              </Tooltip>
-            ) : null}
-          </div>
-
-          {isLoading ? (
-            <Skeleton className="h-48 w-full" />
-          ) : error ? (
-            <p className="text-sm text-destructive">{t('Failed to load categories.')}</p>
-          ) : (
-            <div className="max-h-[75vh] w-full overflow-y-auto rounded-none">
-              <div className="min-w-[600px]">
-                <DataTable
+      <>
+      <ModuleListCard
+        title={t('Category')}
+        canCreate={mayCreate}
+        onCreateClick={mayCreate ? openCreate : undefined}
+        isLoading={isLoading}
+        error={!!error}
+      >
+        <DataTable
                   data={rows}
                   columns={columns}
-                  className="rounded-none"
+                  embedded
                   emptyState={
                     <NoRecordsFound
                       icon={Tag}
@@ -247,11 +229,7 @@ export function CategoriesIndexPage() {
                     />
                   }
                 />
-              </div>
-            </div>
-          )}
-        </CardContent>
-      </Card>
+      </ModuleListCard>
 
       <CrudFormDialog
         open={modalOpen}
@@ -284,6 +262,7 @@ export function CategoriesIndexPage() {
         variant="destructive"
         loading={deleteMutation.isPending}
       />
+      </>
     </TooltipProvider>
   )
 }

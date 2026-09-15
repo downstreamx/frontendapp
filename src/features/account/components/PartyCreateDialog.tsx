@@ -132,7 +132,6 @@ export function PartyCreateDialog({ party, open, onOpenChange }: Props) {
             mode="create"
             data={data}
             onChange={setData}
-            users={metaQuery.data?.users ?? []}
             paymentTerms={metaQuery.data?.payment_terms ?? []}
             categories={categories}
             errors={fieldErrors}

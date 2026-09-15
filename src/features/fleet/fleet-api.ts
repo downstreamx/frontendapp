@@ -26,7 +26,7 @@ export type TruckListRow = {
   make?: string | null
   truck_model?: string | null
   avatar?: string | null
-  fuel_capacity?: string | null
+  capacity_litres?: string | null
   status?: string | null
   operational_status?: string | null
   current_truck_load_id?: number | null
@@ -65,7 +65,7 @@ export type TruckRecord = {
   year: number
   color?: string | null
   purchase_price?: number | string | null
-  fuel_capacity: number | string
+  capacity_litres: number | string
   engine_size?: number | string | null
   engine_hours?: number | string | null
   axle_count?: number | string | null

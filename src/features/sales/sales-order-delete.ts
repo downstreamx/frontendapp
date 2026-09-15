@@ -7,8 +7,8 @@ export function canDeleteSalesOrder(
   userType?: string,
 ): boolean {
   if (
-    !hasPermission(permissions, roles, userType, 'delete-sales-proposals') &&
-    !hasPermission(permissions, roles, userType, 'manage-sales-proposals')
+    !hasPermission(permissions, roles, userType, 'delete-sales-orders') &&
+    !hasPermission(permissions, roles, userType, 'manage-sales-orders')
   ) {
     return false
   }
@@ -17,12 +17,13 @@ export function canDeleteSalesOrder(
 }
 
 export function salesOrderDeleteMessage(
-  row: { proposal_number?: string },
+  row: { order_number?: string },
   t: (key: string, options?: Record<string, string>) => string,
 ): string {
-  if (row.proposal_number) {
+  const number = row.order_number
+  if (number) {
     return t('Are you sure you want to delete sales order "{{number}}"? This action cannot be undone.', {
-      number: row.proposal_number,
+      number,
     })
   }
 

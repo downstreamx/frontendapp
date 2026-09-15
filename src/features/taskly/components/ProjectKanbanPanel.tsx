@@ -17,6 +17,7 @@ import {
 } from '@/components/ui/dialog'
 import { getApiErrorMessage } from '@/lib/errors'
 import { paths } from '@/lib/paths'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 import {
   createProjectBug,
   createProjectTask,
@@ -104,7 +105,7 @@ export function ProjectKanbanPanel({ projectId, kind, embedded = false }: Props)
   }
 
   if (isLoading) {
-    return <p className="text-sm text-muted-foreground">{t('Loading board…')}</p>
+    return <PageContentLoader label={t('Loading board…')} className="min-h-[16rem]" />
   }
 
   return (

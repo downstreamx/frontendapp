@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import KanbanBoard, { type KanbanColumn, type KanbanTask } from '@/components/kanban-board'
 import { getApiErrorMessage } from '@/lib/errors'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 import {
   fetchDealsKanban,
   fetchLeadsKanban,
@@ -76,7 +77,7 @@ export function CrmKanbanView({ kind, pipelineId, showPath }: Props) {
   })
 
   if (isLoading) {
-    return <p className="text-sm text-muted-foreground">{t('Loading board…')}</p>
+    return <PageContentLoader label={t('Loading board…')} className="min-h-[16rem]" />
   }
 
   const board = data as CrmKanbanResponse | undefined

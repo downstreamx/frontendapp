@@ -11,7 +11,15 @@ export type PartyAddress = {
 }
 
 export type CustomerFormState = {
+  /** Edit only — linked user id (not sent on update). */
   user_id: string
+  first_name: string
+  middle_name: string
+  last_name: string
+  avatar: string
+  password: string
+  password_confirmation: string
+  is_enable_login: boolean
   company_name: string
   company_logo: string
   contact_person_name: string
@@ -39,6 +47,13 @@ export const emptyPartyAddress = (): PartyAddress => ({
 
 export const initialCustomerFormState = (): CustomerFormState => ({
   user_id: '',
+  first_name: '',
+  middle_name: '',
+  last_name: '',
+  avatar: '',
+  password: '',
+  password_confirmation: '',
+  is_enable_login: true,
   company_name: '',
   company_logo: '',
   contact_person_name: '',
@@ -56,6 +71,7 @@ export const initialCustomerFormState = (): CustomerFormState => ({
 
 export function partyRowToFormState(row: PartyRow): CustomerFormState {
   return {
+    ...initialCustomerFormState(),
     user_id: row.user_id ? String(row.user_id) : '',
     company_name: row.company_name ?? '',
     company_logo: row.company_logo ?? '',
@@ -82,9 +98,9 @@ export function buildCustomerPayload(state: CustomerFormState): PartyPayload {
   return buildPartyPayload(state, 'customer')
 }
 
-/** Update payload omits user link (legacy edit does not change linked user). */
+/** Update payload omits nested user (edit does not create/relink users). */
 export function buildCustomerUpdatePayload(state: CustomerFormState): PartyPayload {
-  const { user_id: _userId, ...payload } = buildPartyPayload(state, 'customer')
+  const { user: _user, ...payload } = buildPartyPayload(state, 'customer')
   return payload
 }
 
@@ -93,7 +109,7 @@ export function buildSupplierPayload(state: CustomerFormState): PartyPayload {
 }
 
 export const buildSupplierUpdatePayload = (state: CustomerFormState): PartyPayload => {
-  const { user_id: _userId, ...payload } = buildPartyPayload(state, 'supplier')
+  const { user: _user, ...payload } = buildPartyPayload(state, 'supplier')
   return payload
 }
 
@@ -116,10 +132,17 @@ function buildPartyPayload(state: CustomerFormState, party: 'customer' | 'suppli
     notes: state.notes || undefined,
     billing_address: billing,
     same_as_billing: state.same_as_billing,
-  }
-
-  if (state.user_id) {
-    payload.user_id = Number(state.user_id)
+    user: {
+      first_name: state.first_name,
+      middle_name: state.middle_name || undefined,
+      last_name: state.last_name,
+      email: state.contact_person_email,
+      mobile_no: state.contact_person_mobile || undefined,
+      password: state.password,
+      password_confirmation: state.password_confirmation,
+      avatar: state.avatar || undefined,
+      is_enable_login: state.is_enable_login,
+    },
   }
 
   if (state.category_id) {

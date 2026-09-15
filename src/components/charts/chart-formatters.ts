@@ -15,7 +15,7 @@ export function formatChartValue(value: unknown, format: ChartValueFormat = 'num
   return new Intl.NumberFormat('en-NG').format(num)
 }
 
-export const CHART_COLORS = ['#3b82f6', '#10b77f', '#f59e0b', '#ef4444', '#8b5cf6'] as const
+export const CHART_COLORS = ['#1b703a', '#f08c00', '#2f9e62', '#c9a227', '#5c574e'] as const
 
 export const CHART_TOOLTIP_STYLE = {
   backgroundColor: '#fff',

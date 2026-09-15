@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ConfirmationDialog } from '@/components/ui/confirmation-dialog'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 import { useAppContext } from '@/contexts/app-context'
 import { hasPermission } from '@/lib/permissions'
 import { usePageChrome } from '@/contexts/page-chrome-context'
@@ -125,7 +126,7 @@ export function EmployeeShowPage({
   })
 
   if (isLoading) {
-    return <p className="text-sm text-muted-foreground">{t('Loading…')}</p>
+    return <PageContentLoader className="min-h-[16rem]" />
   }
 
   if (error || !employee) {
@@ -171,19 +172,19 @@ export function EmployeeShowPage({
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-4">
-        <Card className="lg:col-span-1">
+        <Card className="border-border/60 lg:col-span-1">
           <CardContent className="p-6 text-center">
             <div className="mb-4 flex justify-center">
               <UserAvatar
                 avatar={employee.user?.avatar}
                 name={employee.user?.name ?? ''}
                 size="xl"
-                className="border-4 border-muted"
+                className="border-4 border-[var(--brand-green-soft)]"
               />
             </div>
-            <h3 className="text-xl font-semibold mb-1">{employee.user?.name}</h3>
-            <p className="text-muted-foreground text-sm mb-4">{employee.user?.email}</p>
-            <div className="space-y-3 text-left text-sm">
+            <h3 className="mb-1 text-xl font-semibold tracking-tight">{employee.user?.name}</h3>
+            <p className="mb-4 text-sm text-muted-foreground">{employee.user?.email}</p>
+            <div className="space-y-3 rounded-xl border border-border/40 bg-[hsl(var(--section-deep))]/70 p-4 text-left text-sm">
               <div>
                 <p className="text-muted-foreground">{t('Employee ID')}</p>
                 <p className="font-medium">{employee.employee_id}</p>

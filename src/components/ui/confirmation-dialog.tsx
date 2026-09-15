@@ -75,7 +75,7 @@ export function ConfirmationDialog({
                 : ''
             }
           >
-            {loading ? t('Loading...') : confirmText || t('Confirm')}
+            {loading ? t('Loading…') : confirmText || t('Confirm')}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

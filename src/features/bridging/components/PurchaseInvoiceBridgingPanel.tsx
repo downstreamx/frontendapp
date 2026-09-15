@@ -244,25 +244,25 @@ export function PurchaseInvoiceBridgingPanel({
           ) : null}
 
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-4">
-            <div className="rounded-lg bg-muted/50 p-3">
+            <div className="rounded-xl border border-border/40 bg-[hsl(var(--section-deep))]/70 p-3">
               <p className="text-xs text-muted-foreground">{t('Invoiced qty')}</p>
               <p className="text-lg font-semibold">
                 {formatQuantity(progress?.total_invoiced_qty ?? 0)}
               </p>
             </div>
-            <div className="rounded-lg bg-muted/50 p-3">
+            <div className="rounded-xl border border-border/40 bg-[hsl(var(--section-deep))]/70 p-3">
               <p className="text-xs text-muted-foreground">{t('Paid qty')}</p>
               <p className="text-lg font-semibold">
                 {formatQuantity(progress?.total_paid_qty ?? 0)}
               </p>
             </div>
-            <div className="rounded-lg bg-muted/50 p-3">
+            <div className="rounded-xl border border-border/40 bg-[hsl(var(--section-deep))]/70 p-3">
               <p className="text-xs text-muted-foreground">{t('Bridged qty')}</p>
               <p className="text-lg font-semibold">
                 {formatQuantity(progress?.total_bridged_qty ?? 0)}
               </p>
             </div>
-            <div className="rounded-lg bg-muted/50 p-3">
+            <div className="rounded-xl border border-border/40 bg-[hsl(var(--section-deep))]/70 p-3">
               <p className="text-xs text-muted-foreground">{t('Unbridged qty')}</p>
               <p className="text-lg font-semibold text-amber-700 dark:text-amber-400">
                 {formatQuantity(progress?.total_balance_qty ?? 0)}

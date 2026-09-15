@@ -22,7 +22,7 @@ export function FilterButton({
         <Button 
             variant="outline" 
             onClick={onToggle} 
-            className={`flex items-center gap-2 ${className}`}
+            className={`flex items-center gap-2 border-border/60 bg-card/80 shadow-none ${className}`}
         >
             <Icon className="h-4 w-4" />
             {label || t('Filters')}

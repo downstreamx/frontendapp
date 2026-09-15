@@ -49,6 +49,7 @@ import {
   updateTruckProvider,
   type FleetProviderRow,
 } from '../fleet-api'
+import { ForbiddenPage } from '@/components/status-page'
 import {
   formStateToProviderPayload,
   initialFleetProviderFormState,
@@ -363,7 +364,7 @@ export function FleetProviderListPage({ kind, title, breadcrumb }: Props) {
   ]
 
   if (!canManage) {
-    return <p className="text-sm text-muted-foreground">{t('Permission denied')}</p>
+    return <ForbiddenPage />
   }
 
   const providerTypes =

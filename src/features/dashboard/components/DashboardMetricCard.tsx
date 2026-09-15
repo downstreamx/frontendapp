@@ -9,41 +9,42 @@ function formatMetricValue(value: string | number): string {
   return formatQuantity(value)
 }
 
+/** Solid tinted surfaces (no gradients) with visible borders. */
 const variants = {
   blue: {
-    card: 'border-blue-200 bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-950/40 dark:to-blue-900/20 dark:border-blue-900',
-    text: 'text-blue-700 dark:text-blue-300',
-    iconBg: 'bg-blue-600/10 dark:bg-blue-400/10',
+    card: 'border-[#b7d4c4] bg-[#e7f3eb] dark:border-emerald-900 dark:bg-emerald-950/40',
+    text: 'text-[#1c5c3a] dark:text-emerald-300',
+    iconBg: 'bg-white/70 dark:bg-emerald-400/10',
   },
   green: {
-    card: 'border-emerald-200 bg-gradient-to-r from-emerald-50 to-emerald-100 dark:from-emerald-950/40 dark:to-emerald-900/20 dark:border-emerald-900',
-    text: 'text-emerald-700 dark:text-emerald-300',
-    iconBg: 'bg-emerald-600/10 dark:bg-emerald-400/10',
+    card: 'border-[#b7d4c4] bg-[#e7f3eb] dark:border-emerald-900 dark:bg-emerald-950/40',
+    text: 'text-[#1b703a] dark:text-emerald-300',
+    iconBg: 'bg-white/70 dark:bg-emerald-400/10',
   },
   red: {
-    card: 'border-rose-200 bg-gradient-to-r from-rose-50 to-rose-100 dark:from-rose-950/40 dark:to-rose-900/20 dark:border-rose-900',
-    text: 'text-rose-700 dark:text-rose-300',
-    iconBg: 'bg-rose-600/10 dark:bg-rose-400/10',
+    card: 'border-rose-200 bg-rose-50 dark:border-rose-900 dark:bg-rose-950/40',
+    text: 'text-rose-800 dark:text-rose-300',
+    iconBg: 'bg-white/70 dark:bg-rose-400/10',
   },
   orange: {
-    card: 'border-orange-200 bg-gradient-to-r from-orange-50 to-orange-100 dark:from-orange-950/40 dark:to-orange-900/20 dark:border-orange-900',
-    text: 'text-orange-700 dark:text-orange-300',
-    iconBg: 'bg-orange-600/10 dark:bg-orange-400/10',
+    card: 'border-[#f0c98a] bg-[#fff3e0] dark:border-orange-900 dark:bg-orange-950/40',
+    text: 'text-[#b86a00] dark:text-orange-300',
+    iconBg: 'bg-white/70 dark:bg-orange-400/10',
   },
   teal: {
-    card: 'border-teal-200 bg-gradient-to-r from-teal-50 to-teal-100 dark:from-teal-950/40 dark:to-teal-900/20 dark:border-teal-900',
-    text: 'text-teal-700 dark:text-teal-300',
-    iconBg: 'bg-teal-600/10 dark:bg-teal-400/10',
+    card: 'border-[#b7d4c4] bg-[#eef7f1] dark:border-teal-900 dark:bg-teal-950/40',
+    text: 'text-[#145c2f] dark:text-teal-300',
+    iconBg: 'bg-white/70 dark:bg-teal-400/10',
   },
   purple: {
-    card: 'border-purple-200 bg-gradient-to-r from-purple-50 to-purple-100 dark:from-purple-950/40 dark:to-purple-900/20 dark:border-purple-900',
-    text: 'text-purple-700 dark:text-purple-300',
-    iconBg: 'bg-purple-600/10 dark:bg-purple-400/10',
+    card: 'border-[#d9cce8] bg-[#f3eef8] dark:border-purple-900 dark:bg-purple-950/40',
+    text: 'text-[#5b3d7a] dark:text-purple-300',
+    iconBg: 'bg-white/70 dark:bg-purple-400/10',
   },
   slate: {
-    card: 'border-border bg-muted/30',
+    card: 'border-border bg-white dark:bg-card',
     text: 'text-foreground',
-    iconBg: 'bg-foreground/8',
+    iconBg: 'bg-[hsl(var(--section-deep))] dark:bg-accent',
   },
 } as const
 
@@ -68,12 +69,20 @@ export function DashboardMetricCard({
   const Icon = icon ?? BarChart3
 
   const content = (
-    <Card className={cn('relative overflow-hidden transition-shadow hover:shadow-card', styles.card, href && 'cursor-pointer')}>
+    <Card
+      className={cn(
+        'relative overflow-hidden border shadow-none',
+        styles.card,
+        href && 'cursor-pointer transition-colors hover:brightness-[0.99]',
+      )}
+    >
       <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
-        <CardTitle className={cn('text-base font-semibold leading-snug', styles.text)}>{title}</CardTitle>
+        <CardTitle className={cn('text-base font-semibold leading-snug', styles.text)}>
+          {title}
+        </CardTitle>
         <span
           className={cn(
-            'flex h-14 w-14 shrink-0 items-center justify-center rounded-lg',
+            'flex h-14 w-14 shrink-0 items-center justify-center rounded-xl',
             styles.iconBg,
           )}
           aria-hidden

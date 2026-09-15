@@ -65,7 +65,7 @@ function ActionItemRow({ item }: { item: ActionableNotificationItem }) {
   return (
     <Link
       to={item.href}
-      className="flex items-start gap-3 rounded-lg px-3 py-2.5 transition-colors hover:bg-muted/80"
+      className="flex items-start gap-3 rounded-lg px-3 py-2.5 transition-colors hover:bg-[hsl(var(--section-deep))]/80"
     >
       <span
         className={cn(
@@ -103,8 +103,8 @@ function InboxRow({
         }
       }}
       className={cn(
-        'flex items-start gap-3 rounded-lg px-3 py-2.5 transition-colors hover:bg-muted/80',
-        !item.is_read && 'bg-section/60',
+        'flex items-start gap-3 rounded-lg px-3 py-2.5 transition-colors hover:bg-[hsl(var(--section-deep))]/80',
+        !item.is_read && 'bg-[hsl(var(--section-deep))]/70',
       )}
     >
       <div
@@ -247,8 +247,8 @@ export function NotificationsBell({ variant = 'operations' }: Props) {
 
               {actionItems.length === 0 && notifications.length === 0 ? (
                 <div className="flex flex-col items-center gap-2 px-4 py-10 text-center">
-                  <span className="flex h-12 w-12 items-center justify-center rounded-full bg-muted">
-                    <Bell className="h-6 w-6 text-muted-foreground" />
+                  <span className="flex h-12 w-12 items-center justify-center rounded-full bg-[var(--brand-green-soft)] text-primary dark:bg-accent">
+                    <Bell className="h-6 w-6" />
                   </span>
                   <p className="text-sm font-medium text-foreground">
                     {isPortal ? t('No active deliveries') : t('No notifications yet')}
@@ -265,7 +265,7 @@ export function NotificationsBell({ variant = 'operations' }: Props) {
         </div>
 
         {!isPortal ? (
-          <div className="shrink-0 border-t bg-muted/30 px-3 py-2">
+          <div className="shrink-0 border-t border-border/50 bg-[hsl(var(--section-deep))]/70 px-3 py-2">
             <Button variant="ghost" size="sm" className="h-8 w-full justify-start gap-2 text-xs" asChild>
               <Link to={`${paths.settings}#email-notification-settings`}>
                 <Settings className="h-3.5 w-3.5" />

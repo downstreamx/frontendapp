@@ -1,23 +1,18 @@
-import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { PartyRow } from '../account-party-api'
 import { formatPartyAddressLines } from '../customer-view-utils'
 import { UserAvatar } from '@/features/shared/components/table-avatar-cells'
-
-function InfoTile({ label, children }: { label: string; children: ReactNode }) {
-  return (
-    <div className="rounded-lg bg-muted/50 p-4">
-      <p className="mb-1 text-sm font-semibold text-foreground">{label}</p>
-      <div className="text-sm text-muted-foreground">{children}</div>
-    </div>
-  )
-}
+import {
+  DetailInfoTile,
+  DetailSectionHeading,
+  detailMutedBlockClass,
+} from '@/features/shared/components/detail-info-tile'
 
 function AddressSection({ label, lines }: { label: string; lines: string[] }) {
   return (
     <section>
-      <h3 className="mb-4 text-lg font-semibold">{label}</h3>
-      <div className="rounded-lg bg-muted/50 p-4 text-sm text-muted-foreground">
+      <DetailSectionHeading>{label}</DetailSectionHeading>
+      <div className={detailMutedBlockClass}>
         {lines.map((line) => (
           <p key={line}>{line}</p>
         ))}
@@ -41,36 +36,36 @@ export function CustomerDetailsContent({ customer }: Props) {
   return (
     <div className="space-y-8">
       <section>
-        <h3 className="mb-4 text-lg font-semibold">{t('Customer Information')}</h3>
+        <DetailSectionHeading>{t('Customer Information')}</DetailSectionHeading>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-          <InfoTile label={t('Customer Code')}>
+          <DetailInfoTile label={t('Customer Code')}>
             <p>{customer.customer_code || '—'}</p>
-          </InfoTile>
-          <InfoTile label={t('Company Name')}>
+          </DetailInfoTile>
+          <DetailInfoTile label={t('Company Name')}>
             <p>{customer.company_name}</p>
-          </InfoTile>
-          <InfoTile label={t('Contact Person')}>
+          </DetailInfoTile>
+          <DetailInfoTile label={t('Contact Person')}>
             <p>{customer.contact_person_name || '—'}</p>
-          </InfoTile>
-          <InfoTile label={t('Email')}>
+          </DetailInfoTile>
+          <DetailInfoTile label={t('Email')}>
             <p>{customer.contact_person_email || '—'}</p>
-          </InfoTile>
-          <InfoTile label={t('Mobile')}>
+          </DetailInfoTile>
+          <DetailInfoTile label={t('Mobile')}>
             <p>{customer.contact_person_mobile || '—'}</p>
-          </InfoTile>
-          <InfoTile label={t('Tax Number')}>
+          </DetailInfoTile>
+          <DetailInfoTile label={t('Tax Number')}>
             <p>{customer.tax_number || '—'}</p>
-          </InfoTile>
-          <InfoTile label={t('Payment Terms')}>
+          </DetailInfoTile>
+          <DetailInfoTile label={t('Payment Terms')}>
             <p>{customer.payment_terms || '—'}</p>
-          </InfoTile>
+          </DetailInfoTile>
         </div>
       </section>
 
       {customer.user ? (
         <section>
-          <h3 className="mb-4 text-lg font-semibold">{t('Linked User')}</h3>
-          <div className="flex items-center gap-3 rounded-lg bg-muted/50 p-4">
+          <DetailSectionHeading>{t('Linked User')}</DetailSectionHeading>
+          <div className={`flex items-center gap-3 ${detailMutedBlockClass}`}>
             <UserAvatar
               avatar={customer.user.avatar}
               name={customer.user.name}
@@ -79,7 +74,7 @@ export function CustomerDetailsContent({ customer }: Props) {
               className="bg-background"
             />
             <div>
-              <p className="font-medium">{customer.user.name}</p>
+              <p className="font-medium text-foreground">{customer.user.name}</p>
               {customer.user.is_disable ? (
                 <p className="text-xs text-destructive">{t('User is disabled')}</p>
               ) : null}
@@ -98,10 +93,8 @@ export function CustomerDetailsContent({ customer }: Props) {
 
       {customer.notes ? (
         <section>
-          <h3 className="mb-4 text-lg font-semibold">{t('Notes')}</h3>
-          <p className="rounded-lg bg-muted/50 p-4 text-sm text-muted-foreground whitespace-pre-wrap">
-            {customer.notes}
-          </p>
+          <DetailSectionHeading>{t('Notes')}</DetailSectionHeading>
+          <p className={`${detailMutedBlockClass} whitespace-pre-wrap`}>{customer.notes}</p>
         </section>
       ) : null}
     </div>

@@ -9,6 +9,7 @@ import { formatCurrency, formatDate } from '@/utils/helpers'
 import { paths } from '@/lib/paths'
 import { candidateFullName } from '../recruitment-candidates-api'
 import { getOffer } from '../recruitment-offers-api'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 
 export function OfferShowPage() {
   const { id } = useParams<{ id: string }>()
@@ -29,7 +30,7 @@ export function OfferShowPage() {
     ],
   })
 
-  if (isLoading) return <p className="text-sm text-muted-foreground">{t('Loading…')}</p>
+  if (isLoading) return <PageContentLoader className="min-h-[16rem]" />
   if (error || !offer) return <p className="text-sm text-destructive">{t('Offer not found.')}</p>
 
   return (

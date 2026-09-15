@@ -17,21 +17,21 @@ type Translate = (key: string) => string
 
 const badgeClasses: Record<string, string> = {
   empty_unbridged:
-    'inline-flex rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-xs font-medium text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200',
+    'inline-flex rounded-full bg-secondary px-2.5 py-0.5 text-xs font-medium text-secondary-foreground',
   in_transit_bridged:
-    'inline-flex rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800 dark:bg-green-950 dark:text-green-200',
+    'inline-flex rounded-full bg-[var(--brand-green-soft)] px-2.5 py-0.5 text-xs font-medium text-accent-foreground',
   loaded_bridged:
-    'inline-flex rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800 dark:bg-green-950 dark:text-green-200',
+    'inline-flex rounded-full bg-[var(--brand-green-soft)] px-2.5 py-0.5 text-xs font-medium text-accent-foreground',
   arrived:
-    'inline-flex rounded-full bg-teal-100 px-2 py-0.5 text-xs font-medium text-teal-800 dark:bg-teal-950 dark:text-teal-200',
+    'inline-flex rounded-full bg-accent px-2.5 py-0.5 text-xs font-medium text-accent-foreground',
   assigned_for_distribution:
-    'inline-flex rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-800 dark:bg-blue-950 dark:text-blue-200',
+    'inline-flex rounded-full bg-accent px-2.5 py-0.5 text-xs font-medium text-accent-foreground',
   in_transit_distribution:
-    'inline-flex rounded-full bg-indigo-100 px-2 py-0.5 text-xs font-medium text-indigo-800 dark:bg-indigo-950 dark:text-indigo-200',
+    'inline-flex rounded-full bg-[var(--brand-orange-soft)] px-2.5 py-0.5 text-xs font-medium text-[color:var(--brand-orange)]',
   in_transit:
-    'inline-flex rounded-full bg-indigo-100 px-2 py-0.5 text-xs font-medium text-indigo-800 dark:bg-indigo-950 dark:text-indigo-200',
+    'inline-flex rounded-full bg-[var(--brand-orange-soft)] px-2.5 py-0.5 text-xs font-medium text-[color:var(--brand-orange)]',
   delivered_pending_release:
-    'inline-flex rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-800 dark:bg-amber-950 dark:text-amber-200',
+    'inline-flex rounded-full bg-[var(--brand-orange-soft)] px-2.5 py-0.5 text-xs font-medium text-[color:var(--brand-orange)]',
 }
 
 const labels: Record<string, string> = {

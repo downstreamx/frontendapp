@@ -11,6 +11,7 @@ import { usePageChrome } from '@/contexts/page-chrome-context'
 import { getApiErrorMessage } from '@/lib/errors'
 import { paths } from '@/lib/paths'
 import { changeUserPassword, fetchUserForEdit } from '../admin-api'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 
 export function UserChangePasswordPage() {
   const { id } = useParams<{ id: string }>()
@@ -57,7 +58,7 @@ export function UserChangePasswordPage() {
   }
 
   if (isLoading) {
-    return <p className="text-sm text-muted-foreground">{t('Loading...')}</p>
+    return <PageContentLoader className="min-h-[16rem]" />
   }
 
   return (

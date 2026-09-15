@@ -36,7 +36,7 @@ export interface DataTableProps<T = any> {
   sortDirection?: 'asc' | 'desc'
   emptyState?: React.ReactNode
   className?: string
-  /** Table only — use inside ModuleListCard (no outer Card). */
+  /** Table only — use inside ModuleListCard (no outer Card). Default true for list shells. */
   embedded?: boolean
   searchable?: boolean
   searchPlaceholder?: string
@@ -126,7 +126,7 @@ export function DataTable<T = any>({
   sortDirection,
   emptyState,
   className,
-  embedded = false,
+  embedded = true,
   searchable = false,
   searchPlaceholder = 'Search...',
   pageSize = 10,
@@ -184,21 +184,23 @@ export function DataTable<T = any>({
 
   const table = (
     <Table>
-      <TableHeader className="[&_tr]:border-primary/10 [&_tr]:bg-transparent">
-        <TableRow>
+      <TableHeader className="[&_tr]:border-border/40 [&_tr]:bg-transparent">
+        <TableRow className="hover:bg-transparent">
           {tableColumns.map((column) => (
             <TableHead
               key={column.key}
               className={cn(
-                'bg-primary font-semibold text-primary-foreground',
-                column.sortable ? 'cursor-pointer' : '',
+                'h-11 bg-accent font-semibold text-accent-foreground',
+                column.sortable ? 'cursor-pointer select-none' : '',
                 column.className || '',
               )}
               onClick={() => handleSort(column.key, column.sortable)}
             >
               <div className="flex items-center gap-2">
                 {column.header}
-                {column.sortable && getSortIcon(column.key)}
+                {column.sortable && (
+                  <span className="text-accent-foreground/70">{getSortIcon(column.key)}</span>
+                )}
               </div>
             </TableHead>
           ))}
@@ -218,7 +220,7 @@ export function DataTable<T = any>({
             </TableRow>
           ))
         ) : (
-          <TableRow>
+          <TableRow className="hover:bg-transparent">
             <TableCell colSpan={tableColumns.length} className="h-24 text-center">
               {emptyState || (
                 <p className="text-muted-foreground">

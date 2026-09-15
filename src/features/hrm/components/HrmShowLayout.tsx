@@ -4,7 +4,7 @@ import { ArrowLeft, Trash2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Skeleton } from '@/components/ui/skeleton'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 
 type Props = {
   title: string
@@ -33,9 +33,8 @@ export function HrmShowLayout({
 
   if (isLoading) {
     return (
-      <div className="mx-auto max-w-3xl space-y-4 p-4 md:p-6">
-        <Skeleton className="h-8 w-48" />
-        <Skeleton className="h-64 w-full" />
+      <div className="mx-auto max-w-3xl p-4 md:p-6">
+        <PageContentLoader className="min-h-[16rem]" />
       </div>
     )
   }
@@ -72,10 +71,10 @@ export function HrmShowLayout({
       </div>
 
       <Card>
-        <CardHeader>
-          <CardTitle>{title}</CardTitle>
+        <CardHeader className="border-b border-border/50 pb-4">
+          <CardTitle className="text-xl tracking-tight">{title}</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-6">{children}</CardContent>
+        <CardContent className="space-y-6 pt-6">{children}</CardContent>
       </Card>
     </div>
   )

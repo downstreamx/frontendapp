@@ -1,8 +1,8 @@
-import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
+import { PasswordInput } from '@/components/ui/password-input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import InputError from '@/components/ui/input-error'
@@ -19,14 +19,11 @@ import { FormSection } from '@/components/ui/form-section'
 import { CategorySelect } from '@/components/setup/CategorySelect'
 import { PaymentTermsSelect } from '@/components/setup/PaymentTermsSelect'
 import { MediaPicker } from '@/features/media/components/MediaPicker'
-import { useAppContext } from '@/contexts/app-context'
-import { hasPermission } from '@/lib/permissions'
 import { paths } from '@/lib/paths'
 import {
   DEFAULT_NIGERIA_COUNTRY,
   NigeriaStateCityFields,
 } from '@/components/forms/nigeria-state-city-fields'
-import type { CustomerCreateMetaUser } from '../account-party-api'
 import type { CustomerFormState, PartyAddress } from '../customer-form-utils'
 import type { SetupCategoryOption, SetupPaymentTermOption } from '@/lib/setup-lookup-types'
 
@@ -40,7 +37,6 @@ type Props = {
   partyCode?: string
   data: CustomerFormState
   onChange: (next: CustomerFormState) => void
-  users?: CustomerCreateMetaUser[]
   paymentTerms?: SetupPaymentTermOption[]
   categories?: SetupCategoryOption[]
   errors?: Record<string, string>
@@ -149,7 +145,6 @@ export function CustomerForm({
   partyCode,
   data,
   onChange,
-  users = [],
   paymentTerms = [],
   categories = [],
   errors,
@@ -159,33 +154,11 @@ export function CustomerForm({
   onCancel,
 }: Props) {
   const { t } = useTranslation()
-  const { auth } = useAppContext()
   const code = partyCode ?? customerCode
   const isSupplier = party === 'supplier'
-  const canCreateUsers = hasPermission(
-    auth.permissions,
-    auth.roles,
-    auth.user?.type,
-    'create-users',
-  )
 
   const setField = <K extends keyof CustomerFormState>(key: K, value: CustomerFormState[K]) => {
     onChange({ ...data, [key]: value })
-  }
-
-  const handleUserSelect = (userId: string) => {
-    if (userId === '0') {
-      setField('user_id', '')
-      return
-    }
-    const selected = users.find((user) => String(user.id) === userId)
-    onChange({
-      ...data,
-      user_id: userId,
-      contact_person_name: selected?.name ?? data.contact_person_name,
-      contact_person_email: selected?.email ?? data.contact_person_email,
-      contact_person_mobile: selected?.mobile_no ?? data.contact_person_mobile,
-    })
   }
 
   const handleSameAsBilling = (checked: boolean) => {
@@ -213,40 +186,95 @@ export function CustomerForm({
           ) : null}
 
           {mode === 'create' ? (
-          <div>
-            <Label htmlFor="user_id">{t('User')}</Label>
-            <Select value={data.user_id || '0'} onValueChange={handleUserSelect}>
-              <SelectTrigger id="user_id">
-                <SelectValue placeholder={t('Select a user (optional)')} />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="0">{t('No User Selected')}</SelectItem>
-                {users.map((user) => (
-                  <SelectItem key={user.id} value={String(user.id)}>
-                    {user.name} ({user.email})
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <InputError message={fieldError(errors, 'user_id')} />
-            {users.length === 0 && canCreateUsers ? (
-              <p className="mt-1 text-xs text-muted-foreground">
-                {t('Create user here.')}{' '}
-                <Link to={paths.users.index} className="text-primary hover:underline">
-                  {t('Create user')}
-                </Link>
-              </p>
-            ) : null}
-            <p className="mt-1 text-xs text-muted-foreground">
-              {isSupplier
-                ? t(
-                    'Note: Only users with supplier role who are not already assigned to other suppliers will appear in this list.',
-                  )
-                : t(
-                    'Note: Only users with the customer role who are not already assigned to other customers will appear in this list.',
-                  )}
-            </p>
-          </div>
+            <div className="space-y-4 rounded-lg border border-border/60 bg-section/40 p-4">
+              <p className="text-sm font-medium text-foreground">{t('User account')}</p>
+              <div className="grid gap-4 sm:grid-cols-3">
+                <div>
+                  <Label htmlFor="first_name">{t('First name')}</Label>
+                  <Input
+                    id="first_name"
+                    value={data.first_name}
+                    onChange={(e) => setField('first_name', e.target.value)}
+                    placeholder={t('Enter first name')}
+                    required
+                  />
+                  <InputError message={fieldError(errors, 'user.first_name')} />
+                </div>
+                <div>
+                  <Label htmlFor="middle_name">{t('Middle name')}</Label>
+                  <Input
+                    id="middle_name"
+                    value={data.middle_name}
+                    onChange={(e) => setField('middle_name', e.target.value)}
+                    placeholder={t('Enter middle name (optional)')}
+                  />
+                  <InputError message={fieldError(errors, 'user.middle_name')} />
+                </div>
+                <div>
+                  <Label htmlFor="last_name">{t('Last name')}</Label>
+                  <Input
+                    id="last_name"
+                    value={data.last_name}
+                    onChange={(e) => setField('last_name', e.target.value)}
+                    placeholder={t('Enter last name')}
+                    required
+                  />
+                  <InputError message={fieldError(errors, 'user.last_name')} />
+                </div>
+              </div>
+              <MediaPicker
+                id="user_avatar"
+                label={t('Profile Image')}
+                value={data.avatar}
+                onChange={(value) =>
+                  setField('avatar', Array.isArray(value) ? (value[0] ?? '') : value)
+                }
+                placeholder={t('Select profile image')}
+              />
+              <InputError message={fieldError(errors, 'user.avatar')} />
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div>
+                  <Label htmlFor="password">{t('Password')}</Label>
+                  <PasswordInput
+                    id="password"
+                    value={data.password}
+                    onChange={(e) => setField('password', e.target.value)}
+                    placeholder={t('Enter password')}
+                    required
+                    autoComplete="new-password"
+                  />
+                  <InputError message={fieldError(errors, 'user.password')} />
+                </div>
+                <div>
+                  <Label htmlFor="password_confirmation">{t('Confirm Password')}</Label>
+                  <PasswordInput
+                    id="password_confirmation"
+                    value={data.password_confirmation}
+                    onChange={(e) => setField('password_confirmation', e.target.value)}
+                    placeholder={t('Confirm password')}
+                    required
+                    autoComplete="new-password"
+                  />
+                  <InputError message={fieldError(errors, 'user.password_confirmation')} />
+                </div>
+              </div>
+              <div>
+                <Label htmlFor="is_enable_login">{t('Login Status')}</Label>
+                <Select
+                  value={data.is_enable_login ? '1' : '0'}
+                  onValueChange={(value) => setField('is_enable_login', value === '1')}
+                >
+                  <SelectTrigger id="is_enable_login">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="1">{t('Enabled')}</SelectItem>
+                    <SelectItem value="0">{t('Disabled')}</SelectItem>
+                  </SelectContent>
+                </Select>
+                <InputError message={fieldError(errors, 'user.is_enable_login')} />
+              </div>
+            </div>
           ) : null}
 
           <div>
@@ -292,8 +320,13 @@ export function CustomerForm({
               value={data.contact_person_email}
               onChange={(e) => setField('contact_person_email', e.target.value)}
               placeholder={t('Enter email address')}
+              required={mode === 'create'}
             />
-            <InputError message={fieldError(errors, 'contact_person_email')} />
+            <InputError
+              message={
+                fieldError(errors, 'contact_person_email') || fieldError(errors, 'user.email')
+              }
+            />
           </div>
 
           <PhoneInputComponent
@@ -301,7 +334,9 @@ export function CustomerForm({
             value={data.contact_person_mobile}
             onChange={(value) => setField('contact_person_mobile', value)}
             placeholder="+1234567890"
-            error={fieldError(errors, 'contact_person_mobile')}
+            error={
+              fieldError(errors, 'contact_person_mobile') || fieldError(errors, 'user.mobile_no')
+            }
           />
 
           <div className="grid gap-4 sm:grid-cols-2">

@@ -16,6 +16,7 @@ import { paths } from '@/lib/paths'
 import { formatDate } from '@/utils/helpers'
 import { getCouponDetail, type CouponUsageRow } from '@/features/saas/saas-api'
 import { formatCouponDiscount } from '../lib/format-coupon-discount'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 
 export function CouponShowPage() {
   const { id } = useParams<{ id: string }>()
@@ -97,7 +98,7 @@ export function CouponShowPage() {
   ]
 
   if (detailQuery.isLoading) {
-    return <p className="text-sm text-muted-foreground">{t('Loading…')}</p>
+    return <PageContentLoader className="min-h-[16rem]" />
   }
 
   if (!coupon) {

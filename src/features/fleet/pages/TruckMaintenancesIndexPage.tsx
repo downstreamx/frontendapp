@@ -47,6 +47,7 @@ import {
   updateTruckMaintenance,
   type TruckMaintenanceRow,
 } from '../fleet-api'
+import { ForbiddenPage } from '@/components/status-page'
 import {
   formStateToMaintenancePayload,
   initialMaintenanceFormState,
@@ -346,7 +347,7 @@ export function TruckMaintenancesIndexPage() {
   ]
 
   if (!canManage) {
-    return <p className="text-sm text-muted-foreground">{t('Permission denied')}</p>
+    return <ForbiddenPage />
   }
 
   return (

@@ -12,6 +12,7 @@ import { useDoubleEntryPageChrome } from '../hooks/use-double-entry-page-chrome'
 import { getBalanceSheetComparison } from '../balance-sheets-api'
 import { buildComparisonRows } from '../balance-sheet-utils'
 import { BalanceSheetComparisonSections } from '../components/BalanceSheetComparisonSections'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 
 function periodLabel(date: string, year: string) {
   return `${formatDate(date)} — FY ${year}`
@@ -40,7 +41,7 @@ export function BalanceSheetComparisonShowPage() {
   useDoubleEntryPageChrome(t('Balance sheet comparison'), t('Reports'))
 
   if (comparisonQuery.isLoading) {
-    return <p className="text-sm text-muted-foreground">{t('Loading…')}</p>
+    return <PageContentLoader className="min-h-[16rem]" />
   }
 
   if (!comparison?.current_period || !comparison?.previous_period) {

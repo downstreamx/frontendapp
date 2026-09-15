@@ -19,6 +19,7 @@ import { usePageChrome } from '@/contexts/page-chrome-context'
 import { getApiErrorMessage } from '@/lib/errors'
 import { paths } from '@/lib/paths'
 import { candidateFullName } from '../recruitment-candidates-api'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 import {
   createInterview,
   fetchCandidateInterviewRounds,
@@ -131,7 +132,7 @@ export function InterviewFormPage() {
   })
 
   if (isEdit && interviewQuery.isLoading) {
-    return <p className="text-sm text-muted-foreground">{t('Loading…')}</p>
+    return <PageContentLoader className="min-h-[16rem]" />
   }
 
   return (

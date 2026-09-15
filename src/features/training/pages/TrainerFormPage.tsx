@@ -12,6 +12,7 @@ import { usePageChrome } from '@/contexts/page-chrome-context'
 import { getApiErrorMessage } from '@/lib/errors'
 import { paths } from '@/lib/paths'
 import { createTrainer, getTrainer, updateTrainer } from '../training-api'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 
 export function TrainerFormPage() {
   const { id } = useParams<{ id: string }>()
@@ -70,7 +71,7 @@ export function TrainerFormPage() {
   })
 
   if (isEdit && trainerQuery.isLoading) {
-    return <p className="text-sm text-muted-foreground">{t('Loading…')}</p>
+    return <PageContentLoader className="min-h-[16rem]" />
   }
 
   return (

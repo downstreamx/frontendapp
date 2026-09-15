@@ -37,6 +37,7 @@ import { getApiErrorMessage } from '@/lib/errors'
 import { formatDate } from '@/utils/helpers'
 import { personName, truckLabel } from '@/features/shared/lib/entity-labels'
 import { FleetStatusBadge } from '../components/FleetStatusBadge'
+import { ForbiddenPage } from '@/components/status-page'
 import {
   advanceTruckTrip,
   createTruckTrip,
@@ -271,7 +272,7 @@ export function TruckTripsIndexPage() {
   ]
 
   if (!canManage) {
-    return <p className="text-sm text-muted-foreground">{t('Permission denied')}</p>
+    return <ForbiddenPage />
   }
 
   return (

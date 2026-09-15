@@ -24,6 +24,7 @@ import {
   type PlanRow,
 } from '@/features/saas/saas-api'
 import { formatAdminCurrency, getPackageAlias, getPackageFavicon } from '@/utils/helpers'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 
 export type PlanFormValues = {
   name: string
@@ -158,11 +159,11 @@ export function PlanForm({ planId, isEdit = false }: Props) {
   }
 
   if (isEdit && planQuery.isLoading) {
-    return <p className="text-sm text-muted-foreground">{t('Loading…')}</p>
+    return <PageContentLoader className="min-h-[16rem]" />
   }
 
   if (modulesQuery.isLoading) {
-    return <p className="text-sm text-muted-foreground">{t('Loading…')}</p>
+    return <PageContentLoader className="min-h-[16rem]" />
   }
 
   return (

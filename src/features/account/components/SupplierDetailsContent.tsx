@@ -1,25 +1,20 @@
-import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { PartyRow } from '../account-party-api'
 import { SupplierOpeningBalanceForm } from './SupplierOpeningBalanceForm'
 import { SupplierPurchaseHistoryTable } from './SupplierPurchaseHistoryTable'
 import { formatPartyAddressLines } from '../customer-view-utils'
 import { UserAvatar } from '@/features/shared/components/table-avatar-cells'
-
-function InfoTile({ label, children }: { label: string; children: ReactNode }) {
-  return (
-    <div className="rounded-lg bg-muted/50 p-4">
-      <p className="mb-1 text-sm font-semibold text-foreground">{label}</p>
-      <div className="text-sm text-muted-foreground">{children}</div>
-    </div>
-  )
-}
+import {
+  DetailInfoTile,
+  DetailSectionHeading,
+  detailMutedBlockClass,
+} from '@/features/shared/components/detail-info-tile'
 
 function AddressSection({ label, lines }: { label: string; lines: string[] }) {
   return (
     <section>
-      <h3 className="mb-4 text-lg font-semibold">{label}</h3>
-      <div className="rounded-lg bg-muted/50 p-4 text-sm text-muted-foreground">
+      <DetailSectionHeading>{label}</DetailSectionHeading>
+      <div className={detailMutedBlockClass}>
         {lines.map((line) => (
           <p key={line}>{line}</p>
         ))}
@@ -43,36 +38,36 @@ export function SupplierDetailsContent({ supplier }: Props) {
   return (
     <div className="space-y-8">
       <section>
-        <h3 className="mb-4 text-lg font-semibold">{t('Supplier Information')}</h3>
+        <DetailSectionHeading>{t('Supplier Information')}</DetailSectionHeading>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-          <InfoTile label={t('Supplier Code')}>
+          <DetailInfoTile label={t('Supplier Code')}>
             <p>{supplier.supplier_code || '—'}</p>
-          </InfoTile>
-          <InfoTile label={t('Company Name')}>
+          </DetailInfoTile>
+          <DetailInfoTile label={t('Company Name')}>
             <p>{supplier.company_name}</p>
-          </InfoTile>
-          <InfoTile label={t('Contact Person')}>
+          </DetailInfoTile>
+          <DetailInfoTile label={t('Contact Person')}>
             <p>{supplier.contact_person_name || '—'}</p>
-          </InfoTile>
-          <InfoTile label={t('Email')}>
+          </DetailInfoTile>
+          <DetailInfoTile label={t('Email')}>
             <p>{supplier.contact_person_email || '—'}</p>
-          </InfoTile>
-          <InfoTile label={t('Mobile')}>
+          </DetailInfoTile>
+          <DetailInfoTile label={t('Mobile')}>
             <p>{supplier.contact_person_mobile || '—'}</p>
-          </InfoTile>
-          <InfoTile label={t('Tax Number')}>
+          </DetailInfoTile>
+          <DetailInfoTile label={t('Tax Number')}>
             <p>{supplier.tax_number || '—'}</p>
-          </InfoTile>
-          <InfoTile label={t('Payment Terms')}>
+          </DetailInfoTile>
+          <DetailInfoTile label={t('Payment Terms')}>
             <p>{supplier.payment_terms || '—'}</p>
-          </InfoTile>
+          </DetailInfoTile>
         </div>
       </section>
 
       {supplier.user ? (
         <section>
-          <h3 className="mb-4 text-lg font-semibold">{t('Linked User')}</h3>
-          <div className="flex items-center gap-3 rounded-lg bg-muted/50 p-4">
+          <DetailSectionHeading>{t('Linked User')}</DetailSectionHeading>
+          <div className={`flex items-center gap-3 ${detailMutedBlockClass}`}>
             <UserAvatar
               avatar={supplier.user.avatar}
               name={supplier.user.name}
@@ -81,7 +76,7 @@ export function SupplierDetailsContent({ supplier }: Props) {
               className="bg-background"
             />
             <div>
-              <p className="font-medium">{supplier.user.name}</p>
+              <p className="font-medium text-foreground">{supplier.user.name}</p>
               {supplier.user.is_disable ? (
                 <p className="text-xs text-destructive">{t('User is disabled')}</p>
               ) : null}
@@ -100,16 +95,14 @@ export function SupplierDetailsContent({ supplier }: Props) {
 
       {supplier.notes ? (
         <section>
-          <h3 className="mb-4 text-lg font-semibold">{t('Notes')}</h3>
-          <p className="rounded-lg bg-muted/50 p-4 text-sm text-muted-foreground whitespace-pre-wrap">
-            {supplier.notes}
-          </p>
+          <DetailSectionHeading>{t('Notes')}</DetailSectionHeading>
+          <p className={`${detailMutedBlockClass} whitespace-pre-wrap`}>{supplier.notes}</p>
         </section>
       ) : null}
 
       <section>
-        <h3 className="mb-4 text-lg font-semibold">{t('Opening balance')}</h3>
-        <div className="rounded-lg bg-muted/50 p-4">
+        <DetailSectionHeading>{t('Opening balance')}</DetailSectionHeading>
+        <div className={detailMutedBlockClass}>
           <SupplierOpeningBalanceForm
             supplierId={supplier.id}
             openingBalanceDebit={Number(supplier.opening_balance_debit ?? 0)}
@@ -120,8 +113,8 @@ export function SupplierDetailsContent({ supplier }: Props) {
       </section>
 
       <section>
-        <h3 className="mb-4 text-lg font-semibold">{t('Purchase history')}</h3>
-        <div className="rounded-lg bg-muted/50 p-4">
+        <DetailSectionHeading>{t('Purchase history')}</DetailSectionHeading>
+        <div className={detailMutedBlockClass}>
           <SupplierPurchaseHistoryTable rows={supplier.purchase_history ?? []} />
         </div>
       </section>

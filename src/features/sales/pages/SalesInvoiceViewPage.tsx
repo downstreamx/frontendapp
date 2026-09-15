@@ -8,7 +8,7 @@ import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
-import { Skeleton } from '@/components/ui/skeleton'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 import { ConfirmationDialog } from '@/components/ui/confirmation-dialog'
 import {
   Tooltip,
@@ -252,9 +252,8 @@ export function SalesInvoiceViewPage() {
 
   if (invoiceQuery.isLoading) {
     return (
-      <div className="mx-auto max-w-6xl space-y-4 p-6">
-        <Skeleton className="h-10 w-full" />
-        <Skeleton className="h-64 w-full" />
+      <div className="mx-auto max-w-6xl p-6">
+        <PageContentLoader className="min-h-[16rem]" />
       </div>
     )
   }

@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 import {
   Select,
   SelectContent,
@@ -62,7 +63,7 @@ export function RecruitmentOfferLetterPage() {
   })
 
   if (isLoading || !data) {
-    return <p className="text-sm text-muted-foreground">{t('Loading…')}</p>
+    return <PageContentLoader className="min-h-[16rem]" />
   }
 
   const languages = Object.entries(data.languages)

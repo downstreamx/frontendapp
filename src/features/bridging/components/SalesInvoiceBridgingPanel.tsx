@@ -306,7 +306,7 @@ export function SalesInvoiceBridgingPanel({
           !isDraft &&
           (progress?.bridged_trucks_available_count ?? 0) === 0 &&
           distributionStatus !== 'fully_distributed' ? (
-            <div className="flex gap-3 rounded-lg border border-border bg-muted/30 p-3 text-sm">
+            <div className="flex gap-3 rounded-xl border border-border/50 bg-[hsl(var(--section-deep))]/80 p-3 text-sm">
               <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
               <p className="text-muted-foreground">
                 {t(
@@ -317,25 +317,25 @@ export function SalesInvoiceBridgingPanel({
           ) : null}
 
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-4">
-            <div className="rounded-lg bg-muted/50 p-3">
+            <div className="rounded-xl border border-border/40 bg-[hsl(var(--section-deep))]/70 p-3">
               <p className="text-xs text-muted-foreground">{t('Invoiced qty')}</p>
               <p className="text-lg font-semibold">
                 {formatQuantity(progress?.total_invoiced_qty ?? 0)}
               </p>
             </div>
-            <div className="rounded-lg bg-muted/50 p-3">
+            <div className="rounded-xl border border-border/40 bg-[hsl(var(--section-deep))]/70 p-3">
               <p className="text-xs text-muted-foreground">{t('Paid qty')}</p>
               <p className="text-lg font-semibold">
                 {formatQuantity(progress?.total_paid_qty ?? 0)}
               </p>
             </div>
-            <div className="rounded-lg bg-muted/50 p-3">
+            <div className="rounded-xl border border-border/40 bg-[hsl(var(--section-deep))]/70 p-3">
               <p className="text-xs text-muted-foreground">{t('Distributed qty')}</p>
               <p className="text-lg font-semibold">
                 {formatQuantity(progress?.total_distributed_qty ?? 0)}
               </p>
             </div>
-            <div className="rounded-lg bg-muted/50 p-3">
+            <div className="rounded-xl border border-border/40 bg-[hsl(var(--section-deep))]/70 p-3">
               <p className="text-xs text-muted-foreground">{t('Undistributed qty')}</p>
               <p className="text-lg font-semibold text-amber-700 dark:text-amber-400">
                 {formatQuantity(progress?.total_balance_qty ?? 0)}

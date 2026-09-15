@@ -3,7 +3,8 @@ import { useQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Skeleton } from '@/components/ui/skeleton'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
+import { DetailFieldGrid } from '@/features/shared/components/detail-info-tile'
 import { useBridgingPageChrome } from '../hooks/use-bridging-page-chrome'
 import { getTruckLoad } from '../bridging-api'
 import { truckLoadPhaseLabel } from '../bridging-status-ui'
@@ -31,7 +32,7 @@ export function TruckLoadShowPage() {
   )
 
   if (isLoading) {
-    return <Skeleton className="h-64 w-full" />
+    return <PageContentLoader className="min-h-[16rem]" />
   }
 
   if (error || !load) {
@@ -61,28 +62,28 @@ export function TruckLoadShowPage() {
       <TruckLoadDistributionPanel load={load} />
 
       <Card>
-        <CardHeader>
-          <CardTitle className="flex flex-wrap items-center gap-2 text-lg">
+        <CardHeader className="border-b border-border/50 pb-4">
+          <CardTitle className="flex flex-wrap items-center gap-2 text-xl tracking-tight">
             {load.load_number || `#${load.id}`}
             <span className="text-sm font-normal text-muted-foreground">
               {truckLoadPhaseLabel(load.phase, t)}
             </span>
           </CardTitle>
         </CardHeader>
-        <CardContent>
-          <dl className="grid gap-4 sm:grid-cols-2">
-            <div>
-              <dt className="text-sm text-muted-foreground">{t('Quantity')}</dt>
-              <dd className="font-medium">{formatQuantity(load.quantity, { unit: 'L' })}</dd>
-            </div>
-            <div>
-              <dt className="text-sm text-muted-foreground">{t('Loading date')}</dt>
-              <dd>{load.loading_date ? formatDate(load.loading_date) : '—'}</dd>
-            </div>
-            <div>
-              <dt className="text-sm text-muted-foreground">{t('Truck')}</dt>
-              <dd>
-                {load.truck_id ? (
+        <CardContent className="pt-6">
+          <DetailFieldGrid
+            fields={[
+              {
+                label: t('Quantity'),
+                value: formatQuantity(load.quantity, { unit: 'L' }),
+              },
+              {
+                label: t('Loading date'),
+                value: load.loading_date ? formatDate(load.loading_date) : '—',
+              },
+              {
+                label: t('Truck'),
+                value: load.truck_id ? (
                   <Link
                     to={paths.fleet.truckShow(load.truck_id)}
                     className="text-primary hover:underline"
@@ -91,39 +92,20 @@ export function TruckLoadShowPage() {
                   </Link>
                 ) : (
                   '—'
-                )}
-              </dd>
-            </div>
-            <div>
-              <dt className="text-sm text-muted-foreground">{t('Truck operational status')}</dt>
-              <dd>
-                <TruckOperationalStatusBadge status={load.truck?.operational_status} />
-              </dd>
-            </div>
-            <div>
-              <dt className="text-sm text-muted-foreground">{t('Driver')}</dt>
-              <dd>{driverName}</dd>
-            </div>
-            <div>
-              <dt className="text-sm text-muted-foreground">{t('Loading depot')}</dt>
-              <dd>{load.loading_depot?.name ?? '—'}</dd>
-            </div>
-            <div>
-              <dt className="text-sm text-muted-foreground">{t('Destination')}</dt>
-              <dd>{load.destination ?? '—'}</dd>
-            </div>
-            <div>
-              <dt className="text-sm text-muted-foreground">{t('Assigned qty')}</dt>
-              <dd>{formatQuantity(load.assigned_qty)}</dd>
-            </div>
-            <div>
-              <dt className="text-sm text-muted-foreground">{t('Delivered qty')}</dt>
-              <dd>{formatQuantity(load.delivered_qty)}</dd>
-            </div>
-            <div>
-              <dt className="text-sm text-muted-foreground">{t('Purchase invoice')}</dt>
-              <dd>
-                {load.purchase_invoice?.id ? (
+                ),
+              },
+              {
+                label: t('Truck operational status'),
+                value: <TruckOperationalStatusBadge status={load.truck?.operational_status} />,
+              },
+              { label: t('Driver'), value: driverName },
+              { label: t('Loading depot'), value: load.loading_depot?.name ?? '—' },
+              { label: t('Destination'), value: load.destination ?? '—' },
+              { label: t('Assigned qty'), value: formatQuantity(load.assigned_qty) },
+              { label: t('Delivered qty'), value: formatQuantity(load.delivered_qty) },
+              {
+                label: t('Purchase invoice'),
+                value: load.purchase_invoice?.id ? (
                   <Link
                     to={`${paths.purchase.invoices}/${load.purchase_invoice.id}`}
                     className="text-primary hover:underline"
@@ -132,13 +114,11 @@ export function TruckLoadShowPage() {
                   </Link>
                 ) : (
                   '—'
-                )}
-              </dd>
-            </div>
-            <div>
-              <dt className="text-sm text-muted-foreground">{t('Sales invoice')}</dt>
-              <dd>
-                {load.sales_invoice?.id ? (
+                ),
+              },
+              {
+                label: t('Sales invoice'),
+                value: load.sales_invoice?.id ? (
                   <Link
                     to={`${paths.sales.invoices}/${load.sales_invoice.id}`}
                     className="text-primary hover:underline"
@@ -147,10 +127,10 @@ export function TruckLoadShowPage() {
                   </Link>
                 ) : (
                   '—'
-                )}
-              </dd>
-            </div>
-          </dl>
+                ),
+              },
+            ]}
+          />
         </CardContent>
       </Card>
     </div>

@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { usePageChrome } from '@/contexts/page-chrome-context'
 import { paths } from '@/lib/paths'
 import { getTrainer } from '../training-api'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 
 export function TrainerShowPage() {
   const { id } = useParams<{ id: string }>()
@@ -25,7 +26,7 @@ export function TrainerShowPage() {
     ],
   })
 
-  if (isLoading) return <p className="text-sm text-muted-foreground">{t('Loading…')}</p>
+  if (isLoading) return <PageContentLoader className="min-h-[16rem]" />
   if (!trainer) return <p className="text-sm text-destructive">{t('Trainer not found.')}</p>
 
   return (

@@ -13,6 +13,7 @@ import { usePageChrome } from '@/contexts/page-chrome-context'
 import { formatCurrency } from '@/utils/helpers'
 import { formatShortDate } from '@/features/shared/lib/entity-labels'
 import { PayslipDialog } from '../components/PayslipDialog'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 import {
   deletePayrollEntry,
   getPayroll,
@@ -145,7 +146,7 @@ export function PayrollShowPage() {
   )
 
   if (isLoading) {
-    return <p className="text-sm text-muted-foreground">{t('Loading…')}</p>
+    return <PageContentLoader className="min-h-[16rem]" />
   }
 
   if (error || !payroll) {

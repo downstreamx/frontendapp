@@ -36,6 +36,7 @@ import { useListToolbar } from '@/hooks/use-list-toolbar'
 import { getApiErrorMessage } from '@/lib/errors'
 import { formatCurrency } from '@/utils/helpers'
 import { personName, truckLabel } from '@/features/shared/lib/entity-labels'
+import { ForbiddenPage } from '@/components/status-page'
 import {
   createTruckFuelLog,
   fetchTruckFuelLogsIndexMeta,
@@ -244,7 +245,7 @@ export function TruckFuelLogsIndexPage() {
   ]
 
   if (!canManage) {
-    return <p className="text-sm text-muted-foreground">{t('Permission denied')}</p>
+    return <ForbiddenPage />
   }
 
   return (

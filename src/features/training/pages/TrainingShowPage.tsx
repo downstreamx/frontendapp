@@ -8,6 +8,7 @@ import { usePageChrome } from '@/contexts/page-chrome-context'
 import { formatDate } from '@/utils/helpers'
 import { paths } from '@/lib/paths'
 import { getTraining } from '../training-api'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 
 export function TrainingShowPage() {
   const { id } = useParams<{ id: string }>()
@@ -27,7 +28,7 @@ export function TrainingShowPage() {
     ],
   })
 
-  if (isLoading) return <p className="text-sm text-muted-foreground">{t('Loading…')}</p>
+  if (isLoading) return <PageContentLoader className="min-h-[16rem]" />
   if (!training) return <p className="text-sm text-destructive">{t('Training not found.')}</p>
 
   return (

@@ -10,7 +10,6 @@ export type EmptyTruckInTransitRow = {
   make?: string | null
   truck_model?: string | null
   avatar?: string | null
-  fuel_capacity?: string | number | null
   capacity_litres?: number | string | null
   status?: string | null
   operational_status?: string | null

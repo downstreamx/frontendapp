@@ -19,6 +19,7 @@ import {
   getSubscription,
 } from '@/features/saas/saas-api'
 import { formatAdminCurrency, formatStorage, getPackageAlias } from '@/utils/helpers'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 
 type PaymentMethod = 'bank_transfer' | 'stripe' | 'paypal'
 
@@ -132,7 +133,7 @@ export function SubscribePlanPage() {
   })
 
   if (planQuery.isLoading) {
-    return <p className="text-sm text-muted-foreground">{t('Loading…')}</p>
+    return <PageContentLoader className="min-h-[16rem]" />
   }
 
   if (!plan) {

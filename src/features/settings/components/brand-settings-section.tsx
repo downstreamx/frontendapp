@@ -54,7 +54,7 @@ function buildInitial(userSettings: Record<string, string>): BrandSettings {
     layoutDirection: userSettings.layoutDirection || 'ltr',
     themeMode: userSettings.themeMode || 'light',
     themeColor: userSettings.themeColor || 'green',
-    customColor: userSettings.customColor || '#10b77f',
+    customColor: userSettings.customColor || '#1b703a',
   }
 }
 
@@ -311,7 +311,7 @@ export function BrandSettingsSection() {
                       <div className="grid grid-cols-5 gap-2">
                         {Object.entries({
                           blue: '#3b82f6',
-                          green: '#10b77f',
+                          green: '#1b703a',
                           purple: '#8b5cf6',
                           orange: '#f97316',
                           red: '#ef4444',

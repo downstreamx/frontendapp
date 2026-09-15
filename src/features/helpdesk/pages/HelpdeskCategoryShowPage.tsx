@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { usePageChrome } from '@/contexts/page-chrome-context'
 import { paths } from '@/lib/paths'
 import { getHelpdeskCategory } from '../helpdesk-api'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 
 export function HelpdeskCategoryShowPage() {
   const { id } = useParams<{ id: string }>()
@@ -27,7 +28,7 @@ export function HelpdeskCategoryShowPage() {
   })
 
   if (isLoading) {
-    return <div className="text-sm text-muted-foreground">{t('Loading…')}</div>
+    return <PageContentLoader className="min-h-[16rem]" />
   }
 
   if (!category) {

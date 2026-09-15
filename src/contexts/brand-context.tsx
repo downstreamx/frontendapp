@@ -42,40 +42,42 @@ export function BrandProvider({ children }: { children: ReactNode }) {
     titleText: globalSettings?.titleText || 'DownstreamX',
     footerText: globalSettings?.footerText || `© ${new Date().getFullYear()} DownstreamX`,
     sidebarVariant: globalSettings?.sidebarVariant || 'inset',
-    sidebarStyle: globalSettings?.sidebarStyle || 'plain',
+    sidebarStyle: globalSettings?.sidebarStyle || 'colored',
     navigationLayout: globalSettings?.navigationLayout || 'mega-menu',
     layoutDirection: globalSettings?.layoutDirection || 'ltr',
     themeMode: globalSettings?.themeMode || 'light',
     themeColor: globalSettings?.themeColor || 'green',
-    customColor: globalSettings?.customColor || '#10b77f',
+    customColor: globalSettings?.customColor || '#1b703a',
   }
 
   const getPreviewUrl = (path: string) => getImagePath(path, imageUrlPrefix)
 
   const themeColors = {
     blue: '#3b82f6',
-    green: '#10b77f',
+    green: '#1b703a',
     purple: '#8b5cf6',
-    orange: '#f97316',
+    orange: '#f08c00',
     red: '#ef4444',
   }
 
   const getPrimaryColor = () =>
     settings.themeColor === 'custom'
-      ? settings.customColor || '#10b77f'
-      : themeColors[settings.themeColor as keyof typeof themeColors] || '#10b77f'
+      ? settings.customColor || '#1b703a'
+      : themeColors[settings.themeColor as keyof typeof themeColors] || '#1b703a'
 
   useEffect(() => {
     const primaryColor = getPrimaryColor()
     const root = document.documentElement
     const isRTL = settings.layoutDirection === 'rtl'
+    const brandOrange = '#f08c00'
 
     root.style.setProperty('--primary', hexToHslChannels(primaryColor))
     root.style.setProperty('--primary-foreground', '0 0% 98%')
     root.style.setProperty('--ring', hexToHslChannels(primaryColor))
-    root.style.setProperty('--sidebar-primary', hexToHslChannels(primaryColor))
+    root.style.setProperty('--sidebar-primary', hexToHslChannels(brandOrange))
     root.style.setProperty('--mega-menu-primary-dark', hexToHslChannels(darkenHex(primaryColor, 0.88)))
     root.style.setProperty('--mega-menu-primary-deep', hexToHslChannels(darkenHex(primaryColor, 0.72)))
+    root.style.setProperty('--brand-orange', brandOrange)
 
     root.classList.toggle('dark', settings.themeMode === 'dark')
     root.dir = isRTL ? 'rtl' : 'ltr'
@@ -92,18 +94,45 @@ export function BrandProvider({ children }: { children: ReactNode }) {
       document.head.appendChild(existingStyle)
     }
 
-    if (settings.sidebarStyle === 'colored' || settings.sidebarStyle === 'gradient') {
-      existingStyle.textContent = `
-        [data-sidebar] [data-sidebar="menu-button"]:hover {
-          background: rgba(255,255,255,0.1);
-        }
-        [data-sidebar] [data-sidebar="menu-button"][data-active="true"] {
-          background: rgba(255,255,255,0.2);
-        }
-      `
+    const coloredChrome =
+      settings.sidebarStyle === 'colored' || settings.sidebarStyle === 'gradient'
+
+    if (coloredChrome) {
+      root.style.setProperty('--sidebar-background', hexToHslChannels('#1c5c3a'))
+      root.style.setProperty('--sidebar-foreground', '0 0% 98%')
+      root.style.setProperty('--sidebar-accent', hexToHslChannels('#245f40'))
+      root.style.setProperty('--sidebar-accent-foreground', '0 0% 100%')
+      root.style.setProperty('--sidebar-border', hexToHslChannels('#2a6848'))
     } else {
-      existingStyle.textContent = ''
+      root.style.setProperty('--sidebar-background', '43 30% 97%')
+      root.style.setProperty('--sidebar-foreground', '0 0% 18%')
+      root.style.setProperty('--sidebar-accent', '43 25% 92%')
+      root.style.setProperty('--sidebar-accent-foreground', '0 0% 11%')
+      root.style.setProperty('--sidebar-border', '40 14% 84%')
     }
+
+    existingStyle.textContent = coloredChrome
+      ? `
+      [data-sidebar] [data-sidebar="menu-button"]:hover {
+        background: rgba(255,255,255,0.12);
+      }
+      [data-sidebar] [data-sidebar="menu-button"][data-active="true"] {
+        background: ${brandOrange} !important;
+        color: #ffffff !important;
+      }
+      [data-sidebar] [data-sidebar="menu-button"][data-active="true"] svg {
+        color: #ffffff !important;
+      }
+    `
+      : `
+      [data-sidebar] [data-sidebar="menu-button"][data-active="true"] {
+        background: ${brandOrange} !important;
+        color: #ffffff !important;
+      }
+      [data-sidebar] [data-sidebar="menu-button"][data-active="true"] svg {
+        color: #ffffff !important;
+      }
+    `
   }, [
     settings.themeMode,
     settings.themeColor,
@@ -114,13 +143,14 @@ export function BrandProvider({ children }: { children: ReactNode }) {
 
   const getSidebarStyles = (): React.CSSProperties => {
     const primaryColor = getPrimaryColor()
+    const forest = '#1c5c3a'
 
     if (settings.sidebarStyle === 'colored') {
-      return { backgroundColor: primaryColor }
+      return { backgroundColor: settings.themeColor === 'green' ? forest : primaryColor }
     }
     if (settings.sidebarStyle === 'gradient') {
       return {
-        background: `linear-gradient(135deg, ${primaryColor} 0%, ${primaryColor}80 100%)`,
+        background: `linear-gradient(165deg, ${forest} 0%, ${primaryColor} 100%)`,
       }
     }
     return {}

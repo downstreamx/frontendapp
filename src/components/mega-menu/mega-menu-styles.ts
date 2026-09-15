@@ -21,7 +21,7 @@ export const MEGA_MENU_ACTIVE_GRADIENT_BG =
   'bg-[linear-gradient(180deg,var(--mega-menu-active-top)_0%,var(--mega-menu-active-bottom)_100%)]'
 
 /** Solid complementary strip for logo / welcome / utilities above primary nav. */
-export const MEGA_MENU_TOP_BAR_BG = 'bg-section text-section-foreground dark:bg-muted dark:text-foreground'
+export const MEGA_MENU_TOP_BAR_BG = 'bg-section text-section-foreground'
 
 export const MEGA_MENU_TOP_BAR_BORDER = 'border-primary/20'
 

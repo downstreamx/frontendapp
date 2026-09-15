@@ -7,6 +7,7 @@ import { useAppContext } from '@/contexts/app-context'
 import { fetchPlanModuleCatalog, listPlans } from '@/features/saas/saas-api'
 import { getPackageAlias } from '@/utils/helpers'
 import { PlansComparisonGrid, PlansIndexPageActions } from '../components/PlansComparisonGrid'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 
 export function PlansIndexPage() {
   const { t } = useTranslation()
@@ -55,7 +56,7 @@ export function PlansIndexPage() {
   return (
     <div className="space-y-8">
       {listQuery.isLoading || modulesQuery.isLoading ? (
-        <p className="text-sm text-muted-foreground">{t('Loading…')}</p>
+        <PageContentLoader className="min-h-[12rem]" />
       ) : (
         <PlansComparisonGrid
           plans={plans}

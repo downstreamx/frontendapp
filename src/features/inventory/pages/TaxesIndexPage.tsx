@@ -1,14 +1,13 @@
 import { useCallback, useMemo, useState } from 'react'
-import { Edit, Percent, Plus, Trash2 } from 'lucide-react'
+import { Edit, Percent, Trash2 } from 'lucide-react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
+import { ModuleListCard } from '@/features/shared/components/ModuleListCard'
 import { DataTable, type Column } from '@/components/ui/data-table'
 import { ConfirmationDialog } from '@/components/ui/confirmation-dialog'
 import { NoRecordsFound } from '@/components/no-records-found'
-import { Skeleton } from '@/components/ui/skeleton'
 import {
   Tooltip,
   TooltipContent,
@@ -211,35 +210,18 @@ export function TaxesIndexPage() {
 
   return (
     <TooltipProvider>
-      <Card className="shadow-sm">
-        <CardContent className="p-6">
-          <div className="mb-6 flex items-center justify-between">
-            <h3 className="text-lg font-medium">{t('Taxes')}</h3>
-            {mayCreate ? (
-              <Tooltip delayDuration={0}>
-                <TooltipTrigger asChild>
-                  <Button size="sm" onClick={openCreate}>
-                    <Plus className="h-4 w-4" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>{t('Create')}</p>
-                </TooltipContent>
-              </Tooltip>
-            ) : null}
-          </div>
-
-          {isLoading ? (
-            <Skeleton className="h-48 w-full" />
-          ) : error ? (
-            <p className="text-sm text-destructive">{t('Failed to load taxes.')}</p>
-          ) : (
-            <div className="max-h-[75vh] w-full overflow-y-auto rounded-none">
-              <div className="min-w-[600px]">
-                <DataTable
+      <>
+      <ModuleListCard
+        title={t('Taxes')}
+        canCreate={mayCreate}
+        onCreateClick={mayCreate ? openCreate : undefined}
+        isLoading={isLoading}
+        error={!!error}
+      >
+        <DataTable
                   data={rows}
                   columns={columns}
-                  className="rounded-none"
+                  embedded
                   emptyState={
                     <NoRecordsFound
                       icon={Percent}
@@ -252,11 +234,7 @@ export function TaxesIndexPage() {
                     />
                   }
                 />
-              </div>
-            </div>
-          )}
-        </CardContent>
-      </Card>
+      </ModuleListCard>
 
       <CrudFormDialog
         open={modalOpen}
@@ -289,6 +267,7 @@ export function TaxesIndexPage() {
         variant="destructive"
         loading={deleteMutation.isPending}
       />
+      </>
     </TooltipProvider>
   )
 }

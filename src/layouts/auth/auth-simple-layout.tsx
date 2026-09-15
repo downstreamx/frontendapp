@@ -28,74 +28,118 @@ export function AuthSimpleLayout({
       ? settings.logo_light || settings.logo_dark
       : settings.logo_dark || settings.logo_light
   const primaryColor = getPrimaryColor()
+  const brandName = settings.titleText || 'DownstreamX'
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#070d14]">
+    <div className="auth-shell relative min-h-screen overflow-hidden bg-[#070d14]">
       <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap');
+        .auth-shell {
+          font-family: 'Source Sans 3', 'Segoe UI', sans-serif;
+        }
+        .auth-shell h1,
+        .auth-shell .auth-brand-type {
+          font-family: Outfit, 'Source Sans 3', sans-serif;
+        }
         .auth-primary {
           background-color: ${primaryColor} !important;
           color: white !important;
         }
         .auth-primary:hover {
-          background-color: ${primaryColor}dd !important;
+          background-color: ${primaryColor}e6 !important;
+        }
+        .auth-primary:disabled {
+          opacity: 0.65;
         }
         .auth-text-primary {
           color: ${primaryColor} !important;
+        }
+        .auth-card-enter {
+          animation: auth-card-enter 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+        @keyframes auth-card-enter {
+          from {
+            opacity: 0;
+            transform: translateY(14px) scale(0.985);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+          }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .auth-card-enter {
+            animation: none;
+          }
         }
       `}</style>
 
       <AuthBackground primaryColor={primaryColor} />
 
-      <div className="relative z-10 flex min-h-screen items-center justify-center p-6">
-        <div className="w-full max-w-md">
+      <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-4 py-10 sm:px-6">
+        <div className="auth-card-enter w-full max-w-[440px]">
           <div className="relative">
             <div
-              className="absolute -left-3 -top-3 h-6 w-6 rounded-tl-md border-l-2 border-t-2"
-              style={{ borderColor: primaryColor }}
-            />
-            <div
-              className="absolute -bottom-3 -right-3 h-6 w-6 rounded-br-md border-b-2 border-r-2"
-              style={{ borderColor: primaryColor }}
+              className="pointer-events-none absolute -inset-px rounded-2xl opacity-80"
+              style={{
+                background: `linear-gradient(135deg, ${primaryColor}66 0%, transparent 38%, transparent 62%, #ffb34755 100%)`,
+              }}
             />
 
-            <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-800 lg:p-8 lg:pt-5">
-              <div className="mb-6 text-center">
-                <Link to={paths.dashboard} className="inline-block max-w-[260px]">
-                  {logoSrc ? (
-                    <img
-                      src={getImagePath(logoSrc, imageUrlPrefix)}
-                      alt={settings.titleText || 'Logo'}
-                      className="mx-auto max-h-14 w-auto object-contain"
-                    />
-                  ) : (
-                    <ApplicationLogo className="mx-auto max-h-14" alt={settings.titleText || 'DownstreamX'} />
-                  )}
-                </Link>
-              </div>
+            <div className="relative overflow-hidden rounded-2xl border border-white/70 bg-white/95 shadow-[0_24px_80px_-24px_rgba(0,0,0,0.65)] backdrop-blur-md">
+              <div
+                className="h-1.5 w-full"
+                style={{
+                  background: `linear-gradient(90deg, ${primaryColor} 0%, #1a9f6e 55%, #ffb347 100%)`,
+                }}
+              />
 
-              {title && (
-                <div className="mb-4 text-center">
-                  <h1 className="mb-1.5 text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">
-                    {title}
-                  </h1>
-                  <div
-                    className="mx-auto mb-2.5 h-px w-12"
-                    style={{ backgroundColor: primaryColor }}
-                  />
-                  {description && (
-                    <p className="text-sm text-gray-700 dark:text-gray-300">{description}</p>
-                  )}
+              <div className="px-6 pb-7 pt-7 sm:px-9 sm:pb-9 sm:pt-8">
+                <div className="mb-7 text-center">
+                  <Link
+                    to={paths.login}
+                    className="auth-brand-type inline-flex max-w-[280px] flex-col items-center gap-3 transition-opacity hover:opacity-90"
+                    aria-label={brandName}
+                  >
+                    {logoSrc ? (
+                      <img
+                        src={getImagePath(logoSrc, imageUrlPrefix)}
+                        alt={brandName}
+                        className="mx-auto max-h-16 w-auto object-contain sm:max-h-[4.5rem]"
+                      />
+                    ) : (
+                      <ApplicationLogo
+                        className="mx-auto max-h-16 sm:max-h-[4.5rem]"
+                        alt={brandName}
+                      />
+                    )}
+                  </Link>
                 </div>
-              )}
 
-              {children}
+                {title ? (
+                  <div className="mb-6 text-center">
+                    <h1 className="text-[1.65rem] font-semibold leading-tight tracking-tight text-slate-900 sm:text-[1.85rem]">
+                      {title}
+                    </h1>
+                    <div
+                      className="mx-auto mt-3 h-1 w-10 rounded-full"
+                      style={{ backgroundColor: primaryColor }}
+                    />
+                    {description ? (
+                      <p className="mt-3 text-[0.95rem] leading-relaxed text-slate-600">
+                        {description}
+                      </p>
+                    ) : null}
+                  </div>
+                ) : null}
+
+                {children}
+              </div>
             </div>
           </div>
 
           <div className="mt-6 text-center">
-            <div className="inline-flex items-center space-x-2 rounded-md border border-gray-200 bg-white/90 px-4 py-2 backdrop-blur-sm dark:border-slate-700 dark:bg-slate-800/80">
-              <p className="text-sm text-gray-500 dark:text-gray-400">{settings.footerText}</p>
-            </div>
+            <p className="text-sm text-white/55">{settings.footerText}</p>
           </div>
         </div>
       </div>

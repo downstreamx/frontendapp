@@ -29,6 +29,7 @@ import {
   fetchTruckEditMeta,
   updateTruck,
 } from '../fleet-api'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 import {
   formStateToPayload,
   initialTruckFormState,
@@ -112,7 +113,7 @@ export function TruckFormPage() {
   }
 
   if (isLoading || (isEdit && !hydrated)) {
-    return <p className="text-sm text-muted-foreground">{t('Loading...')}</p>
+    return <PageContentLoader className="min-h-[16rem]" />
   }
 
   const statuses = meta?.statuses ?? []
@@ -200,11 +201,11 @@ export function TruckFormPage() {
               />
             </div>
             <div className="space-y-1">
-              <Label htmlFor="fuel_capacity">{t('Fuel Capacity')}</Label>
+              <Label htmlFor="capacity_litres">{t('Fuel Capacity')}</Label>
               <Input
-                id="fuel_capacity"
-                value={form.fuel_capacity}
-                onChange={(e) => setField('fuel_capacity', e.target.value)}
+                id="capacity_litres"
+                value={form.capacity_litres}
+                onChange={(e) => setField('capacity_litres', e.target.value)}
                 required
               />
             </div>

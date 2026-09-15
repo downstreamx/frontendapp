@@ -69,7 +69,7 @@ export const PAGE_MODULES: Record<string, PageModuleConfig> = {
   '/sales/orders': {
     title: 'Sales orders',
     listApi: '/sales/sales-orders',
-    labelKeys: ['proposal_number', 'id', 'status'],
+    labelKeys: ['order_number', 'id', 'status'],
   },
   '/sales/returns': {
     title: 'Sales returns',

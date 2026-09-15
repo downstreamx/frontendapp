@@ -21,6 +21,7 @@ import { getApiErrorMessage } from '@/lib/errors'
 import { paths } from '@/lib/paths'
 import { createLead, getLead, updateLead } from '../lead-api'
 import { useLeadMeta } from '../hooks/use-lead-meta'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 
 export function LeadFormPage() {
   const { id } = useParams<{ id: string }>()
@@ -94,7 +95,7 @@ export function LeadFormPage() {
   })
 
   if (isEdit && leadQuery.isLoading) {
-    return <p className="text-sm text-muted-foreground">{t('Loading…')}</p>
+    return <PageContentLoader className="min-h-[16rem]" />
   }
 
   return (

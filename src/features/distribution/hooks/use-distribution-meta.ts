@@ -17,7 +17,7 @@ function depotLabel(d: DistributionMeta['depots'][0]) {
 }
 
 function truckLabel(v: DistributionMeta['trucks'][0]) {
-  const capacity = v.capacity_litres ?? v.fuel_capacity
+  const capacity = v.capacity_litres
   const parts: string[] = [v.plate_number, v.make].filter((x): x is string => Boolean(x))
   if (capacity != null && Number(capacity) > 0) {
     parts.push(formatQuantity(capacity, { unit: 'L' }))

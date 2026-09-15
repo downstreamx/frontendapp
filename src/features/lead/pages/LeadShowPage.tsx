@@ -12,6 +12,7 @@ import { CrmTasksSection } from '../components/CrmTasksSection'
 import { CrmCallsSection } from '../components/CrmCallsSection'
 import { CrmFilesSection } from '../components/CrmFilesSection'
 import { paths } from '@/lib/paths'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 
 export function LeadShowPage() {
   const { id } = useParams<{ id: string }>()
@@ -25,7 +26,7 @@ export function LeadShowPage() {
   })
 
   if (isLoading) {
-    return <p className="text-sm text-muted-foreground">{t('Loading…')}</p>
+    return <PageContentLoader className="min-h-[16rem]" />
   }
   if (error || !lead) {
     return <p className="text-sm text-destructive">{t('Lead not found.')}</p>

@@ -22,7 +22,7 @@ export function buildSalesOrderPayload(values: SalesOrderFormValues, totals: Pro
     }))
 
   return {
-    proposal_date: values.proposal_date,
+    order_date: values.order_date,
     due_date: values.due_date || undefined,
     customer_id: Number(values.customer_id),
     depot_id: values.depot_id ? Number(values.depot_id) : null,

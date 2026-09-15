@@ -85,7 +85,7 @@ export const purchaseInvoiceEditSchema =
   purchaseInvoiceFormBase.superRefine(purchaseInvoiceFormRefine)
 
 export const commercialSalesOrderSchema = z.object({
-  proposal_date: z.string().min(1),
+  order_date: z.string().min(1),
   due_date: z.string().min(1),
   customer_id: z.coerce.number().min(1),
   depot_id: z.coerce.number().optional(),
@@ -109,7 +109,7 @@ const salesOrderItemSchema = z.object({
 })
 
 export const salesOrderFormSchema = z.object({
-  proposal_date: z.string().min(1, 'Order date is required'),
+  order_date: z.string().min(1, 'Order date is required'),
   due_date: z.string().min(1, 'Due date is required'),
   customer_id: z.string().min(1, 'Customer is required'),
   depot_id: z.string().min(1, 'Depot is required'),
@@ -126,7 +126,7 @@ export function buildSalesOrderFormSchema(options?: { singleLine?: boolean }) {
     : z.array(salesOrderItemSchema).min(1)
 
   return z.object({
-    proposal_date: z.string().min(1, 'Order date is required'),
+    order_date: z.string().min(1, 'Order date is required'),
     due_date: z.string().min(1, 'Due date is required'),
     customer_id: z.string().min(1, 'Customer is required'),
     depot_id: z.string().min(1, 'Depot is required'),

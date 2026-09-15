@@ -9,7 +9,12 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ImageSlider } from '@/components/ui/image-slider'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 import { usePageChrome } from '@/contexts/page-chrome-context'
+import {
+  DetailInfoTile,
+  DetailSectionHeading,
+} from '@/features/shared/components/detail-info-tile'
 import {
   getProduct,
   listProductPriceHistory,
@@ -32,10 +37,9 @@ function InfoTile({
   className?: string
 }) {
   return (
-    <div className={className ?? 'bg-muted/50 p-4 rounded-lg'}>
-      {label ? <p className="text-sm font-semibold text-foreground mb-1">{label}</p> : null}
+    <DetailInfoTile label={label} className={className}>
       {children}
-    </div>
+    </DetailInfoTile>
   )
 }
 
@@ -83,7 +87,7 @@ export function ProductViewPage() {
   })
 
   if (isLoading) {
-    return <p className="text-sm text-muted-foreground">{t('Loading…')}</p>
+    return <PageContentLoader className="min-h-[16rem]" />
   }
   if (error || !product) {
     return <p className="text-sm text-destructive">{t('Product not found.')}</p>
@@ -103,10 +107,10 @@ export function ProductViewPage() {
   return (
     <>
       <Card>
-        <CardHeader>
+        <CardHeader className="border-b border-border/50 pb-4">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <CardTitle className="flex items-center gap-2 text-lg">
-              <Package className="h-5 w-5" />
+            <CardTitle className="flex items-center gap-2 text-xl tracking-tight">
+              <Package className="h-5 w-5 text-primary" />
               {product.name}
             </CardTitle>
             <div className="flex items-center gap-2">
@@ -126,7 +130,7 @@ export function ProductViewPage() {
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
             <div className="space-y-6 lg:col-span-2">
               <section>
-                <h3 className="text-lg font-semibold mb-4">{t('Basic Information')}</h3>
+                <DetailSectionHeading>{t('Basic Information')}</DetailSectionHeading>
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                   {product.sku ? (
                     <InfoTile label={t('SKU')}>
@@ -143,7 +147,7 @@ export function ProductViewPage() {
               </section>
 
               <section>
-                <h3 className="text-lg font-semibold mb-4">{t('Pricing & Inventory')}</h3>
+                <DetailSectionHeading>{t('Pricing & Inventory')}</DetailSectionHeading>
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                   {product.sale_price != null && Number(product.sale_price) > 0 ? (
                     <InfoTile
@@ -182,7 +186,7 @@ export function ProductViewPage() {
               </section>
 
               <section>
-                <h3 className="text-lg font-semibold mb-4">{t('Inventory Movement Summary')}</h3>
+                <DetailSectionHeading>{t('Inventory Movement Summary')}</DetailSectionHeading>
                 <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
                   <InfoTile label={t('Purchased')}>
                     <p className="text-lg font-semibold tabular-nums">
@@ -209,7 +213,7 @@ export function ProductViewPage() {
 
               {depotStocks.length > 0 ? (
                 <section>
-                  <h3 className="text-lg font-semibold mb-4">{t('Depot Stock')}</h3>
+                  <DetailSectionHeading>{t('Depot Stock')}</DetailSectionHeading>
                   <div className="bg-muted/50 p-4 rounded-lg">
                     <div className="space-y-2">
                       {depotStocks.map((stock, index) => (
@@ -229,9 +233,9 @@ export function ProductViewPage() {
               ) : null}
 
               <section>
-                <h3 className="text-lg font-semibold mb-4">{t('Price History')}</h3>
+                <DetailSectionHeading>{t('Price History')}</DetailSectionHeading>
                 {priceHistoryLoading ? (
-                  <p className="text-sm text-muted-foreground">{t('Loading…')}</p>
+                  <PageContentLoader className="min-h-[8rem] py-6" />
                 ) : priceHistory.length === 0 ? (
                   <p className="text-sm text-muted-foreground">{t('No price history yet.')}</p>
                 ) : (
@@ -265,7 +269,7 @@ export function ProductViewPage() {
               </section>
 
               <section>
-                <h3 className="text-lg font-semibold mb-4">{t('Additional Details')}</h3>
+                <DetailSectionHeading>{t('Additional Details')}</DetailSectionHeading>
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                   <InfoTile label={t('Unit')}>
                     <p className="text-muted-foreground">{unitName || '-'}</p>
@@ -292,7 +296,7 @@ export function ProductViewPage() {
               </section>
 
               <section>
-                <h3 className="text-lg font-semibold mb-4">{t('Audit')}</h3>
+                <DetailSectionHeading>{t('Audit')}</DetailSectionHeading>
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                   <InfoTile label={t('Created')}>
                     <p className="text-muted-foreground">
@@ -310,7 +314,7 @@ export function ProductViewPage() {
 
             <div className="space-y-6 lg:col-span-1">
               <div className="border rounded-lg p-6 shadow-sm bg-card">
-                <h3 className="text-lg font-semibold mb-4">{t('Product Image')}</h3>
+                <DetailSectionHeading>{t('Product Image')}</DetailSectionHeading>
                 {product.image ? (
                   <img
                     src={imageUrl}
@@ -330,7 +334,7 @@ export function ProductViewPage() {
 
               {additionalImages.length > 0 ? (
                 <div className="border rounded-lg p-6 shadow-sm bg-card">
-                  <h3 className="text-lg font-semibold mb-4">{t('Additional Images')}</h3>
+                  <DetailSectionHeading>{t('Additional Images')}</DetailSectionHeading>
                   <ImageSlider
                     images={additionalImages}
                     className="w-full"

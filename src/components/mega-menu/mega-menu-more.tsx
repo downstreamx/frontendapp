@@ -13,7 +13,14 @@ import {
 import type { NavItem } from '@/types'
 import { cn } from '@/lib/utils'
 import { MegaMenuPanel } from './mega-menu-panel'
-import { MegaMenuTile, MEGA_MENU_DROPDOWN_LINK_HOVER, MEGA_MENU_TILE_TEXT, MEGA_MENU_TILE_WIDTH } from './mega-menu-item'
+import {
+  MegaMenuTile,
+  MEGA_MENU_DROPDOWN_LINK_HOVER,
+  MEGA_MENU_DROPDOWN_PANEL_LINK,
+  MEGA_MENU_DROPDOWN_PANEL_LINK_ACTIVE,
+  MEGA_MENU_TILE_TEXT,
+  MEGA_MENU_TILE_WIDTH,
+} from './mega-menu-item'
 import { MEGA_MENU_GRADIENT_BG, megaMenuDropdownSurfaceStyle } from './mega-menu-styles'
 import { getNavItemActiveState } from './mega-menu-utils'
 import { MenuLucideIcon } from './mega-menu-icon'
@@ -51,48 +58,75 @@ export function MegaMenuMore({ items, className }: MegaMenuMoreProps) {
               className="h-full w-full cursor-pointer"
             />
           </button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className={cn('w-max min-w-[12rem]', MEGA_MENU_TILE_TEXT)}>
-        {items.map((item) => {
-          const isActive = getNavItemActiveState(pathname, item)
+        </DropdownMenuTrigger>
+        <DropdownMenuContent
+          align="end"
+          className={cn(
+            'w-max min-w-[12rem] border-primary/20 p-1.5 text-primary-foreground',
+            MEGA_MENU_GRADIENT_BG,
+            MEGA_MENU_TILE_TEXT,
+          )}
+          style={megaMenuDropdownSurfaceStyle()}
+        >
+          {items.map((item) => {
+            const isActive = getNavItemActiveState(pathname, item)
 
-          if (item.children && item.children.length > 0) {
+            if (item.children && item.children.length > 0) {
+              return (
+                <DropdownMenuSub key={item.title}>
+                  <DropdownMenuSubTrigger
+                    className={cn(
+                      MEGA_MENU_TILE_TEXT,
+                      MEGA_MENU_DROPDOWN_PANEL_LINK,
+                      'focus:bg-white/10 focus:text-white data-[state=open]:bg-white/10 data-[state=open]:text-white',
+                      isActive && MEGA_MENU_DROPDOWN_PANEL_LINK_ACTIVE,
+                    )}
+                  >
+                    <MenuLucideIcon item={item} className="mr-2 text-inherit" />
+                    {item.title}
+                  </DropdownMenuSubTrigger>
+                  <DropdownMenuSubContent
+                    className={cn('w-max max-w-none border-primary/20 p-0', MEGA_MENU_GRADIENT_BG)}
+                    style={megaMenuDropdownSurfaceStyle()}
+                  >
+                    <MegaMenuPanel item={item} surface="transparent" />
+                  </DropdownMenuSubContent>
+                </DropdownMenuSub>
+              )
+            }
+
             return (
-              <DropdownMenuSub key={item.title}>
-                <DropdownMenuSubTrigger
-                  className={cn(MEGA_MENU_TILE_TEXT, MEGA_MENU_DROPDOWN_LINK_HOVER, isActive && 'bg-muted/60')}
-                >
-                  <MenuLucideIcon item={item} className="mr-2" />
-                  {item.title}
-                </DropdownMenuSubTrigger>
-                <DropdownMenuSubContent
-                  className={cn('w-max max-w-none border-primary/20 p-0', MEGA_MENU_GRADIENT_BG)}
-                  style={megaMenuDropdownSurfaceStyle()}
-                >
-                  <MegaMenuPanel item={item} surface="transparent" />
-                </DropdownMenuSubContent>
-              </DropdownMenuSub>
+              <DropdownMenuItem
+                key={item.title}
+                asChild
+                disabled={!item.href}
+                className={cn(
+                  MEGA_MENU_TILE_TEXT,
+                  'focus:bg-white/10 focus:text-white',
+                  isActive && MEGA_MENU_DROPDOWN_PANEL_LINK_ACTIVE,
+                )}
+              >
+                {item.href ? (
+                  <Link
+                    to={item.href}
+                    className={cn(
+                      'flex w-full cursor-pointer items-center',
+                      MEGA_MENU_DROPDOWN_LINK_HOVER,
+                      MEGA_MENU_DROPDOWN_PANEL_LINK,
+                      isActive && MEGA_MENU_DROPDOWN_PANEL_LINK_ACTIVE,
+                    )}
+                  >
+                    <MenuLucideIcon item={item} className="mr-2 text-inherit" />
+                    {item.title}
+                  </Link>
+                ) : (
+                  <span>{item.title}</span>
+                )}
+              </DropdownMenuItem>
             )
-          }
-
-          return (
-            <DropdownMenuItem key={item.title} asChild disabled={!item.href} className={MEGA_MENU_TILE_TEXT}>
-              {item.href ? (
-                <Link
-                  to={item.href}
-                  className={cn('flex w-full cursor-pointer items-center', MEGA_MENU_DROPDOWN_LINK_HOVER)}
-                >
-                  <MenuLucideIcon item={item} className="mr-2" />
-                  {item.title}
-                </Link>
-              ) : (
-                <span>{item.title}</span>
-              )}
-            </DropdownMenuItem>
-          )
-        })}
-      </DropdownMenuContent>
-    </DropdownMenu>
+          })}
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   )
 }

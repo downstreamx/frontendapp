@@ -17,8 +17,8 @@ export type SalesOrderCustomer = {
 
 export type SalesOrderRow = {
   id: number
-  proposal_number: string
-  proposal_date: string
+  order_number: string
+  order_date: string
   due_date: string
   customer_id: number
   depot_id?: number | null

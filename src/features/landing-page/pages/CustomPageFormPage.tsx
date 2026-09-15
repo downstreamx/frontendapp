@@ -19,6 +19,7 @@ import { usePageChrome } from '@/contexts/page-chrome-context'
 import { getApiErrorMessage } from '@/lib/errors'
 import { paths } from '@/lib/paths'
 import { createCustomPage, getCustomPage, updateCustomPage } from '../landing-page-api'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 
 export function CustomPageFormPage() {
   const { id } = useParams<{ id: string }>()
@@ -81,7 +82,7 @@ export function CustomPageFormPage() {
   })
 
   if (isEdit && pageQuery.isLoading) {
-    return <p className="text-sm text-muted-foreground">{t('Loading…')}</p>
+    return <PageContentLoader className="min-h-[16rem]" />
   }
 
   return (

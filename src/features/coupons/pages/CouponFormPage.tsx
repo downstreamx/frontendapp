@@ -10,6 +10,7 @@ import { useAppContext } from '@/contexts/app-context'
 import { getApiErrorMessage } from '@/lib/errors'
 import { paths } from '@/lib/paths'
 import { createCoupon, getCoupon, updateCoupon } from '@/features/saas/saas-api'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 import {
   CouponFormFields,
   couponToFormState,
@@ -73,7 +74,7 @@ export function CouponFormPage() {
   })
 
   if (isEdit && couponQuery.isLoading) {
-    return <p className="text-sm text-muted-foreground">{t('Loading…')}</p>
+    return <PageContentLoader className="min-h-[16rem]" />
   }
 
   return (

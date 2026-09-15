@@ -13,7 +13,12 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { ConfirmationDialog } from '@/components/ui/confirmation-dialog'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 import { useAppContext } from '@/contexts/app-context'
+import {
+  DetailFieldGrid,
+  detailMutedBlockClass,
+} from '@/features/shared/components/detail-info-tile'
 import { hasPermission } from '@/lib/permissions'
 import { getApiErrorMessage } from '@/lib/errors'
 import { formatQuantity } from '@/lib/format-quantity'
@@ -46,13 +51,12 @@ export function ProductViewDialog({ productId, open, onOpenChange, onEdit, onDel
     enabled: open && productId != null,
   })
 
-  const canDelete =
-    hasPermission(
-      auth.permissions,
-      auth.roles,
-      auth.user?.type,
-      'delete-product-service-item',
-    ) && !product?.is_system
+  const canDelete = hasPermission(
+    auth.permissions,
+    auth.roles,
+    auth.user?.type,
+    'delete-product-service-item',
+  )
 
   const { deleteState, openDeleteDialog, closeDeleteDialog, confirmDelete, isDeleting } =
     useDeleteHandler({
@@ -149,7 +153,7 @@ export function ProductViewDialog({ productId, open, onOpenChange, onEdit, onDel
       <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent className="max-h-[90vh] overflow-y-auto p-0 sm:max-w-2xl">
           {isLoading ? (
-            <p className="p-6 text-sm text-muted-foreground">{t('Loading...')}</p>
+            <PageContentLoader className="min-h-[12rem] py-10" />
           ) : error || !product ? (
             <p className="p-6 text-sm text-destructive">{t('Product not found.')}</p>
           ) : (
@@ -161,7 +165,7 @@ export function ProductViewDialog({ productId, open, onOpenChange, onEdit, onDel
                   className="h-auto w-full object-contain"
                 />
               ) : (
-                <div className="flex h-48 w-full items-center justify-center bg-muted">
+                <div className="flex h-48 w-full items-center justify-center bg-[hsl(var(--section-deep))]">
                   <div className="text-center">
                     <Image className="mx-auto mb-2 h-16 w-16 text-muted-foreground" />
                     <p className="text-sm text-muted-foreground">{t('No Image Available')}</p>
@@ -170,20 +174,13 @@ export function ProductViewDialog({ productId, open, onOpenChange, onEdit, onDel
               )}
               <div className="space-y-4 p-6">
                 <DialogHeader className="space-y-1 text-left">
-                  <DialogTitle>{product.name}</DialogTitle>
+                  <DialogTitle className="tracking-tight">{product.name}</DialogTitle>
                 </DialogHeader>
-                <dl className="grid gap-4 sm:grid-cols-2">
-                  {fields.map((field) => (
-                    <div key={field.label}>
-                      <dt className="text-sm font-medium text-muted-foreground">{field.label}</dt>
-                      <dd className="mt-1 text-sm">{field.value}</dd>
-                    </div>
-                  ))}
-                </dl>
+                <DetailFieldGrid fields={fields} />
                 {depotStocks.length > 0 ? (
                   <div>
                     <p className="text-sm font-medium text-muted-foreground">{t('Depot Stock')}</p>
-                    <div className="mt-2 space-y-2 rounded-md bg-muted/40 p-3">
+                    <div className={`mt-2 space-y-2 ${detailMutedBlockClass}`}>
                       {depotStocks.map((stock, index) => (
                         <div
                           key={`${stock.depot_name}-${index}`}
@@ -199,7 +196,7 @@ export function ProductViewDialog({ productId, open, onOpenChange, onEdit, onDel
                 {product.description ? (
                   <div>
                     <p className="text-sm font-medium text-muted-foreground">{t('Description')}</p>
-                    <p className="mt-1 whitespace-pre-wrap rounded-md bg-muted/40 p-3 text-sm">
+                    <p className={`mt-1 whitespace-pre-wrap ${detailMutedBlockClass}`}>
                       {product.description}
                     </p>
                   </div>
@@ -209,7 +206,7 @@ export function ProductViewDialog({ productId, open, onOpenChange, onEdit, onDel
                     <p className="text-sm font-medium text-muted-foreground">
                       {t('Long Description')}
                     </p>
-                    <p className="mt-1 whitespace-pre-wrap rounded-md bg-muted/40 p-3 text-sm">
+                    <p className={`mt-1 whitespace-pre-wrap ${detailMutedBlockClass}`}>
                       {product.long_description}
                     </p>
                   </div>

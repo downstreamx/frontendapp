@@ -50,6 +50,7 @@ import {
   updateTruck,
   type TruckListRow,
 } from '../fleet-api'
+import { ForbiddenPage } from '@/components/status-page'
 import {
   formStateToPayload,
   initialTruckFormState,
@@ -333,7 +334,7 @@ export function TrucksIndexPage() {
       render: (value) => (value ? t(String(value)) : '—'),
     },
     {
-      key: 'fuel_capacity',
+      key: 'capacity_litres',
       header: t('Fuel Capacity'),
       render: (value) => (value ? `${value} L` : '—'),
     },
@@ -370,7 +371,7 @@ export function TrucksIndexPage() {
   ]
 
   if (!canManage) {
-    return <p className="text-sm text-muted-foreground">{t('Permission denied')}</p>
+    return <ForbiddenPage />
   }
 
   return (
@@ -485,6 +486,7 @@ export function TrucksIndexPage() {
           />
         ) : (
           <DataTable
+            embedded
             columns={columns}
             data={rows}
             sortField={sortField}

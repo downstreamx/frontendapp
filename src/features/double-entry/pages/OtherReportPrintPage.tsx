@@ -14,6 +14,7 @@ import {
 import { isOtherReportKey } from '../other-reports-config'
 import { OtherReportPrintLayout } from '../components/OtherReportPrintLayout'
 import { defaultReportDateRange } from '../utils/default-date-range'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 
 export function OtherReportPrintPage() {
   const { t } = useTranslation()
@@ -97,7 +98,7 @@ export function OtherReportPrintPage() {
     expenseQuery.error
 
   if (loading) {
-    return <p className="p-8 text-sm text-muted-foreground">{t('Loading…')}</p>
+    return <PageContentLoader className="min-h-[16rem]" />
   }
 
   if (error) {

@@ -44,9 +44,9 @@ export function AccountDashboardPage() {
     <div className="space-y-6">
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <DashboardMetricCard
-          title={t('Total Clients')}
+          title={t('Total Customers')}
           value={data.stats.total_clients}
-          subtitle={t('Active clients')}
+          subtitle={t('Active Customers')}
           variant="orange"
           icon={UserCheck}
           href={paths.account.customers}

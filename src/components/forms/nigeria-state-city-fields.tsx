@@ -109,7 +109,7 @@ export function NigeriaStateCityFields({
           <SelectTrigger id={`${idPrefix}-state`}>
             <SelectValue placeholder={t('Select state')} />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent searchable searchPlaceholder={t('Search state…')}>
             {states.map((state) => (
               <SelectItem key={state.id} value={String(state.id)}>
                 {state.name}
@@ -130,7 +130,7 @@ export function NigeriaStateCityFields({
           <SelectTrigger id={`${idPrefix}-city`}>
             <SelectValue placeholder={t('Select city')} />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent searchable searchPlaceholder={t('Search city…')}>
             {cities.map((city) => (
               <SelectItem key={city.id} value={String(city.id)}>
                 {city.name}

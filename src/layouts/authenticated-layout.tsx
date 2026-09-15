@@ -27,7 +27,7 @@ import { useFlashMessages } from '@/hooks/useFlashMessages'
 import { paths } from '@/lib/paths'
 import { setAuthToken } from '@/lib/api'
 import { getApiErrorMessage } from '@/lib/errors'
-import { usePageChromeState } from '@/contexts/page-chrome-context'
+import { usePageChromeState, useContentTitleMatchesPageTitle } from '@/contexts/page-chrome-context'
 import { cn } from '@/lib/utils'
 import { leaveImpersonation } from '@/features/admin/admin-api'
 import { queryKeys } from '@/lib/query-keys'
@@ -38,6 +38,9 @@ function LayoutChrome() {
   const pageTitle = pageChrome.pageTitle
   const pageActions = pageChrome.pageActions
   const centerPageTitle = pageChrome.centerPageTitle
+  const duplicateContentTitle = useContentTitleMatchesPageTitle(pageTitle)
+  const showPageTitleHeading = Boolean(pageTitle) && !duplicateContentTitle
+  const showTitleRow = showPageTitleHeading || Boolean(pageActions)
   const { t } = useTranslation()
   const { auth } = useAppContext()
   const { settings } = useBrand()
@@ -64,7 +67,7 @@ function LayoutChrome() {
     <>
       <header
         className={cn(
-          'mb-2 flex h-14 shrink-0 items-center gap-3 border-b bg-background py-2',
+          'mb-2 flex h-14 shrink-0 items-center gap-3 border-b border-border/70 bg-background/90 py-2 backdrop-blur-sm',
           isMegaMenu ? 'px-0' : 'px-4',
         )}
       >
@@ -124,24 +127,32 @@ function LayoutChrome() {
           ) : null}
         </div>
       </header>
-      {pageTitle ? (
+      {showTitleRow ? (
         <div
           className={cn(
             'mb-4 mt-6 items-center',
-            centerPageTitle ? 'grid grid-cols-[1fr_auto_1fr] gap-3' : 'flex',
+            centerPageTitle && showPageTitleHeading
+              ? 'grid grid-cols-[1fr_auto_1fr] gap-3'
+              : 'flex',
           )}
           dir={settings.layoutDirection}
         >
-          {centerPageTitle ? <div aria-hidden className="min-w-0" /> : null}
-          <h1
-            className={cn(
-              'text-2xl font-semibold',
-              centerPageTitle ? 'text-center' : 'flex-1',
-            )}
-          >
-            {pageTitle}
-          </h1>
-          <div className={cn('shrink-0', centerPageTitle && 'justify-self-end')}>{pageActions}</div>
+          {centerPageTitle && showPageTitleHeading ? <div aria-hidden className="min-w-0" /> : null}
+          {showPageTitleHeading ? (
+            <h1
+              className={cn(
+                'text-2xl font-semibold',
+                centerPageTitle ? 'text-center' : 'flex-1',
+              )}
+            >
+              {pageTitle}
+            </h1>
+          ) : (
+            <div className="min-w-0 flex-1" />
+          )}
+          <div className={cn('shrink-0', centerPageTitle && showPageTitleHeading && 'justify-self-end')}>
+            {pageActions}
+          </div>
         </div>
       ) : null}
     </>
@@ -174,7 +185,7 @@ function AuthenticatedLayoutContent() {
         <div className="flex min-h-screen flex-col bg-background">
           <div className="flex w-full flex-1 flex-col bg-background px-6 md:px-8 lg:px-10">
             <LayoutChrome />
-            <main className="h-full flex-1 bg-content pb-4 text-[17px] leading-relaxed md:pt-0">
+            <main className="h-full flex-1 bg-content pb-10 text-[17px] leading-relaxed md:pb-12 md:pt-0">
               <Outlet />
             </main>
           </div>
@@ -197,7 +208,7 @@ function AuthenticatedLayoutContent() {
         <AppSidebar />
         <SidebarInset className="overflow-visible" {...shellDirProps}>
           <LayoutChrome />
-          <main className="h-full bg-content p-4 md:pt-0">
+          <main className="h-full bg-content p-4 pb-10 md:pb-12 md:pt-0">
             <Outlet />
           </main>
         </SidebarInset>

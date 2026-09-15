@@ -1,5 +1,6 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { DefaultLandingRedirect } from '@/components/default-landing-redirect'
+import { NotFoundPage } from '@/components/status-page'
 import { paths } from '@/lib/paths'
 import { LoginPage } from '@/features/auth/pages/LoginPage'
 import { AccountBeingPreparedPage } from '@/features/auth/pages/AccountBeingPreparedPage'
@@ -23,7 +24,6 @@ import { StockIndexPage } from '@/features/inventory/pages/StockIndexPage'
 import { ReorderLevelsIndexPage } from '@/features/inventory/pages/ReorderLevelsIndexPage'
 import { TransfersIndexPage } from '@/features/transfers/pages/TransfersIndexPage'
 import { TransferShowPage } from '@/features/transfers/pages/TransferShowPage'
-import { ModuleIndexPage } from '@/features/shared/pages/ModuleIndexPage'
 import { commercialRoutes } from '@/routes/modules/commercial'
 import { platformRoutes } from '@/routes/modules/platform'
 import { fleetRoutes } from '@/routes/modules/fleet'
@@ -103,7 +103,7 @@ export function AppRoutes() {
           {integrationRoutes}
 
           <Route path="/" element={<DefaultLandingRedirect />} />
-          <Route path="*" element={<ModuleIndexPage />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Route>
 

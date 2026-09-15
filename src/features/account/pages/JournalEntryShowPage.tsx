@@ -16,6 +16,7 @@ import {
   formatJournalEntryStatusLabel,
   getJournalEntryStatusBadgeClasses,
 } from '../journal-entry-utils'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 import {
   getJournalEntry,
   postJournalEntry,
@@ -66,7 +67,7 @@ export function JournalEntryShowPage() {
   })
 
   if (entryQuery.isLoading) {
-    return <p className="text-sm text-muted-foreground">{t('Loading...')}</p>
+    return <PageContentLoader className="min-h-[16rem]" />
   }
   if (entryQuery.error || !entry) {
     return <p className="text-sm text-destructive">{t('Journal entry not found.')}</p>

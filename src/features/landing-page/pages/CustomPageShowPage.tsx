@@ -7,6 +7,7 @@ import { FleetStatusBadge } from '@/features/fleet/components/FleetStatusBadge'
 import { usePageChrome } from '@/contexts/page-chrome-context'
 import { paths } from '@/lib/paths'
 import { getCustomPage } from '../landing-page-api'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 
 export function CustomPageShowPage() {
   const { id } = useParams<{ id: string }>()
@@ -27,7 +28,7 @@ export function CustomPageShowPage() {
     ],
   })
 
-  if (isLoading) return <p className="text-sm text-muted-foreground">{t('Loading…')}</p>
+  if (isLoading) return <PageContentLoader className="min-h-[16rem]" />
   if (!page) return <p className="text-sm text-destructive">{t('Page not found.')}</p>
 
   return (

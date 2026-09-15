@@ -16,6 +16,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { NoRecordsFound } from '@/components/no-records-found'
+import { ForbiddenPage } from '@/components/status-page'
 import { Pagination } from '@/components/ui/pagination'
 import { PerPageSelector } from '@/components/ui/per-page-selector'
 import { SearchInput } from '@/components/ui/search-input'
@@ -191,13 +192,13 @@ export function StockIndexPage() {
   }, [mayCreate, t])
 
   if (!mayManage) {
-    return <p className="text-sm text-destructive">{t('Permission denied')}</p>
+    return <ForbiddenPage />
   }
 
   return (
     <TooltipProvider>
-      <Card className="shadow-sm">
-        <CardContent className="border-b bg-muted/30 p-6">
+      <Card>
+        <CardContent className="border-b border-border/50 bg-[hsl(var(--section-deep))]/70 p-6">
           <div className="flex items-center justify-between gap-4">
             <div className="max-w-md flex-1">
               <SearchInput

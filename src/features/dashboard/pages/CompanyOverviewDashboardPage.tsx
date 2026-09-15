@@ -94,7 +94,7 @@ export function CompanyOverviewDashboardPage() {
               connectBarTops
               height={420}
               series={[
-                { dataKey: 'stock_quantity', color: '#0ea5e9', name: t('Stock quantity') },
+                { dataKey: 'stock_quantity', color: '#1b703a', name: t('Stock quantity') },
               ]}
             />
           </CardContent>
@@ -125,8 +125,9 @@ export function CompanyOverviewDashboardPage() {
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <DashboardMetricCard
-          title={t('Total Clients')}
+          title={t('Total Customers')}
           value={account.total_clients}
+          subtitle={t('Active Customers')}
           variant="orange"
           icon={UserCheck}
           href={paths.account.customers}
@@ -206,7 +207,7 @@ export function CompanyOverviewDashboardPage() {
               <li key={action.key}>
                 <Link
                   to={action.href}
-                  className="flex items-center justify-between gap-3 rounded-lg border p-3 transition-colors hover:bg-muted/50"
+                  className="flex items-center justify-between gap-3 rounded-xl border border-border/60 bg-white p-3 transition-colors hover:bg-[#fff3e0]/70"
                 >
                   <span className="flex items-center gap-2 text-sm font-medium">
                     <AlertTriangle className="h-4 w-4 text-amber-500" />

@@ -32,6 +32,7 @@ import {
   type ProjectMilestoneInput,
 } from '../taskly-api'
 import type { FormDialogCallbacks } from '@/features/shared/types/form-presentation'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 
 type MilestoneRow = ProjectMilestoneInput & { key: string }
 
@@ -189,7 +190,7 @@ export function ProjectFormPage({
   }
 
   if (isLoading || (isEdit && !hydrated)) {
-    return <p className="text-sm text-muted-foreground">{t('Loading...')}</p>
+    return <PageContentLoader className="min-h-[16rem]" />
   }
 
   return (

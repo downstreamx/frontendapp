@@ -96,6 +96,7 @@ export const getCompanyMenu = (t: (key: string) => string): NavItem[] => [
         permission: 'manage-dashboard',
         order: 10,
         megaMenuGroup: t('Overview'),
+        matchExact: true,
       },
       {
         title: t('Account Dashboard'),
@@ -114,6 +115,7 @@ export const getCompanyMenu = (t: (key: string) => string): NavItem[] => [
         modules: ['Hrm'],
         order: 12,
         megaMenuGroup: t('Integrations'),
+        matchExact: true,
       },
       {
         title: t('Fleet Dashboard'),

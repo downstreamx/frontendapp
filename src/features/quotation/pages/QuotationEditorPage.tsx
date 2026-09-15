@@ -22,6 +22,7 @@ import {
   type QuotationLineInput,
 } from '../quotations-api'
 import { useQuotationMeta } from '../hooks/use-quotation-meta'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 
 type LineRow = QuotationLineInput & { key: string }
 
@@ -130,7 +131,7 @@ export function QuotationEditorPage() {
   }
 
   if (isEdit && quotationQuery.isLoading) {
-    return <p className="text-sm text-muted-foreground">{t('Loading…')}</p>
+    return <PageContentLoader className="min-h-[16rem]" />
   }
 
   return (

@@ -19,6 +19,7 @@ import { getApiErrorMessage } from '@/lib/errors'
 import { paths } from '@/lib/paths'
 import { createBudgetPeriod, getBudgetPeriod, updateBudgetPeriod } from '../budget-planner-api'
 import { useBudgetPeriodsMeta } from '../hooks/use-budget-planner-meta'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 
 export function BudgetPeriodFormPage() {
   const { id } = useParams<{ id: string }>()
@@ -80,7 +81,7 @@ export function BudgetPeriodFormPage() {
   })
 
   if (isEdit && periodQuery.isLoading) {
-    return <p className="text-sm text-muted-foreground">{t('Loading…')}</p>
+    return <PageContentLoader className="min-h-[16rem]" />
   }
 
   return (

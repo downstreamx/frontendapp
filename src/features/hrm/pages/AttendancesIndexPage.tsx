@@ -31,7 +31,7 @@ import { usePageChrome } from '@/contexts/page-chrome-context'
 import { useAppContext } from '@/contexts/app-context'
 import { hasPermission } from '@/lib/permissions'
 import { useListToolbar } from '@/hooks/use-list-toolbar'
-import { formatShortDate } from '@/features/shared/lib/entity-labels'
+import { formatShortDate, personName } from '@/features/shared/lib/entity-labels'
 import {
   createAttendance,
   deleteAttendance,
@@ -130,7 +130,7 @@ export function AttendancesIndexPage() {
     if (!open && !editing) return
     if (editing) {
       setForm({
-        employee_id: String(editing.employee_id ?? editing.user?.id ?? ''),
+        employee_id: String(editing.employee_id ?? ''),
         date: editing.date?.slice(0, 10) ?? '',
         clock_in: toDateTimeLocal(editing.clock_in),
         clock_out: toDateTimeLocal(editing.clock_out),
@@ -192,7 +192,7 @@ export function AttendancesIndexPage() {
   }
 
   const columns: Column<AttendanceRow>[] = [
-    { key: 'employee', header: t('Employee'), render: (_, row) => row.user?.name ?? '—' },
+    { key: 'employee', header: t('Employee'), render: (_, row) => personName(row.employee?.user, row.employee_id) },
     {
       key: 'date',
       header: t('Date'),

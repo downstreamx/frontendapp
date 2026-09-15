@@ -82,9 +82,9 @@ export function ProjectDashboardPage() {
           href={paths.users.index}
         />
         <DashboardMetricCard
-          title={t('Total Clients')}
+          title={t('Total Customers')}
           value={stats.total_clients}
-          subtitle={t('Active clients')}
+          subtitle={t('Active Customers')}
           variant="orange"
           icon={UserCheck}
         />

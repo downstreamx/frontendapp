@@ -14,7 +14,20 @@ export default function App() {
           <AppRoutes />
         </BrowserRouter>
       </ThemeProvider>
-      <Toaster richColors position="top-right" />
+      <Toaster
+        richColors
+        position="top-right"
+        toastOptions={{
+          classNames: {
+            toast:
+              'border border-border/60 bg-card text-card-foreground shadow-[var(--shadow-soft)] rounded-xl',
+            title: 'text-foreground font-semibold',
+            description: 'text-muted-foreground',
+            actionButton: 'bg-primary text-primary-foreground',
+            cancelButton: 'bg-secondary text-secondary-foreground',
+          },
+        }}
+      />
     </QueryClientProvider>
   )
 }

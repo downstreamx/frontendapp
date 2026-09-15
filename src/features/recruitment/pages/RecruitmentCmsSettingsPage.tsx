@@ -11,6 +11,7 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import type { RecruitmentCmsSection } from '../config/recruitment-cms-sections'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 
 type Props = {
   section: RecruitmentCmsSection
@@ -75,7 +76,7 @@ export function RecruitmentCmsSettingsPage({ section }: Props) {
   }
 
   if (isLoading) {
-    return <p className="text-sm text-muted-foreground">{t('Loading…')}</p>
+    return <PageContentLoader className="min-h-[16rem]" />
   }
 
   return (

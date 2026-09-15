@@ -5,11 +5,11 @@ import type { CommercialInvoiceFormValues } from './types'
 export type CommercialDocumentRow = {
   id: number
   status?: string
-  proposal_number?: string
+  order_number?: string
   return_number?: string
   invoice_number?: string
   total_amount?: number | string
-  proposal_date?: string
+  order_date?: string
   return_date?: string
   converted_to_invoice?: boolean
   invoice_id?: number

@@ -78,7 +78,6 @@ export function CustomerCreatePage() {
         mode="create"
         data={data}
         onChange={setData}
-        users={metaQuery.data?.users ?? []}
         paymentTerms={metaQuery.data?.payment_terms ?? []}
         categories={metaQuery.data?.customer_categories ?? []}
         errors={fieldErrors}

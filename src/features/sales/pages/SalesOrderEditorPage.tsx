@@ -66,7 +66,7 @@ const emptyItem = (): SalesOrderFormValues['items'][0] => ({
 })
 
 const defaultValues: SalesOrderFormValues = {
-  proposal_date: new Date().toISOString().slice(0, 10),
+  order_date: new Date().toISOString().slice(0, 10),
   due_date: '',
   customer_id: '',
   depot_id: '',
@@ -201,7 +201,7 @@ export function SalesOrderEditorPage() {
       return
     }
 
-    setProposalNumber(row.proposal_number)
+    setProposalNumber(row.order_number ?? "")
     form.reset(mapSalesOrderToFormValues(row))
   }, [proposalQuery.data, isEdit, form, navigate, t])
 
@@ -343,8 +343,8 @@ export function SalesOrderEditorPage() {
         <CardContent className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           <div className="space-y-2">
             <Label>{t('Order Date')} *</Label>
-            <Input type="date" {...form.register('proposal_date')} />
-            <InputError message={fieldError('proposal_date')} />
+            <Input type="date" {...form.register('order_date')} />
+            <InputError message={fieldError('order_date')} />
           </div>
           <div className="space-y-2">
             <Label>{t('Due Date')}</Label>

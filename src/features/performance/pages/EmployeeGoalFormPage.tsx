@@ -21,6 +21,7 @@ import { getApiErrorMessage } from '@/lib/errors'
 import { paths } from '@/lib/paths'
 import { createEmployeeGoal, getEmployeeGoal, updateEmployeeGoal } from '../performance-api'
 import { useEmployeeGoalsIndexMeta } from '../hooks/use-performance-meta'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 
 export function EmployeeGoalFormPage() {
   const { id } = useParams<{ id: string }>()
@@ -94,7 +95,7 @@ export function EmployeeGoalFormPage() {
   })
 
   if (isEdit && goalQuery.isLoading) {
-    return <p className="text-sm text-muted-foreground">{t('Loading…')}</p>
+    return <PageContentLoader className="min-h-[16rem]" />
   }
 
   return (

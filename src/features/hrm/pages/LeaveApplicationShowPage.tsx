@@ -28,6 +28,7 @@ import { useAppContext } from '@/contexts/app-context'
 import { hasPermission } from '@/lib/permissions'
 import { formatShortDate } from '@/features/shared/lib/entity-labels'
 import { getImagePath } from '@/utils/helpers'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 import {
   deleteLeaveApplication,
   fetchLeaveBalance,
@@ -115,7 +116,7 @@ export function LeaveApplicationShowPage() {
   })
 
   if (isLoading) {
-    return <p className="text-sm text-muted-foreground">{t('Loading…')}</p>
+    return <PageContentLoader className="min-h-[16rem]" />
   }
 
   if (error || !data) {

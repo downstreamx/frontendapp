@@ -41,14 +41,14 @@ export function SearchAndFilter({
   const { t } = useTranslation()
 
   return (
-    <div className="mx-6 mb-6">
+    <div className="mx-6 mb-5">
       <SectionPanel
         className={cn(
-          'rounded-none border-x-0 border-t-0 p-4 md:p-4',
+          'rounded-xl border border-border/50 bg-[hsl(var(--section-deep))] p-3.5 md:p-4',
           showFilters && children && 'rounded-b-none border-b-0',
         )}
       >
-        <div className="flex items-center justify-between gap-4">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="max-w-md flex-1">
             <SearchInput
               value={searchValue}
@@ -73,7 +73,7 @@ export function SearchAndFilter({
       </SectionPanel>
 
       {showFilters && children && (
-        <SectionPanel className="rounded-none border-x-0 border-t-0 rounded-t-none p-4 md:p-4">
+        <SectionPanel className="rounded-b-xl rounded-t-none border border-t-0 border-border/50 bg-[hsl(var(--section-deep))] p-3.5 md:p-4">
           <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4">{children}</div>
           {showFilterActions && (onApplyFilters || onClearFilters) && (
             <div className="mt-4 flex items-center gap-2">

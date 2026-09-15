@@ -48,6 +48,7 @@ import {
   type PosTerminalProduct,
 } from '../pos-api'
 import { PosReceiptModal, type CompletedPosSale } from '../components/PosReceiptModal'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 import {
   cartSubtotal,
   cartTaxAmount,
@@ -273,7 +274,7 @@ export function PosTerminalPage() {
   }
 
   if (metaQuery.isLoading) {
-    return <p className="text-sm text-muted-foreground">{t('Loading…')}</p>
+    return <PageContentLoader className="min-h-[16rem]" />
   }
 
   const bankOptions =

@@ -21,6 +21,7 @@ import { TruckStatusBadge } from './TruckStatusBadge'
 import { TruckOperationalStatusBadge } from './TruckOperationalStatusBadge'
 import { TruckCurrentLoadSummary } from './TruckCurrentLoadSummary'
 import { fetchTruck } from '../fleet-api'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 
 type Props = {
   truckId: number | null
@@ -75,7 +76,7 @@ export function TruckViewDialog({ truckId, open, onOpenChange, onEdit, onDeleted
         },
         {
           label: t('Fuel Capacity'),
-          value: truck.fuel_capacity != null ? `${truck.fuel_capacity} L` : '—',
+          value: truck.capacity_litres != null ? `${truck.capacity_litres} L` : '—',
         },
         { label: t('Engine Size'), value: truck.engine_size ?? '—' },
         { label: t('Engine Hours'), value: truck.engine_hours ?? '—' },
@@ -94,7 +95,7 @@ export function TruckViewDialog({ truckId, open, onOpenChange, onEdit, onDeleted
       <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent className="max-h-[90vh] overflow-y-auto p-0 sm:max-w-2xl">
           {isLoading ? (
-            <p className="p-6 text-sm text-muted-foreground">{t('Loading...')}</p>
+            <PageContentLoader className="min-h-[12rem] py-10" />
           ) : error || !truck ? (
             <p className="p-6 text-sm text-destructive">{t('Truck not found.')}</p>
           ) : (

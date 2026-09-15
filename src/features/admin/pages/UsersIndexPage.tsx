@@ -91,8 +91,8 @@ function LoginStatusBadge({ enabled, t }: { enabled: boolean; t: (key: string) =
       variant="outline"
       className={
         enabled
-          ? 'border-green-200 bg-green-50 text-green-800'
-          : 'border-red-200 bg-red-50 text-red-800'
+          ? 'border-0 bg-[var(--brand-green-soft)] font-medium text-accent-foreground'
+          : 'border-0 bg-destructive/10 font-medium text-destructive'
       }
     >
       {enabled ? t('Enabled') : t('Disabled')}

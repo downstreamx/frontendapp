@@ -18,6 +18,7 @@ import { EntitySelect } from '@/components/forms/entity-select'
 import { usePageChrome } from '@/contexts/page-chrome-context'
 import { getApiErrorMessage } from '@/lib/errors'
 import { paths } from '@/lib/paths'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 import {
   candidateFullName,
   createCandidate,
@@ -102,7 +103,7 @@ export function CandidateFormPage() {
   })
 
   if (isEdit && candidateQuery.isLoading) {
-    return <p className="text-sm text-muted-foreground">{t('Loading…')}</p>
+    return <PageContentLoader className="min-h-[16rem]" />
   }
 
   const jobOptions = indexMeta?.job_postings.map((j) => ({ id: j.id, label: j.title })) ?? []

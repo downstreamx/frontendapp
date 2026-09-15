@@ -6,9 +6,11 @@ import { Pencil, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ConfirmationDialog } from '@/components/ui/confirmation-dialog'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 import { toast } from 'sonner'
 import { usePageChrome } from '@/contexts/page-chrome-context'
 import { useAppContext } from '@/contexts/app-context'
+import { DetailFieldGrid, detailMutedBlockClass } from '@/features/shared/components/detail-info-tile'
 import { hasPermission } from '@/lib/permissions'
 import { getApiErrorMessage } from '@/lib/errors'
 import { paths } from '@/lib/paths'
@@ -56,7 +58,7 @@ export function TruckViewPage() {
     })
 
   if (isLoading) {
-    return <p className="text-sm text-muted-foreground">{t('Loading...')}</p>
+    return <PageContentLoader className="min-h-[16rem]" />
   }
   if (error || !truck) {
     return <p className="text-sm text-destructive">{t('Truck not found.')}</p>
@@ -80,7 +82,7 @@ export function TruckViewPage() {
     },
     {
       label: t('Fuel Capacity'),
-      value: truck.fuel_capacity != null ? `${truck.fuel_capacity} L` : '—',
+      value: truck.capacity_litres != null ? `${truck.capacity_litres} L` : '—',
     },
     { label: t('Engine Size'), value: truck.engine_size ?? '—' },
     { label: t('Engine Hours'), value: truck.engine_hours ?? '—' },
@@ -96,7 +98,7 @@ export function TruckViewPage() {
   return (
     <article className="space-y-6">
       <header className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-2xl font-semibold">{truck.plate_number}</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">{truck.plate_number}</h1>
         <div className="flex flex-wrap gap-2">
           {canEdit ? (
             <Button asChild variant="outline" size="sm">
@@ -129,27 +131,20 @@ export function TruckViewPage() {
       </header>
 
       <Card>
-        <CardHeader>
-          <CardTitle className="text-base">{t('Truck Information')}</CardTitle>
+        <CardHeader className="border-b border-border/50 pb-4">
+          <CardTitle className="text-base tracking-tight">{t('Truck Information')}</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-6">
+        <CardContent className="space-y-6 pt-6">
           <img
             src={getImagePath(truck.avatar ?? 'avatar.png')}
             alt={truck.plate_number}
-            className="mx-auto h-32 w-32 rounded-lg border object-cover"
+            className="mx-auto h-32 w-32 rounded-full border border-border/50 object-cover"
           />
-          <dl className="grid gap-4 sm:grid-cols-2">
-            {fields.map((field) => (
-              <div key={field.label}>
-                <dt className="text-sm font-medium text-muted-foreground">{field.label}</dt>
-                <dd className="mt-1 text-sm">{field.value}</dd>
-              </div>
-            ))}
-          </dl>
+          <DetailFieldGrid fields={fields} />
           {truck.additional_info ? (
             <div>
               <p className="text-sm font-medium text-muted-foreground">{t('Additional Info')}</p>
-              <p className="mt-1 whitespace-pre-wrap rounded-md bg-muted/40 p-3 text-sm">
+              <p className={`mt-1 whitespace-pre-wrap ${detailMutedBlockClass}`}>
                 {truck.additional_info}
               </p>
             </div>
@@ -158,19 +153,19 @@ export function TruckViewPage() {
       </Card>
 
       <Card>
-        <CardHeader>
-          <CardTitle className="text-base">{t('Current truck load')}</CardTitle>
+        <CardHeader className="border-b border-border/50 pb-4">
+          <CardTitle className="text-base tracking-tight">{t('Current truck load')}</CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="pt-6">
           <TruckCurrentLoadSummary load={truck.current_truck_load} />
         </CardContent>
       </Card>
 
       <Card>
-        <CardHeader>
-          <CardTitle className="text-base">{t('Load history')}</CardTitle>
+        <CardHeader className="border-b border-border/50 pb-4">
+          <CardTitle className="text-base tracking-tight">{t('Load history')}</CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="pt-6">
           <TruckLoadTimeline truckId={truck.id} limit={15} />
         </CardContent>
       </Card>

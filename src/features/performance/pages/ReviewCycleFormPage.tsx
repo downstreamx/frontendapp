@@ -20,6 +20,7 @@ import { getApiErrorMessage } from '@/lib/errors'
 import { paths } from '@/lib/paths'
 import { createReviewCycle, getReviewCycle, updateReviewCycle } from '../performance-api'
 import { useReviewCyclesIndexMeta } from '../hooks/use-performance-meta'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 
 export function ReviewCycleFormPage() {
   const { id } = useParams<{ id: string }>()
@@ -78,7 +79,7 @@ export function ReviewCycleFormPage() {
   })
 
   if (isEdit && reviewCycleQuery.isLoading) {
-    return <p className="text-sm text-muted-foreground">{t('Loading…')}</p>
+    return <PageContentLoader className="min-h-[16rem]" />
   }
 
   return (

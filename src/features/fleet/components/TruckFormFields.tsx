@@ -114,11 +114,11 @@ export function TruckFormFields({ form, setField, truckProviders, statuses }: Pr
           />
         </div>
         <div className="space-y-1">
-          <Label htmlFor="fuel_capacity">{t('Fuel Capacity')}</Label>
+          <Label htmlFor="capacity_litres">{t('Fuel Capacity')}</Label>
           <Input
-            id="fuel_capacity"
-            value={form.fuel_capacity}
-            onChange={(e) => setField('fuel_capacity', e.target.value)}
+            id="capacity_litres"
+            value={form.capacity_litres}
+            onChange={(e) => setField('capacity_litres', e.target.value)}
             required
           />
         </div>

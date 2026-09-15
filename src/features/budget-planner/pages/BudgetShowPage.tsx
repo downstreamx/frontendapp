@@ -20,6 +20,7 @@ import {
   listBudgetAllocations,
 } from '../budget-planner-api'
 import { useBudgetsMeta } from '../hooks/use-budget-planner-meta'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 
 export function BudgetShowPage() {
   const { id } = useParams<{ id: string }>()
@@ -85,7 +86,7 @@ export function BudgetShowPage() {
   })
 
   if (budgetQuery.isLoading) {
-    return <p className="text-sm text-muted-foreground">{t('Loading…')}</p>
+    return <PageContentLoader className="min-h-[16rem]" />
   }
 
   if (!budget) {

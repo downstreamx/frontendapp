@@ -18,9 +18,9 @@ export function ThemePreview({
   logoDark,
   logoLight,
   themeColor = 'green',
-  customColor = '#10b77f',
+  customColor = '#1b703a',
   sidebarVariant = 'inset',
-  sidebarStyle = 'plain',
+  sidebarStyle = 'colored',
   navigationLayout = 'mega-menu',
   layoutDirection = 'ltr',
   themeMode = 'light',
@@ -29,16 +29,16 @@ export function ThemePreview({
 
   const themeColors = {
     blue: '#3b82f6',
-    green: '#10b77f',
+    green: '#1b703a',
     purple: '#8b5cf6',
-    orange: '#f97316',
+    orange: '#f08c00',
     red: '#ef4444',
   }
 
   const primaryColor =
     themeColor === 'custom'
       ? customColor
-      : themeColors[themeColor as keyof typeof themeColors] || '#10b77f'
+      : themeColors[themeColor as keyof typeof themeColors] || '#1b703a'
 
   const isDark = themeMode === 'dark'
   const isRTL = layoutDirection === 'rtl'

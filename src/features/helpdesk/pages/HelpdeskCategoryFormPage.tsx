@@ -12,6 +12,7 @@ import { usePageChrome } from '@/contexts/page-chrome-context'
 import { getApiErrorMessage } from '@/lib/errors'
 import { paths } from '@/lib/paths'
 import { createHelpdeskCategory, getHelpdeskCategory, updateHelpdeskCategory } from '../helpdesk-api'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 
 export function HelpdeskCategoryFormPage() {
   const { id } = useParams<{ id: string }>()
@@ -62,7 +63,7 @@ export function HelpdeskCategoryFormPage() {
   })
 
   if (isEdit && categoryQuery.isLoading) {
-    return <div className="text-sm text-muted-foreground">{t('Loading…')}</div>
+    return <PageContentLoader className="min-h-[16rem]" />
   }
 
   return (

@@ -132,7 +132,7 @@ export type AttendanceRow = {
   status?: string
   notes?: string
   employee_id?: number
-  user?: { id: number; name: string; email?: string }
+  employee?: { id: number; user?: { id: number; name: string; email?: string } }
   shift?: { id: number; shift_name: string }
 }
 
@@ -285,7 +285,7 @@ export async function deleteLeaveType(id: number) {
 }
 
 export type EmployeeCreateMeta = {
-  users: Array<{ id: number; name: string }>
+  roles?: Array<{ id: number; name: string; label: string }>
   branches: Array<{ id: number; branch_name: string }>
   departments: Array<{ id: number; department_name: string; branch_id: number }>
   designations: Array<{ id: number; designation_name: string; branch_id: number; department_id: number }>
@@ -332,11 +332,12 @@ export type EmployeeDetail = {
   branch_id?: number
   department_id?: number
   designation_id?: number
-  shift?: number | { id: number; shift_name: string }
+  shift_id?: number
   user?: { id: number; name: string; email?: string; avatar?: string; is_disable?: boolean }
   branch?: { branch_name: string }
   department?: { department_name: string }
   designation?: { designation_name: string }
+  shift?: { id: number; shift_name: string }
   documents?: EmployeeDocumentRow[]
 }
 
@@ -352,6 +353,7 @@ export type EmployeeRow = Pick<
   | 'department'
   | 'designation'
   | 'shift'
+  | 'shift_id'
 >
 
 export type EmployeeEditMeta = EmployeeCreateMeta & {

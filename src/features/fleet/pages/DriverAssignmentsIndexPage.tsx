@@ -43,6 +43,7 @@ import {
 } from '@/features/shared/components/table-avatar-cells'
 import { truckDriverLabel, truckLabel } from '@/features/shared/lib/entity-labels'
 import { FleetStatusBadge } from '../components/FleetStatusBadge'
+import { ForbiddenPage } from '@/components/status-page'
 import {
   createTruckAssignment,
   fetchTruckAssignmentsIndexMeta,
@@ -320,7 +321,7 @@ export function DriverAssignmentsIndexPage() {
   ]
 
   if (!canManage) {
-    return <p className="text-sm text-muted-foreground">{t('Permission denied')}</p>
+    return <ForbiddenPage />
   }
 
   return (

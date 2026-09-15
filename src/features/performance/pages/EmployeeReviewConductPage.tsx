@@ -11,6 +11,7 @@ import { usePageChrome } from '@/contexts/page-chrome-context'
 import { formatDate } from '@/utils/helpers'
 import { paths } from '@/lib/paths'
 import { fetchEmployeeReviewConduct, submitEmployeeReviewConduct } from '../performance-api'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 
 export function EmployeeReviewConductPage() {
   const { id } = useParams<{ id: string }>()
@@ -94,7 +95,7 @@ export function EmployeeReviewConductPage() {
     )
   }
 
-  if (isLoading) return <p className="text-sm text-muted-foreground">{t('Loading…')}</p>
+  if (isLoading) return <PageContentLoader className="min-h-[16rem]" />
   if (!review) return <p className="text-sm text-destructive">{t('Employee review not found.')}</p>
 
   const handleSubmit = (e: React.FormEvent) => {

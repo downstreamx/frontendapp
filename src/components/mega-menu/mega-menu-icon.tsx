@@ -28,7 +28,7 @@ function MegaMenuNavImage({ src, className }: { src: string; className?: string 
   return (
     <span
       className={cn(
-        'mega-menu-icon-badge flex shrink-0 items-center justify-center transition-[transform,box-shadow] duration-150',
+        'mega-menu-icon-badge flex shrink-0 items-center justify-center rounded-full p-1.5 transition-[background,box-shadow,transform] duration-150',
         className,
       )}
       aria-hidden
@@ -36,7 +36,7 @@ function MegaMenuNavImage({ src, className }: { src: string; className?: string 
       <img
         src={src}
         alt=""
-        className="mega-menu-nav-icon h-14 w-14 rounded-full object-cover shadow-sm ring-2 ring-black/5"
+        className="mega-menu-nav-icon h-14 w-14 rounded-full object-cover shadow-sm ring-1 ring-black/10"
       />
     </span>
   )
@@ -55,7 +55,7 @@ export function MenuLucideIcon({ item, className, size = 'inline' }: MenuLucideI
     return (
       <span
         className={cn(
-          'mega-menu-icon-badge flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/[0.06] transition-colors duration-150',
+          'mega-menu-icon-badge flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary/[0.06] transition-colors duration-150',
           className,
         )}
         aria-hidden

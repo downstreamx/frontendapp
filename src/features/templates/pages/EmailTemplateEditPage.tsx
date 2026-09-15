@@ -19,6 +19,7 @@ import { RichTextEditor } from '@/components/ui/rich-text-editor'
 import { usePageChrome } from '@/contexts/page-chrome-context'
 import { getApiErrorMessage } from '@/lib/errors'
 import { paths } from '@/lib/paths'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 import {
   fetchEmailTemplateLanguage,
   fetchEmailTemplateForEdit,
@@ -103,7 +104,7 @@ export function EmailTemplateEditPage() {
   })
 
   if (editQuery.isLoading) {
-    return <p className="text-sm text-muted-foreground">{t('Loading…')}</p>
+    return <PageContentLoader className="min-h-[16rem]" />
   }
 
   if (!template) {

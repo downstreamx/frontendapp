@@ -6,7 +6,7 @@ import { Building2, FileText, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ConfirmationDialog } from '@/components/ui/confirmation-dialog'
-import { Skeleton } from '@/components/ui/skeleton'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 import { useAppContext } from '@/contexts/app-context'
 import { hasPermission } from '@/lib/permissions'
 import { useDeleteHandler } from '@/hooks/useDeleteHandler'
@@ -60,9 +60,8 @@ export function CustomerViewPage() {
 
   if (isLoading) {
     return (
-      <div className="mx-auto max-w-4xl space-y-4 p-6">
-        <Skeleton className="h-10 w-full" />
-        <Skeleton className="h-64 w-full" />
+      <div className="mx-auto max-w-4xl p-6">
+        <PageContentLoader className="min-h-[16rem]" />
       </div>
     )
   }
@@ -74,18 +73,18 @@ export function CustomerViewPage() {
   const showDelete = canDeleteCustomer(customer, auth.permissions, auth.roles, auth.user?.type)
 
   const openReport = () => {
-    if (!customer.user_id) return
-    const params = new URLSearchParams({ customer: String(customer.user_id) })
+    if (!customer.id) return
+    const params = new URLSearchParams({ customer_id: String(customer.id) })
     navigate(`${paths.account.reports}?${params.toString()}`)
   }
 
   return (
     <>
-      <Card className="mx-auto max-w-4xl shadow-sm">
-        <CardHeader>
+      <Card className="mx-auto max-w-4xl">
+        <CardHeader className="border-b border-border/50 pb-4">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <CardTitle className="flex items-center gap-3 text-lg">
-              <span className="rounded-lg bg-primary/10 p-2">
+            <CardTitle className="flex items-center gap-3 text-xl tracking-tight">
+              <span className="rounded-full bg-[var(--brand-green-soft)] p-2">
                 <Building2 className="h-5 w-5 text-primary" />
               </span>
               <span>
@@ -98,7 +97,7 @@ export function CustomerViewPage() {
               </span>
             </CardTitle>
             <div className="flex flex-wrap items-center gap-2">
-              {canViewReport && customer.user_id ? (
+              {canViewReport && customer.id ? (
                 <Button type="button" size="sm" variant="outline" onClick={openReport}>
                   <FileText className="mr-2 h-4 w-4" />
                   {t('View Report')}

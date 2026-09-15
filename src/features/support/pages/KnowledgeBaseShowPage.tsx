@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { usePageChrome } from '@/contexts/page-chrome-context'
 import { paths } from '@/lib/paths'
 import { getKnowledgeBase } from '../support-api'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 
 export function KnowledgeBaseShowPage() {
   const { id } = useParams<{ id: string }>()
@@ -26,7 +27,7 @@ export function KnowledgeBaseShowPage() {
     ],
   })
 
-  if (isLoading) return <p className="text-sm text-muted-foreground">{t('Loading…')}</p>
+  if (isLoading) return <PageContentLoader className="min-h-[16rem]" />
   if (!article) return <p className="text-sm text-destructive">{t('Article not found.')}</p>
 
   return (

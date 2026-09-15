@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
+import { isAxiosError } from 'axios'
 import { Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -10,6 +11,7 @@ import { Label } from '@/components/ui/label'
 import { Card, CardContent } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { PasswordInput } from '@/components/ui/password-input'
 import { PhoneInputComponent } from '@/components/ui/phone-input'
 import {
   Select,
@@ -45,6 +47,7 @@ import {
   buildEmployeeFormData,
   employeeToFormState,
   initialEmployeeFormState,
+  type DocumentRow,
   type EmployeeFormState,
 } from '../employee-form-utils'
 import { paths } from '@/lib/paths'
@@ -52,6 +55,7 @@ import { getApiErrorMessage } from '@/lib/errors'
 import { validateEmployeeForm } from '../schemas'
 import type { FormDialogCallbacks } from '@/features/shared/types/form-presentation'
 import { cn } from '@/lib/utils'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 
 type TabId = 'personal' | 'employment' | 'contact' | 'banking' | 'hours' | 'documents'
 
@@ -70,8 +74,16 @@ export function EmployeeFormPage({
   const isDriver = mode === 'driver'
   const isDepotRep = mode === 'depot-rep'
   const isRoleEmployee = isDriver || isDepotRep
+  const usesInlineUser = !isEdit
+  const requiresRoleSelect = usesInlineUser && !isRoleEmployee
   const isDialog = presentation === 'dialog' && !isEdit
   const { t } = useTranslation()
+  const fixedRoleLabel = isDriver ? t('Driver') : isDepotRep ? t('Depot Rep') : ''
+  const fixedRoleHint = isDriver
+    ? t('A user account with the Driver role will be created automatically.')
+    : isDepotRep
+      ? t('A user account with the Depot Rep role will be created automatically.')
+      : ''
   const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState<TabId>('personal')
   const [data, setData] = useState<EmployeeFormState>(initialEmployeeFormState)
@@ -186,8 +198,19 @@ export function EmployeeFormPage({
     setData((prev) => ({ ...prev, [key]: value }))
   }
 
-  const validatePersonalTab = () =>
-    data.employee_id.trim() !== '' && data.date_of_birth !== '' && data.gender !== ''
+  const validatePersonalTab = () => {
+    const base = data.employee_id.trim() !== '' && data.date_of_birth !== '' && data.gender !== ''
+    if (!usesInlineUser) return base
+    return (
+      base &&
+      data.first_name.trim() !== '' &&
+      data.last_name.trim() !== '' &&
+      data.email.trim() !== '' &&
+      data.password.length >= 6 &&
+      data.password_confirmation !== '' &&
+      data.password === data.password_confirmation
+    )
+  }
 
   const validateEmploymentTab = () => {
     const base =
@@ -196,7 +219,9 @@ export function EmployeeFormPage({
       data.branch_id !== '' &&
       data.department_id !== '' &&
       data.designation_id !== ''
-    return isEdit ? base : base && data.user_id !== ''
+    if (isEdit) return base
+    if (requiresRoleSelect) return base && data.role_id !== ''
+    return base
   }
 
   const validateContactTab = () =>
@@ -222,12 +247,12 @@ export function EmployeeFormPage({
     data.days_per_week.trim() !== '' &&
     data.rate_per_hour.trim() !== ''
 
-  const validateDocumentsTab = () =>
-    data.documents.some((doc) => doc.document_type_id && doc.file)
-
   const saveMutation = useMutation({
     mutationFn: () => {
-      const payload = buildEmployeeFormData(data, { isEdit })
+      const payload = buildEmployeeFormData(data, {
+        isEdit,
+        includeRoleId: requiresRoleSelect,
+      })
       if (isDriver) {
         return isEdit ? updateDriver(id!, payload) : createDriver(payload)
       }
@@ -262,7 +287,16 @@ export function EmployeeFormPage({
             : paths.hrm.employeeShow(saved.id),
       )
     },
-    onError: (error) =>
+    onError: (error) => {
+      if (isAxiosError(error)) {
+        const payload = error.response?.data as { errors?: Record<string, string[]> } | undefined
+        const keys = Object.keys(payload?.errors ?? {})
+        if (keys.some((key) => key.startsWith('user.') && key !== 'user.role_id')) {
+          setActiveTab('personal')
+        } else if (keys.some((key) => key === 'user.role_id' || key === 'role_id')) {
+          setActiveTab('employment')
+        }
+      }
       toast.error(
         getApiErrorMessage(
           error,
@@ -278,12 +312,16 @@ export function EmployeeFormPage({
                 ? t('Failed to create depot rep')
                 : t('Failed to create employee'),
         ),
-      ),
+      )
+    },
   })
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault()
-    const validation = validateEmployeeForm(data, { isEdit })
+    const validation = validateEmployeeForm(data, {
+      isEdit,
+      requireRole: requiresRoleSelect,
+    })
     if (!validation.success) {
       toast.error(t(validation.message))
       if (validation.tab) setActiveTab(validation.tab)
@@ -317,7 +355,7 @@ export function EmployeeFormPage({
   )
 
   if (isLoading) {
-    return <p className="text-sm text-muted-foreground">{t('Loading…')}</p>
+    return <PageContentLoader className="min-h-[16rem]" />
   }
 
   return (
@@ -360,6 +398,101 @@ export function EmployeeFormPage({
                     />
                   </div>
                 </div>
+
+                {usesInlineUser ? (
+                  <div className="space-y-4 rounded-lg border border-border/60 bg-section/40 p-4">
+                    <p className="text-sm font-medium text-foreground">{t('User account')}</p>
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                      <div>
+                        <Label htmlFor="first_name">{t('First name')}</Label>
+                        <Input
+                          id="first_name"
+                          value={data.first_name}
+                          onChange={(e) => setField('first_name', e.target.value)}
+                          placeholder={t('Enter first name')}
+                          required
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="middle_name">{t('Middle name')}</Label>
+                        <Input
+                          id="middle_name"
+                          value={data.middle_name}
+                          onChange={(e) => setField('middle_name', e.target.value)}
+                          placeholder={t('Enter middle name (optional)')}
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="last_name">{t('Last name')}</Label>
+                        <Input
+                          id="last_name"
+                          value={data.last_name}
+                          onChange={(e) => setField('last_name', e.target.value)}
+                          placeholder={t('Enter last name')}
+                          required
+                        />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                      <div>
+                        <Label htmlFor="email">{t('Email')}</Label>
+                        <Input
+                          id="email"
+                          type="email"
+                          value={data.email}
+                          onChange={(e) => setField('email', e.target.value)}
+                          placeholder={t('Enter email address')}
+                          required
+                        />
+                      </div>
+                      <PhoneInputComponent
+                        label={t('Mobile Number')}
+                        value={data.mobile_no}
+                        onChange={(value) => setField('mobile_no', value)}
+                        placeholder="+1234567890"
+                      />
+                    </div>
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                      <div>
+                        <Label htmlFor="password">{t('Password')}</Label>
+                        <PasswordInput
+                          id="password"
+                          value={data.password}
+                          onChange={(e) => setField('password', e.target.value)}
+                          placeholder={t('Enter password')}
+                          required
+                          autoComplete="new-password"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="password_confirmation">{t('Confirm Password')}</Label>
+                        <PasswordInput
+                          id="password_confirmation"
+                          value={data.password_confirmation}
+                          onChange={(e) => setField('password_confirmation', e.target.value)}
+                          placeholder={t('Confirm password')}
+                          required
+                          autoComplete="new-password"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <Label htmlFor="is_enable_login">{t('Login Status')}</Label>
+                      <Select
+                        value={data.is_enable_login ? '1' : '0'}
+                        onValueChange={(value) => setField('is_enable_login', value === '1')}
+                      >
+                        <SelectTrigger id="is_enable_login">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="1">{t('Enabled')}</SelectItem>
+                          <SelectItem value="0">{t('Disabled')}</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                ) : null}
 
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                   <MediaPicker
@@ -419,24 +552,29 @@ export function EmployeeFormPage({
                         <p className="text-sm text-muted-foreground mt-1">{linkedUser.email}</p>
                       )}
                     </div>
-                  ) : (
+                  ) : requiresRoleSelect ? (
                     <div>
-                      <Label>{t('User')}</Label>
-                      <Select value={data.user_id} onValueChange={(v) => setField('user_id', v)}>
+                      <Label>{t('Role')}</Label>
+                      <Select value={data.role_id} onValueChange={(v) => setField('role_id', v)}>
                         <SelectTrigger>
-                          <SelectValue placeholder={t('Select User')} />
+                          <SelectValue placeholder={t('Select Role')} />
                         </SelectTrigger>
                         <SelectContent>
-                          {(createMeta?.users ?? []).map((user) => (
-                            <SelectItem key={user.id} value={String(user.id)}>
-                              {user.name}
-                            </SelectItem>
-                          ))}
+                          {((createMeta as EmployeeCreateMeta | undefined)?.roles ?? []).map(
+                            (role) => (
+                              <SelectItem key={role.id} value={String(role.id)}>
+                                {role.label || role.name}
+                              </SelectItem>
+                            ),
+                          )}
                         </SelectContent>
                       </Select>
-                      <p className="text-sm text-muted-foreground mt-1">
-                        {t('Note: Company users will be applicable for create employee.')}
-                      </p>
+                    </div>
+                  ) : (
+                    <div>
+                      <Label>{t('Role')}</Label>
+                      <Input value={fixedRoleLabel} readOnly disabled className="bg-muted" />
+                      <p className="mt-1 text-xs text-muted-foreground">{fixedRoleHint}</p>
                     </div>
                   )}
 
@@ -492,16 +630,11 @@ export function EmployeeFormPage({
                       onValueChange={(v) => {
                         setField('branch_id', v)
                         setField('department_id', '')
-                        setField('designation_id', '')
+                        setField('designation_id', isRoleEmployee ? roleDesignationId : '')
                       }}
-                      disabled={!isEdit && !data.user_id}
                     >
                       <SelectTrigger>
-                        <SelectValue
-                          placeholder={
-                            isEdit || data.user_id ? t('Select Branch') : t('Select User first')
-                          }
-                        />
+                        <SelectValue placeholder={t('Select Branch')} />
                       </SelectTrigger>
                       <SelectContent>
                         {(meta?.branches ?? []).map((branch) => (
@@ -519,7 +652,10 @@ export function EmployeeFormPage({
                       value={data.department_id}
                       onValueChange={(v) => {
                         setField('department_id', v)
-                        setField('designation_id', '')
+                        setField(
+                          'designation_id',
+                          isRoleEmployee && roleDesignationId ? roleDesignationId : '',
+                        )
                       }}
                       disabled={!data.branch_id}
                     >
@@ -542,8 +678,12 @@ export function EmployeeFormPage({
 
                   <div>
                     <Label>{t('Designation')}</Label>
-                    {isDriver ? (
-                      <Input value={t('Driver')} disabled className="bg-muted" />
+                    {isRoleEmployee ? (
+                      <Input
+                        value={isDriver ? t('Driver') : t('Depot Rep')}
+                        disabled
+                        className="bg-muted"
+                      />
                     ) : (
                     <Select
                       value={data.designation_id}

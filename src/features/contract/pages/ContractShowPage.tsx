@@ -8,6 +8,7 @@ import { usePageChrome } from '@/contexts/page-chrome-context'
 import { formatCurrency, formatDate } from '@/utils/helpers'
 import { paths } from '@/lib/paths'
 import { getContract } from '../contract-api'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 
 export function ContractShowPage() {
   const { id } = useParams<{ id: string }>()
@@ -27,7 +28,7 @@ export function ContractShowPage() {
     ],
   })
 
-  if (isLoading) return <p className="text-sm text-muted-foreground">{t('Loading…')}</p>
+  if (isLoading) return <PageContentLoader className="min-h-[16rem]" />
   if (!contract) return <p className="text-sm text-destructive">{t('Contract not found.')}</p>
 
   return (

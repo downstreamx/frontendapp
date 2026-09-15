@@ -79,7 +79,6 @@ export function SupplierCreatePage() {
         mode="create"
         data={data}
         onChange={setData}
-        users={metaQuery.data?.users ?? []}
         paymentTerms={metaQuery.data?.payment_terms ?? []}
         categories={metaQuery.data?.supplier_categories ?? []}
         errors={fieldErrors}

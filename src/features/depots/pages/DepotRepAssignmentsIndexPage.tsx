@@ -32,6 +32,7 @@ import { useListToolbar } from '@/hooks/use-list-toolbar'
 import { getApiErrorMessage } from '@/lib/errors'
 import { personName } from '@/features/shared/lib/entity-labels'
 import { TableUserAvatarCell } from '@/features/shared/components/table-avatar-cells'
+import { ForbiddenPage } from '@/components/status-page'
 import {
   createDepotRepAssignment,
   fetchDepotRepAssignmentsIndexMeta,
@@ -46,7 +47,7 @@ export function DepotRepAssignmentsIndexPage() {
   const toolbar = useListToolbar()
   const [createOpen, setCreateOpen] = useState(false)
   const [depotId, setDepotId] = useState('')
-  const [userId, setUserId] = useState('')
+  const [employeeId, setEmployeeId] = useState('')
   const [saving, setSaving] = useState(false)
 
   const canManage = hasPermission(
@@ -105,12 +106,12 @@ export function DepotRepAssignmentsIndexPage() {
       render: (_, row) => row.depot?.name ?? `#${row.depot_id}`,
     },
     {
-      key: 'user',
+      key: 'employee',
       header: t('Depot Rep'),
       render: (_, row) => (
         <TableUserAvatarCell
-          avatar={row.user?.avatar}
-          name={personName(row.user, row.user_id)}
+          avatar={row.employee?.user?.avatar}
+          name={personName(row.employee?.user, row.employee_id)}
         />
       ),
     },
@@ -124,7 +125,7 @@ export function DepotRepAssignmentsIndexPage() {
             openDeleteDialog(
               row.id,
               t('Remove {{rep}} from {{depot}}?', {
-                rep: personName(row.user, row.user_id),
+                rep: personName(row.employee?.user, row.employee_id),
                 depot: row.depot?.name ?? `#${row.depot_id}`,
               }),
             )
@@ -135,7 +136,7 @@ export function DepotRepAssignmentsIndexPage() {
   ]
 
   const submit = async () => {
-    if (!depotId || !userId) {
+    if (!depotId || !employeeId) {
       toast.error(t('Depot and depot rep are required'))
       return
     }
@@ -143,12 +144,12 @@ export function DepotRepAssignmentsIndexPage() {
     try {
       const result = await createDepotRepAssignment({
         depot_id: Number(depotId),
-        user_id: Number(userId),
+        employee_id: Number(employeeId),
       })
       toast.success(result.message ?? t('Depot rep assigned.'))
       setCreateOpen(false)
       setDepotId('')
-      setUserId('')
+      setEmployeeId('')
       void queryClient.invalidateQueries({ queryKey: ['depot-rep-assignments'] })
     } catch (error) {
       toast.error(getApiErrorMessage(error, t('Failed to assign depot rep')))
@@ -158,7 +159,7 @@ export function DepotRepAssignmentsIndexPage() {
   }
 
   if (!canManage) {
-    return <p className="text-sm text-muted-foreground">{t('Permission denied')}</p>
+    return <ForbiddenPage />
   }
 
   return (
@@ -209,7 +210,7 @@ export function DepotRepAssignmentsIndexPage() {
             </div>
             <div className="space-y-1">
               <Label>{t('Depot Rep')}</Label>
-              <Select value={userId} onValueChange={setUserId}>
+              <Select value={employeeId} onValueChange={setEmployeeId}>
                 <SelectTrigger>
                   <SelectValue placeholder={t('Select depot rep')} />
                 </SelectTrigger>

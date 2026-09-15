@@ -1,14 +1,11 @@
 import {
   Bell,
   CreditCard,
-  FileText,
   Headphones,
   Image,
   Landmark,
-  Layout,
   LayoutGrid,
   Mail,
-  Megaphone,
   Package,
   Settings,
   ShoppingBag,
@@ -33,38 +30,6 @@ export const getSuperAdminMenu = (t: (key: string) => string): NavItem[] => [
     icon: Users,
     permission: 'manage-users',
     order: 20,
-  },
-  {
-    title: t('CMS'),
-    icon: Layout,
-    permission: 'manage-landing-page',
-    order: 2825,
-    children: [
-      {
-        title: t('Landing Page'),
-        href: route('landing-page.index'),
-        icon: Layout,
-        permission: 'manage-landing-page',
-      },
-      {
-        title: t('Marketplace'),
-        href: route('marketplace.settings'),
-        icon: ShoppingBag,
-        permission: 'manage-marketplace-settings',
-      },
-      {
-        title: t('Custom Pages'),
-        href: route('landing-page.pages.index'),
-        icon: FileText,
-        permission: 'manage-custom-pages',
-      },
-      {
-        title: t('Newsletter Subscribers'),
-        href: route('newsletter-subscribers.index'),
-        icon: Megaphone,
-        permission: 'manage-newsletter-subscribers',
-      },
-    ],
   },
   {
     title: t('Helpdesk'),

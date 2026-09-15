@@ -42,6 +42,7 @@ import { getApiErrorMessage } from '@/lib/errors'
 import { formatCurrency, formatDate } from '@/utils/helpers'
 import { truckLabel } from '@/features/shared/lib/entity-labels'
 import { FleetStatusBadge } from '../components/FleetStatusBadge'
+import { ForbiddenPage } from '@/components/status-page'
 import {
   createFuelTicket,
   fetchFuelTicketsIndexMeta,
@@ -363,7 +364,7 @@ export function FuelTicketsIndexPage() {
   ]
 
   if (!canManage) {
-    return <p className="text-sm text-muted-foreground">{t('Permission denied')}</p>
+    return <ForbiddenPage />
   }
 
   return (

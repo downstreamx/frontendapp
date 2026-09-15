@@ -17,6 +17,7 @@ import { truckLabel } from '@/features/shared/lib/entity-labels'
 import { FleetStatusBadge } from '../components/FleetStatusBadge'
 import { fetchTruckMaintenance } from '../fleet-api'
 import { useDeleteHandler } from '@/hooks/useDeleteHandler'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 
 export function TruckMaintenanceViewPage() {
   const { id } = useParams<{ id: string }>()
@@ -64,7 +65,7 @@ export function TruckMaintenanceViewPage() {
     })
 
   if (isLoading) {
-    return <p className="text-sm text-muted-foreground">{t('Loading...')}</p>
+    return <PageContentLoader className="min-h-[16rem]" />
   }
   if (error || !maintenance) {
     return <p className="text-sm text-destructive">{t('Maintenance record not found.')}</p>

@@ -13,6 +13,7 @@ import {
   getSettingsMenuItems,
 } from '../lib/settings-menu'
 import { getSettingsSectionComponent } from '../components/settings-section-registry'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 
 function SettingsPageContent() {
   const { t } = useTranslation()
@@ -94,7 +95,7 @@ function SettingsPageContent() {
   }
 
   if (isLoading) {
-    return <p className="text-sm text-muted-foreground">{t('Loading settings…')}</p>
+    return <PageContentLoader label={t('Loading settings…')} className="min-h-[16rem]" />
   }
 
   if (isError) {

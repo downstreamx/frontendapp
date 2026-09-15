@@ -8,10 +8,6 @@ export const TRUCK_LOAD_PHASES = [
   'in_transit_distribution',
   'delivered',
   'cancelled',
-  /** @deprecated API may still return legacy values */
-  'loaded',
-  /** @deprecated API may still return legacy values */
-  'in_transit',
 ] as const
 
 export type TruckLoadPhase = (typeof TRUCK_LOAD_PHASES)[number]
@@ -40,7 +36,6 @@ export type TruckLoadTruck = {
   make?: string
   avatar?: string | null
   operational_status?: string | null
-  fuel_capacity?: number
   capacity_litres?: number
 }
 

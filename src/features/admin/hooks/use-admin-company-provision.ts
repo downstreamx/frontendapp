@@ -7,7 +7,7 @@ import {
 } from '@/features/admin/admin-provision-api'
 import { getApiErrorMessage } from '@/lib/errors'
 
-const MIN_STEP_MS = 5000
+const MIN_STEP_MS = 2500
 
 function sleep(ms: number) {
   return new Promise<void>((resolve) => {

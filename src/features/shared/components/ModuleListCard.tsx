@@ -5,10 +5,11 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
 import { Pagination, type PaginatedListMeta } from '@/components/ui/pagination'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 import { SearchAndFilter, type SearchAndFilterProps } from '@/components/ui/search-and-filter'
-import { Skeleton } from '@/components/ui/skeleton'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { ListPaginationProvider } from '@/contexts/list-pagination-context'
+import { useRegisterContentTitle } from '@/contexts/page-chrome-context'
 
 type SearchToolbarProps = Omit<SearchAndFilterProps, 'children'> & {
   filtersPanel?: ReactNode
@@ -47,6 +48,7 @@ export function ModuleListCard({
   children,
 }: Props) {
   const { t } = useTranslation()
+  useRegisterContentTitle(title)
 
   const paginationForSn = pagination
     ? {
@@ -80,13 +82,15 @@ export function ModuleListCard({
         <CardContent className={cn('p-6', searchToolbar && 'pb-0')}>
           <div
             className={cn(
-              'flex items-center justify-between',
-              searchToolbar ? 'mb-4' : 'mb-8',
+              'flex items-center justify-between gap-4',
+              searchToolbar ? 'mb-4' : 'mb-6',
             )}
           >
-            <div>
-              <h3 className="text-xl font-medium">{title}</h3>
-              {description && <p className="mt-1 text-sm text-muted-foreground">{description}</p>}
+            <div className="min-w-0">
+              <h3 className="text-xl font-semibold tracking-tight text-foreground">{title}</h3>
+              {description && (
+                <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{description}</p>
+              )}
             </div>
             {headerAction}
           </div>
@@ -97,18 +101,12 @@ export function ModuleListCard({
         )}
 
         <CardContent className="p-0">
-          {isLoading && (
-            <div className="space-y-2 px-6 pb-6">
-              <Skeleton className="h-8 w-full" />
-              <Skeleton className="h-8 w-full" />
-              <Skeleton className="h-8 w-full" />
-            </div>
-          )}
+          {isLoading && <PageContentLoader className="min-h-[16rem] py-10" />}
           {error && !isLoading && (
             <p className="px-6 pb-6 text-sm text-destructive">{t('Failed to load list.')}</p>
           )}
           {!isLoading && !error && (
-            <div className="scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 max-h-[75vh] w-full overflow-y-auto rounded-none">
+            <div className="scrollbar-thin scrollbar-thumb-border scrollbar-track-section max-h-[75vh] w-full overflow-y-auto rounded-none">
               <div className="min-w-[600px]">
                 <ListPaginationProvider meta={paginationForSn}>{children}</ListPaginationProvider>
               </div>
@@ -117,7 +115,9 @@ export function ModuleListCard({
         </CardContent>
 
         {paginationFooter && !isLoading && !error && (
-          <Pagination data={paginationFooter} onPageChange={paginationFooter.onPageChange} />
+          <div className="border-t border-border/50 px-4 sm:px-6">
+            <Pagination data={paginationFooter} onPageChange={paginationFooter.onPageChange} />
+          </div>
         )}
       </Card>
     </TooltipProvider>

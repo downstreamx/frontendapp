@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label'
 import {
   Dialog,
   DialogContent,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
@@ -197,7 +198,7 @@ export function CrudFormDialog({
               )}
             </div>
           ))}
-          <div className="flex justify-end gap-2">
+          <DialogFooter>
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
               {t('Cancel')}
             </Button>
@@ -211,7 +212,7 @@ export function CrudFormDialog({
                     ? t('Create')
                     : t('Save'))}
             </Button>
-          </div>
+          </DialogFooter>
         </form>
       </DialogContent>
     </Dialog>

@@ -5,6 +5,7 @@ import { useAppContext } from '@/contexts/app-context'
 import { getActiveSettings } from '@/lib/page-props-bridge'
 import { getPosSale } from '../pos-api'
 import { PosSaleReceiptLayout } from '../components/PosSaleReceiptLayout'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 
 export function PosPrintPage() {
   const { id } = useParams()
@@ -19,7 +20,7 @@ export function PosPrintPage() {
   })
 
   if (isLoading) {
-    return <p className="p-8 text-sm text-muted-foreground">{t('Loading…')}</p>
+    return <PageContentLoader className="min-h-[16rem]" />
   }
 
   if (error || !data) {

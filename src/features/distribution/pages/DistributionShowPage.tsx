@@ -7,6 +7,7 @@ import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 import { FleetStatusBadge } from '@/features/fleet/components/FleetStatusBadge'
 import { usePageChrome } from '@/contexts/page-chrome-context'
 import { paths } from '@/lib/paths'
@@ -69,13 +70,16 @@ function RelatedList({
 }) {
   if (!items.length) return null
   return (
-    <div className="space-y-2 border-t pt-4">
-      <h3 className="text-sm font-semibold">{sectionTitle}</h3>
-      <ul className="divide-y rounded-md border text-sm">
+    <div className="space-y-2 border-t border-border/50 pt-4">
+      <h3 className="text-sm font-semibold tracking-tight">{sectionTitle}</h3>
+      <ul className="divide-y divide-border/40 overflow-hidden rounded-xl border border-border/50 bg-[hsl(var(--section-deep))]/40 text-sm">
         {items.map((row) => {
           const record = row as Record<string, unknown>
           return (
-            <li key={String(record.id ?? record.transit_number ?? record.delivery_number)} className="px-3 py-2">
+            <li
+              key={String(record.id ?? record.transit_number ?? record.delivery_number)}
+              className="px-3.5 py-2.5"
+            >
               {renderItem(record)}
             </li>
           )
@@ -369,7 +373,7 @@ export function DistributionShowPage({
         </div>
       </CardHeader>
       <CardContent className="space-y-4">
-        {isLoading && <p className="text-sm text-muted-foreground">{t('Loading…')}</p>}
+        {isLoading && <PageContentLoader className="min-h-[12rem]" />}
         {error && <p className="text-sm text-destructive">{t('Record not found.')}</p>}
         {data ? (
           <>

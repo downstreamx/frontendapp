@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { fetchPublicJob } from '../careers-public-api'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 
 export function CareerJobPage() {
   const { id } = useParams<{ id: string }>()
@@ -21,7 +22,7 @@ export function CareerJobPage() {
     return <p className="p-4 text-sm text-muted-foreground">{t('Missing company slug.')}</p>
   }
 
-  if (isLoading) return <p className="p-4 text-sm text-muted-foreground">{t('Loading…')}</p>
+  if (isLoading) return <PageContentLoader className="min-h-[16rem]" />
   if (error || !data) return <p className="p-4 text-sm text-destructive">{t('Job not found.')}</p>
 
   const job = data.job

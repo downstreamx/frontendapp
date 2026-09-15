@@ -38,7 +38,7 @@ export function MegaMenuHeader() {
 
   return (
     <header
-      className="sticky top-0 z-40 w-full overflow-visible bg-section shadow-sm dark:bg-muted"
+      className="sticky top-0 z-40 w-full overflow-visible bg-section shadow-[var(--shadow-soft)]"
       style={MEGA_MENU_CSS_VARS}
     >
       <MegaMenuTopBar isMobile={isMobile} mobileMenuTrigger={mobileMenuTrigger} />
@@ -46,7 +46,7 @@ export function MegaMenuHeader() {
       {!isMobile ? (
         <div
           className={cn(
-            'flex min-h-[88px] w-full items-stretch border-b border-primary/20',
+            'flex min-h-[88px] w-full items-stretch border-b border-primary/10',
             MEGA_MENU_GRADIENT_BG,
             'text-primary-foreground',
             isRtl && 'flex-row-reverse',

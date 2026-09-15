@@ -33,14 +33,16 @@ export function ProvisionProgressPanel({
       <div className="space-y-3">
         <div className="flex items-start justify-between gap-4">
           <div className="min-w-0 space-y-1">
-            <p className="text-lg font-semibold leading-snug text-foreground">{currentLabel}</p>
-            <p className="text-sm text-muted-foreground">{helperText}</p>
+            <p className="text-lg font-semibold leading-snug tracking-tight text-foreground">
+              {currentLabel}
+            </p>
+            <p className="text-sm leading-relaxed text-muted-foreground">{helperText}</p>
           </div>
-          <span className="shrink-0 text-base font-semibold tabular-nums text-foreground">
+          <span className="shrink-0 rounded-full bg-[var(--brand-green-soft)] px-2.5 py-1 text-sm font-semibold tabular-nums text-accent-foreground">
             {percent}%
           </span>
         </div>
-        <div className="h-3 overflow-hidden rounded-full bg-muted">
+        <div className="h-3 overflow-hidden rounded-full bg-[hsl(var(--section-deep))]">
           <div
             className="h-full rounded-full bg-primary transition-[width] duration-500 ease-out"
             style={{ width: `${percent}%` }}
@@ -53,17 +55,20 @@ export function ProvisionProgressPanel({
       </div>
 
       {status ? (
-        <ul className="space-y-3">
+        <ul className="space-y-2.5">
           {status.steps.map((step) => {
             const isActive = !step.completed && step.id === activeStepId
             return (
               <li
                 key={step.id}
                 className={cn(
-                  'flex items-center gap-3 rounded-lg border px-3 py-3 text-base leading-relaxed transition-colors',
-                  step.completed && 'border-primary/20 bg-primary/5 text-foreground',
-                  isActive && 'border-primary/40 bg-primary/10 text-foreground',
-                  !step.completed && !isActive && 'border-transparent text-muted-foreground',
+                  'flex items-center gap-3 rounded-xl border px-3.5 py-3 text-base leading-relaxed transition-colors',
+                  step.completed &&
+                    'border-primary/15 bg-[var(--brand-green-soft)] text-foreground',
+                  isActive && 'border-primary/35 bg-accent text-foreground',
+                  !step.completed &&
+                    !isActive &&
+                    'border-border/40 bg-[hsl(var(--section-deep))]/50 text-muted-foreground',
                 )}
               >
                 <span className="flex h-8 w-8 shrink-0 items-center justify-center">
@@ -76,7 +81,7 @@ export function ProvisionProgressPanel({
                     <Loader2 className="h-7 w-7 animate-spin text-primary" aria-hidden />
                   ) : (
                     <span
-                      className="h-3.5 w-3.5 rounded-full border-2 border-muted-foreground/40"
+                      className="h-3.5 w-3.5 rounded-full border-2 border-muted-foreground/35"
                       aria-hidden
                     />
                   )}
@@ -93,7 +98,7 @@ export function ProvisionProgressPanel({
       )}
 
       {error ? (
-        <div className="space-y-3">
+        <div className="space-y-3 rounded-xl border border-destructive/25 bg-destructive/5 px-4 py-3">
           <p className="text-sm text-destructive">{error}</p>
           {onRetry ? (
             <Button type="button" variant="outline" size="sm" onClick={onRetry}>

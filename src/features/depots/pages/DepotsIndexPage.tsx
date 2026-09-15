@@ -150,7 +150,7 @@ export function DepotsIndexPage() {
         key: 'is_active',
         header: t('Status'),
         render: (_, row) => (
-          <Badge variant={row.is_active !== false ? 'default' : 'secondary'}>
+          <Badge variant={row.is_active !== false ? 'secondary' : 'outline'}>
             {row.is_active !== false ? t('Active') : t('Inactive')}
           </Badge>
         ),
@@ -179,13 +179,20 @@ export function DepotsIndexPage() {
         error={!!error}
       >
         {depots.length === 0 && !isLoading ? (
-          <NoRecordsFound message={t('No depots yet.')} />
+          <NoRecordsFound
+            title={t('No depots found')}
+            description={t('No depots yet.')}
+            createPermission="create-depots"
+            onCreateClick={openCreate}
+            createButtonText={t('Create depot')}
+          />
         ) : (
           <DataTable
+            embedded
             columns={columns}
             data={depots}
             rowProps={(row) => ({
-              className: 'cursor-pointer hover:bg-muted/50',
+              className: 'cursor-pointer',
               onClick: () => openView(row.id),
             })}
           />

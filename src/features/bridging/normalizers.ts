@@ -128,7 +128,6 @@ function normalizeTruckRef(raw: unknown): TruckLoad['truck'] {
     plate_number: optionalStr(row.plate_number),
     avatar: (row.avatar as string | null | undefined) ?? null,
     operational_status: optionalStr(row.operational_status) ?? null,
-    fuel_capacity: row.fuel_capacity != null ? num(row.fuel_capacity) : undefined,
     capacity_litres: row.capacity_litres != null ? num(row.capacity_litres) : undefined,
     make: optionalStr(row.make),
   }

@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { getTransfer, postTransfer } from '../api'
 import { paths } from '@/lib/paths'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 
 export function TransferShowPage() {
   const { id } = useParams<{ id: string }>()
@@ -29,7 +30,7 @@ export function TransferShowPage() {
   })
 
   if (isLoading) {
-    return <p className="text-muted-foreground">{t('Loading…')}</p>
+    return <PageContentLoader className="min-h-[16rem]" />
   }
 
   if (!transfer) {

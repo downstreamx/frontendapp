@@ -22,6 +22,7 @@ import {
   type UserFormState,
 } from '../components/UserFormFields'
 import { toE164Mobile, toNationalMobile } from '@/lib/phone-country'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 
 /** @deprecated Use modal on UsersIndexPage; routes redirect to the list. */
 export function UserFormPage() {
@@ -193,7 +194,7 @@ export function UserFormPage() {
   const isLoading = isEdit ? editLoading : createLoading
 
   if (isLoading) {
-    return <p className="text-sm text-muted-foreground">{t('Loading...')}</p>
+    return <PageContentLoader className="min-h-[16rem]" />
   }
 
   if (isEdit && editMeta?.user.is_disable) {

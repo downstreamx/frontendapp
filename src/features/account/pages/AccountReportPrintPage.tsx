@@ -13,6 +13,7 @@ import {
 } from '../account-reports-api'
 import { isAccountReportKey } from '../account-reports-config'
 import { defaultReportDateRange } from '@/features/double-entry/utils/default-date-range'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 
 export function AccountReportPrintPage() {
   const { t } = useTranslation()
@@ -70,7 +71,7 @@ export function AccountReportPrintPage() {
     invoiceQuery.error || billQuery.error || taxQuery.error || supplierQuery.error
 
   if (loading) {
-    return <p className="p-8 text-sm text-muted-foreground">{t('Loading…')}</p>
+    return <PageContentLoader className="min-h-[16rem]" />
   }
 
   if (error) {

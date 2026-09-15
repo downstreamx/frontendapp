@@ -12,6 +12,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { getApiErrorMessage } from '@/lib/errors'
 import { paths } from '@/lib/paths'
 import { fetchSupportPortalSettings, updateSupportPortalSettings } from '../support-api'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 
 type SectionBlock = { title: string; description: string }
 
@@ -149,7 +150,7 @@ export function SupportContactInformationPage() {
   })
 
   if (query.isLoading) {
-    return <p className="text-sm text-muted-foreground">{t('Loading…')}</p>
+    return <PageContentLoader className="min-h-[16rem]" />
   }
 
   return (
@@ -222,7 +223,7 @@ export function SupportTitleSectionsPage() {
   })
 
   if (query.isLoading) {
-    return <p className="text-sm text-muted-foreground">{t('Loading…')}</p>
+    return <PageContentLoader className="min-h-[16rem]" />
   }
 
   const blocks: { key: keyof TitleSections; label: string }[] = [
@@ -279,7 +280,7 @@ export function SupportCtaSectionsPage() {
   })
 
   if (query.isLoading) {
-    return <p className="text-sm text-muted-foreground">{t('Loading…')}</p>
+    return <PageContentLoader className="min-h-[16rem]" />
   }
 
   return (

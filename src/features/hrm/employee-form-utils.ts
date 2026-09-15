@@ -30,7 +30,17 @@ export type EmployeeFormState = {
   hours_per_day: string
   days_per_week: string
   rate_per_hour: string
+  /** Linked login user id (read-only on edit). */
   user_id: string
+  first_name: string
+  middle_name: string
+  last_name: string
+  email: string
+  mobile_no: string
+  password: string
+  password_confirmation: string
+  role_id: string
+  is_enable_login: boolean
   branch_id: string
   department_id: string
   designation_id: string
@@ -65,6 +75,15 @@ export const initialEmployeeFormState: EmployeeFormState = {
   days_per_week: '',
   rate_per_hour: '',
   user_id: '',
+  first_name: '',
+  middle_name: '',
+  last_name: '',
+  email: '',
+  mobile_no: '',
+  password: '',
+  password_confirmation: '',
+  role_id: '',
+  is_enable_login: true,
   branch_id: '',
   department_id: '',
   designation_id: '',
@@ -102,13 +121,14 @@ function relationId(
 }
 
 function shiftIdFromEmployee(employee: Record<string, unknown>): string {
-  return relationId(employee, 'shift_id', 'shift') || relationId(employee, 'shift')
+  return relationId(employee, 'shift_id', 'shift')
 }
 
 export function employeeToFormState(employee: Record<string, unknown>): EmployeeFormState {
   const user = employee.user as { avatar?: string } | undefined
 
   return {
+    ...initialEmployeeFormState,
     employee_id: String(employee.employee_id ?? ''),
     date_of_birth: dateInputValue(employee.date_of_birth as string),
     avatar: String(employee.avatar ?? user?.avatar ?? ''),
@@ -143,13 +163,31 @@ export function employeeToFormState(employee: Record<string, unknown>): Employee
   }
 }
 
-export function buildEmployeeFormData(data: EmployeeFormState, options?: { isEdit?: boolean }): FormData {
-  const formData = new FormData()
-  const skip = new Set<keyof EmployeeFormState>(['documents'])
+type BuildOptions = {
+  isEdit?: boolean
+  /** Employee create sends role_id; driver/depot-rep use a fixed server role. */
+  includeRoleId?: boolean
+}
 
-  if (options?.isEdit) {
+export function buildEmployeeFormData(data: EmployeeFormState, options?: BuildOptions): FormData {
+  const formData = new FormData()
+  const isEdit = Boolean(options?.isEdit)
+  const skip = new Set<keyof EmployeeFormState>([
+    'documents',
+    'first_name',
+    'middle_name',
+    'last_name',
+    'email',
+    'mobile_no',
+    'password',
+    'password_confirmation',
+    'role_id',
+    'is_enable_login',
+    'user_id',
+  ])
+
+  if (isEdit) {
     skip.add('employee_id')
-    skip.add('user_id')
   }
 
   ;(Object.keys(data) as Array<keyof EmployeeFormState>).forEach((key) => {
@@ -159,6 +197,21 @@ export function buildEmployeeFormData(data: EmployeeFormState, options?: { isEdi
       formData.append(key, value)
     }
   })
+
+  if (!isEdit) {
+    formData.append('user[first_name]', data.first_name)
+    if (data.middle_name) formData.append('user[middle_name]', data.middle_name)
+    formData.append('user[last_name]', data.last_name)
+    formData.append('user[email]', data.email)
+    if (data.mobile_no) formData.append('user[mobile_no]', data.mobile_no)
+    formData.append('user[password]', data.password)
+    formData.append('user[password_confirmation]', data.password_confirmation)
+    formData.append('user[is_enable_login]', data.is_enable_login ? '1' : '0')
+    if (data.avatar) formData.append('user[avatar]', data.avatar)
+    if (options?.includeRoleId && data.role_id) {
+      formData.append('user[role_id]', data.role_id)
+    }
+  }
 
   data.documents.forEach((document, index) => {
     if (document.document_type_id) {

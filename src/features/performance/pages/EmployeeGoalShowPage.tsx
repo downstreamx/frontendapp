@@ -8,6 +8,7 @@ import { usePageChrome } from '@/contexts/page-chrome-context'
 import { formatDate } from '@/utils/helpers'
 import { paths } from '@/lib/paths'
 import { getEmployeeGoal } from '../performance-api'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 
 export function EmployeeGoalShowPage() {
   const { id } = useParams<{ id: string }>()
@@ -28,7 +29,7 @@ export function EmployeeGoalShowPage() {
     ],
   })
 
-  if (isLoading) return <p className="text-sm text-muted-foreground">{t('Loading…')}</p>
+  if (isLoading) return <PageContentLoader className="min-h-[16rem]" />
   if (!goal) return <p className="text-sm text-destructive">{t('Employee goal not found.')}</p>
 
   return (

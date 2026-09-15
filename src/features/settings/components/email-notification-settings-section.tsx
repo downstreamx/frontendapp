@@ -16,6 +16,7 @@ import {
   type EmailNotificationRow,
 } from '../email-notification-api'
 import { useSettingsContext } from '../context/settings-context'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 
 function moduleLabel(module: string, t: (key: string) => string): string {
   if (module === 'general') {
@@ -99,7 +100,7 @@ export function EmailNotificationSettingsSection() {
   })
 
   if (settingsQuery.isLoading) {
-    return <p className="text-sm text-muted-foreground">{t('Loading…')}</p>
+    return <PageContentLoader className="min-h-[16rem]" />
   }
 
   if (settingsQuery.isError) {

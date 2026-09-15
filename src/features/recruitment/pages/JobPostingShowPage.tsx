@@ -11,6 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { usePageChrome } from '@/contexts/page-chrome-context'
 import { paths } from '@/lib/paths'
 import { getJobPosting, updateJobPosting } from '../recruitment-api'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 
 export function JobPostingShowPage() {
   const { t } = useTranslation()
@@ -54,7 +55,7 @@ export function JobPostingShowPage() {
   })
 
   if (postingQuery.isLoading) {
-    return <p className="text-sm text-muted-foreground">Loading…</p>
+    return <PageContentLoader className="min-h-[16rem]" />
   }
   if (postingQuery.error || !posting) {
     return <p className="text-sm text-destructive">Job posting not found.</p>

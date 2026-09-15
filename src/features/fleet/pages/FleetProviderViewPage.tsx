@@ -19,6 +19,7 @@ import {
   fetchTruckProvider,
 } from '../fleet-api'
 import { useDeleteHandler } from '@/hooks/useDeleteHandler'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 
 type ProviderKind = 'truck' | 'maintenance'
 
@@ -79,7 +80,7 @@ function FleetProviderViewPage({ kind }: Props) {
     })
 
   if (isLoading) {
-    return <p className="text-sm text-muted-foreground">{t('Loading...')}</p>
+    return <PageContentLoader className="min-h-[16rem]" />
   }
   if (error || !provider) {
     return <p className="text-sm text-destructive">{t('Provider not found.')}</p>

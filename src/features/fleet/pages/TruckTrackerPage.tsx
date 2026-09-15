@@ -43,6 +43,7 @@ import { TruckLocationsLiveMap } from '../components/TruckLocationsLiveMap'
 import { TableRowActions } from '@/features/shared/components/TableRowActions'
 import { TableTruckAvatarCell } from '@/features/shared/components/table-avatar-cells'
 import { useDeleteHandler } from '@/hooks/useDeleteHandler'
+import { ForbiddenPage } from '@/components/status-page'
 
 function hasCoordinates(row: TruckLocationRow): boolean {
   const lat = row.latitude != null ? Number(row.latitude) : NaN
@@ -191,7 +192,7 @@ export function TruckTrackerPage() {
   ]
 
   if (!canManage) {
-    return <p className="text-sm text-muted-foreground">{t('Permission denied')}</p>
+    return <ForbiddenPage />
   }
 
   return (

@@ -1,5 +1,5 @@
 import { Navigate, Outlet } from 'react-router-dom'
-import { Loader2 } from 'lucide-react'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 import { useMeQuery } from '@/features/auth/hooks'
 import { clearAuthToken, getAuthToken } from '@/lib/api'
 import { paths } from '@/lib/paths'
@@ -7,7 +7,7 @@ import { paths } from '@/lib/paths'
 function AuthSessionLoading() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background">
-      <Loader2 className="size-8 animate-spin text-muted-foreground" aria-hidden />
+      <PageContentLoader className="min-h-0" />
     </div>
   )
 }

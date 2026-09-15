@@ -5,6 +5,7 @@ import { useAppContext } from '@/contexts/app-context'
 import { fetchCustomerBalanceSummary } from '../account-customer-balance-api'
 import { formatCurrency, formatDate } from '@/utils/helpers'
 import { useEffect } from 'react'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 
 function setting(settings: Record<string, string>, key: string) {
   return settings[key] || ''
@@ -35,7 +36,7 @@ export function CustomerCreditBalancePrintPage() {
   }, [autoPrint])
 
   if (isLoading) {
-    return <p className="p-8 text-sm text-muted-foreground">{t('Loading…')}</p>
+    return <PageContentLoader className="min-h-[16rem]" />
   }
 
   if (error || !data) {

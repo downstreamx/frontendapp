@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useAppContext } from '@/contexts/app-context'
 import { fetchLedgerSummaryExport } from '../double-entry-api'
 import { LedgerSummaryPrintLayout } from '../components/LedgerSummaryPrintLayout'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 
 export function LedgerSummaryPrintPage() {
   const { t } = useTranslation()
@@ -32,7 +33,7 @@ export function LedgerSummaryPrintPage() {
   })
 
   if (isLoading) {
-    return <p className="p-8 text-sm text-muted-foreground">{t('Loading…')}</p>
+    return <PageContentLoader className="min-h-[16rem]" />
   }
 
   if (error || !data) {

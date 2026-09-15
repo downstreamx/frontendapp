@@ -65,7 +65,7 @@ export function CompanyProvisioningDialog({ open, companyId, onClose }: Props) {
                 name: status.company?.name ?? t('The company'),
               })}
             </p>
-            <div className="space-y-2 rounded-lg border bg-muted/40 px-4 py-4 text-sm">
+            <div className="space-y-2 rounded-xl border border-border/50 bg-[hsl(var(--section-deep))]/80 px-4 py-4 text-sm">
               <p>
                 <span className="text-muted-foreground">{t('Owner')}: </span>
                 {status.owner?.name}

@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 import { api } from '@/lib/api'
 
 type Props = {
@@ -23,8 +24,8 @@ export function ResourceViewPage({ title, apiEndpoint, id, editPath, indexPath }
 
   return (
     <Card>
-      <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle>{title}</CardTitle>
+      <CardHeader className="flex flex-row items-center justify-between border-b border-border/50 pb-4">
+        <CardTitle className="text-xl tracking-tight">{title}</CardTitle>
         <div className="flex gap-2">
           {editPath && (
             <Button asChild size="sm" variant="outline">
@@ -36,11 +37,11 @@ export function ResourceViewPage({ title, apiEndpoint, id, editPath, indexPath }
           </Button>
         </div>
       </CardHeader>
-      <CardContent>
-        {isLoading && <p className="text-sm text-muted-foreground">Loading…</p>}
+      <CardContent className="pt-6">
+        {isLoading && <PageContentLoader className="min-h-[12rem]" />}
         {error && <p className="text-sm text-destructive">Failed to load record.</p>}
         {data && (
-          <pre className="text-xs rounded-md bg-muted p-3 overflow-auto max-h-96">
+          <pre className="max-h-96 overflow-auto rounded-xl border border-border/40 bg-[hsl(var(--section-deep))]/70 p-3 text-xs">
             {JSON.stringify(data, null, 2)}
           </pre>
         )}

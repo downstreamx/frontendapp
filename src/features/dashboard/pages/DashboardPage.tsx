@@ -1,4 +1,6 @@
 import { Navigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 import { useMeQuery } from '@/features/auth/hooks'
 import { paths } from '@/lib/paths'
 import { isSuperAdminUser, resolveDefaultLandingPath } from '@/lib/resolve-default-landing-path'
@@ -6,10 +8,11 @@ import { SuperAdminDashboardPage } from './SuperAdminDashboardPage'
 import { CompanyOverviewDashboardPage } from './CompanyOverviewDashboardPage'
 
 export function DashboardPage() {
+  const { t } = useTranslation()
   const { data: me, isLoading } = useMeQuery()
 
   if (isLoading) {
-    return <p className="text-sm text-muted-foreground">Loading…</p>
+    return <PageContentLoader label={t('Loading dashboard…')} />
   }
 
   if (me && isSuperAdminUser(me)) {

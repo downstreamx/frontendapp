@@ -94,7 +94,7 @@ export function CommercialDocumentEditorPage({ documentType }: Props) {
     defaultValues:
       documentType === 'sales-order'
         ? {
-            proposal_date: today,
+            order_date: today,
             due_date: today,
             customer_id: 0,
             depot_id: undefined,
@@ -154,7 +154,7 @@ export function CommercialDocumentEditorPage({ documentType }: Props) {
       const row = data as Record<string, unknown>
       if (documentType === 'sales-order') {
         form.reset({
-          proposal_date: String(row.proposal_date ?? today).slice(0, 10),
+          order_date: String(row.order_date ?? today).slice(0, 10),
           due_date: String(row.due_date ?? today).slice(0, 10),
           customer_id: Number(row.customer_id ?? 0),
           depot_id: row.depot_id != null ? Number(row.depot_id) : undefined,
@@ -283,8 +283,8 @@ export function CommercialDocumentEditorPage({ documentType }: Props) {
           {documentType === 'sales-order' ? (
             <>
               <div className="space-y-2">
-                <Label>{t('Proposal date')}</Label>
-                <Input type="date" {...form.register('proposal_date')} />
+                <Label>{t('Order date')}</Label>
+                <Input type="date" {...form.register('order_date')} />
               </div>
               <div className="space-y-2">
                 <Label>{t('Due date')}</Label>

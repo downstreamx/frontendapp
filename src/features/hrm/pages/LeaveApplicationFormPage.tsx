@@ -19,6 +19,7 @@ import {
   type LeaveApplicationFormValues,
 } from '../hrm-api'
 import { useHrmMeta } from '../hooks/use-hrm-meta'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 
 const emptyForm = (): LeaveApplicationFormValues => ({
   employee_id: '',
@@ -114,7 +115,7 @@ export function LeaveApplicationFormPage() {
   }
 
   if (isEdit && detailQuery.isLoading) {
-    return <p className="text-sm text-muted-foreground">{t('Loading…')}</p>
+    return <PageContentLoader className="min-h-[16rem]" />
   }
 
   if (isEdit && (detailQuery.error || !detailQuery.data)) {

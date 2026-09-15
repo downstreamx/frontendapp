@@ -72,13 +72,13 @@ export function ModuleCard({
 
     if (compact && selectable) {
         return (
-            <div className="flex items-center space-x-3 p-2 rounded hover:bg-muted/30">
+            <div className="flex items-center space-x-3 p-2 rounded hover:bg-[hsl(var(--section-deep))]/80">
                 <input
                     type="checkbox"
                     id={module.module}
                     checked={selected}
                     onChange={(e) => onSelectionChange?.(module.module, e.target.checked)}
-                    className="rounded border-gray-300 text-primary focus:ring-primary"
+                    className="rounded border-border text-primary focus:ring-primary"
                 />
                 <label htmlFor={module.module} className="flex items-center space-x-2 flex-1 cursor-pointer">
                     <img
@@ -91,9 +91,9 @@ export function ModuleCard({
                             target.nextElementSibling?.classList.remove('hidden');
                         }}
                     />
-                    <Package className="h-5 w-5 text-gray-400 hidden" />
-                    <span className="text-sm font-medium text-gray-900 dark:text-white">{module.alias}</span>
-                    <span className="text-xs text-gray-500 dark:text-gray-400">
+                    <Package className="h-5 w-5 text-muted-foreground hidden" />
+                    <span className="text-sm font-medium text-foreground">{module.alias}</span>
+                    <span className="text-xs text-gray-500 dark:text-muted-foreground">
                         +{formatAdminCurrency(pricingPeriod === 'monthly' ? monthlyPrice : yearlyPrice)}/{pricingPeriod === 'monthly' ? 'mo' : 'yr'}
                     </span>
                 </label>
@@ -118,10 +118,10 @@ export function ModuleCard({
                                         target.nextElementSibling?.classList.remove('hidden');
                                     }}
                                 />
-                                <Package className="h-8 w-8 text-gray-400 hidden" />
+                                <Package className="h-8 w-8 text-muted-foreground hidden" />
                             </div>
                             <div className="min-w-0 flex-1">
-                                <h4 className="font-bold text-gray-900 dark:text-white text-sm truncate">
+                                <h4 className="font-bold text-foreground text-sm truncate">
                                     {getPackageAlias(module.module)}
                                 </h4>
                             </div>
@@ -142,7 +142,7 @@ export function ModuleCard({
                                     type="checkbox"
                                     checked={selected}
                                     onChange={(e) => onSelectionChange?.(module.module, e.target.checked)}
-                                    className="rounded border-gray-300 text-primary focus:ring-primary"
+                                    className="rounded border-border text-primary focus:ring-primary"
                                 />
                             )}
                         </div>
@@ -151,10 +151,10 @@ export function ModuleCard({
                     {showPricing && (
                         <div key={`${pricingPeriod}-${monthlyPrice}-${yearlyPrice}`} className="rounded bg-section p-2 text-center">
                             <div className="flex items-baseline justify-center space-x-1">
-                                <span className="text-sm font-black text-gray-900 dark:text-white">
+                                <span className="text-sm font-black text-foreground">
                                     {formatAdminCurrency(pricingPeriod === 'monthly' ? monthlyPrice : yearlyPrice)}
                                 </span>
-                                <span className="text-xs text-gray-500 dark:text-gray-400 font-semibold">
+                                <span className="text-xs text-gray-500 dark:text-muted-foreground font-semibold">
                                     /{pricingPeriod === 'monthly' ? t('monthly') : t('yearly')}
                                 </span>
                             </div>

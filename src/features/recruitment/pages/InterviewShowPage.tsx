@@ -9,6 +9,7 @@ import { formatDate } from '@/utils/helpers'
 import { paths } from '@/lib/paths'
 import { candidateFullName } from '../recruitment-candidates-api'
 import { getInterview } from '../recruitment-interviews-api'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 
 export function InterviewShowPage() {
   const { id } = useParams<{ id: string }>()
@@ -29,7 +30,7 @@ export function InterviewShowPage() {
     ],
   })
 
-  if (isLoading) return <p className="text-sm text-muted-foreground">{t('Loading…')}</p>
+  if (isLoading) return <PageContentLoader className="min-h-[16rem]" />
   if (error || !interview) return <p className="text-sm text-destructive">{t('Interview not found.')}</p>
 
   const round = interview.interview_round ?? interview.interviewRound

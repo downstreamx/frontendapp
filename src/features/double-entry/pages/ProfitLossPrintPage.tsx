@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useAppContext } from '@/contexts/app-context'
 import { fetchProfitLoss } from '../double-entry-api'
 import { ProfitLossPrintLayout } from '../components/ProfitLossPrintLayout'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 
 export function ProfitLossPrintPage() {
   const { t } = useTranslation()
@@ -21,7 +22,7 @@ export function ProfitLossPrintPage() {
   })
 
   if (isLoading) {
-    return <p className="p-8 text-sm text-muted-foreground">{t('Loading…')}</p>
+    return <PageContentLoader className="min-h-[16rem]" />
   }
 
   if (error || !data) {

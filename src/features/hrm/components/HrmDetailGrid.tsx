@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { DetailFieldGrid } from '@/features/shared/components/detail-info-tile'
 
 export type HrmDetailItem = {
   label: string
@@ -6,17 +7,5 @@ export type HrmDetailItem = {
 }
 
 export function HrmDetailGrid({ items }: { items: HrmDetailItem[] }) {
-  const visible = items.filter((item) => item.value != null && item.value !== '')
-  if (visible.length === 0) return null
-
-  return (
-    <div className="grid gap-4 sm:grid-cols-2">
-      {visible.map((item) => (
-        <div key={item.label} className="space-y-1">
-          <p className="text-sm font-medium text-muted-foreground">{item.label}</p>
-          <div className="text-sm font-medium">{item.value}</div>
-        </div>
-      ))}
-    </div>
-  )
+  return <DetailFieldGrid fields={items} />
 }

@@ -3,15 +3,32 @@ import { extractPaginatedList, type PaginatedListResult } from '@/hooks/use-reso
 
 export type DepotRepAssignmentsIndexMeta = {
   depots: Array<{ id: number; name: string; city?: string }>
-  depot_reps: Array<{ id: number; name: string; email?: string; first_name?: string; last_name?: string }>
+  depot_reps: Array<{
+    id: number
+    name: string
+    email?: string
+    first_name?: string
+    last_name?: string
+    user_id?: number
+  }>
 }
 
 export type DepotRepAssignmentRow = {
   id: number
   depot_id: number
-  user_id: number
+  employee_id: number
   depot?: { id: number; name: string; city?: string }
-  user?: { id: number; name?: string; email?: string; first_name?: string; last_name?: string; avatar?: string | null }
+  employee?: {
+    id: number
+    user?: {
+      id: number
+      name?: string
+      email?: string
+      first_name?: string
+      last_name?: string
+      avatar?: string | null
+    }
+  }
 }
 
 export async function fetchDepotRepAssignmentsIndexMeta() {
@@ -28,7 +45,7 @@ export async function listDepotRepAssignmentsPaginated(
   return extractPaginatedList<DepotRepAssignmentRow>(data)
 }
 
-export async function createDepotRepAssignment(body: { depot_id: number; user_id: number }) {
+export async function createDepotRepAssignment(body: { depot_id: number; employee_id: number }) {
   const { data } = await api.post<ApiSuccess<DepotRepAssignmentRow>>('/depot-rep-assignments', body)
   return { row: data.data, message: data.message }
 }

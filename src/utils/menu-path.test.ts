@@ -18,4 +18,10 @@ describe('isMenuPathActive', () => {
   it('still prefix-matches nested routes when matchExact is false', () => {
     expect(isMenuPathActive('/account/customers/42/edit', '/account/customers')).toBe(true)
   })
+
+  it('does not treat HRM module pages as the HRM dashboard root', () => {
+    expect(isMenuPathActive('/hrm/employees', '/hrm', { matchExact: true })).toBe(false)
+    expect(isMenuPathActive('/hrm', '/hrm', { matchExact: true })).toBe(true)
+    expect(isMenuPathActive('/hrm/employees', '/hrm')).toBe(true)
+  })
 })

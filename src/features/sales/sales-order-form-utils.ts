@@ -14,7 +14,7 @@ export type SalesOrderFormItem = {
 }
 
 export type SalesOrderFormValues = {
-  proposal_date: string
+  order_date: string
   due_date: string
   customer_id: string
   depot_id: string
@@ -25,10 +25,10 @@ export type SalesOrderFormValues = {
 
 export type SalesOrderApiRow = {
   id?: number
-  proposal_number?: string
+  order_number?: string
   status?: string
   converted_to_invoice?: boolean
-  proposal_date?: string
+  order_date?: string
   due_date?: string
   customer_id?: number
   depot_id?: number | null
@@ -81,7 +81,7 @@ export function mapSalesOrderToFormValues(row: SalesOrderApiRow): SalesOrderForm
         ]
 
   return {
-    proposal_date: String(row.proposal_date ?? new Date().toISOString().slice(0, 10)).slice(0, 10),
+    order_date: String(row.order_date ?? new Date().toISOString().slice(0, 10)).slice(0, 10),
     due_date: row.due_date ? String(row.due_date).slice(0, 10) : '',
     customer_id: row.customer_id != null ? String(row.customer_id) : '',
     depot_id: row.depot_id != null ? String(row.depot_id) : '',

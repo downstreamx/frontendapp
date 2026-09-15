@@ -7,6 +7,7 @@ import { FleetStatusBadge } from '@/features/fleet/components/FleetStatusBadge'
 import { usePageChrome } from '@/contexts/page-chrome-context'
 import { paths } from '@/lib/paths'
 import { getIndicator } from '../performance-api'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 
 export function IndicatorShowPage() {
   const { id } = useParams<{ id: string }>()
@@ -27,7 +28,7 @@ export function IndicatorShowPage() {
     ],
   })
 
-  if (isLoading) return <p className="text-sm text-muted-foreground">{t('Loading…')}</p>
+  if (isLoading) return <PageContentLoader className="min-h-[16rem]" />
   if (!indicator) return <p className="text-sm text-destructive">{t('Indicator not found.')}</p>
 
   return (

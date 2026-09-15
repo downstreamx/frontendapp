@@ -246,7 +246,7 @@ export function ResourceIndexPage({
         <DataTable
           data={rows}
           columns={tableColumns}
-          className="rounded-none border-0 shadow-none"
+          embedded
           emptyState={<p className="text-sm text-muted-foreground p-4">{t('No records yet.')}</p>}
         />
       </ModuleListCard>
@@ -267,7 +267,7 @@ export function ResourceIndexPage({
         <DataTable
           data={rows}
           columns={tableColumns}
-          className="rounded-none border-0 shadow-none"
+          embedded
           emptyState={
             <NoRecordsFound
               icon={EmptyIcon}

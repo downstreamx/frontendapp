@@ -207,7 +207,7 @@ export function DistributionInformationPage() {
       },
       {
         label: t('Phase'),
-        value: String(truckLoad?.phase ?? truckLoad?.status ?? '—'),
+        value: String(truckLoad?.phase ?? '—'),
       },
       {
         label: t('Loading schedule'),

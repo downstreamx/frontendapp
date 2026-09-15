@@ -70,9 +70,11 @@ export function ModuleIndexPage() {
   if (!config.listApi) {
     return (
       <ModuleListCard title={config.title} isLoading={isLoading} error={!!error}>
-        <div className="rounded-md border border-dashed p-6 text-sm text-muted-foreground text-center">
-          <p className="font-medium mb-1">{t('Coming soon')}</p>
-          <p>{t('Full legacy UI is being ported — API expansion may be required.')}</p>
+        <div className="mx-6 mb-6 rounded-xl border border-dashed border-border/60 bg-[hsl(var(--section-deep))]/70 p-8 text-center text-sm text-muted-foreground">
+          <p className="mb-1 text-base font-semibold tracking-tight text-foreground">{t('Coming soon')}</p>
+          <p className="leading-relaxed">
+            {t('Full legacy UI is being ported — API expansion may be required.')}
+          </p>
         </div>
       </ModuleListCard>
     )

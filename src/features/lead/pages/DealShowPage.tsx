@@ -18,6 +18,7 @@ import { CrmFilesSection } from '../components/CrmFilesSection'
 import { CrmTasksSection } from '../components/CrmTasksSection'
 import { DealSidebar, type DealSection } from '../components/DealSidebar'
 import { getDeal, updateDeal, type DealDetail } from '../lead-api'
+import { PageContentLoader } from '@/components/ui/page-content-loader'
 
 export function DealShowPage() {
   const { id } = useParams<{ id: string }>()
@@ -72,7 +73,7 @@ export function DealShowPage() {
   }
 
   if (dealQuery.isLoading) {
-    return <p className="text-sm text-muted-foreground">{t('Loading…')}</p>
+    return <PageContentLoader className="min-h-[16rem]" />
   }
   if (dealQuery.error || !deal) {
     return <p className="text-sm text-destructive">{t('Deal not found.')}</p>
