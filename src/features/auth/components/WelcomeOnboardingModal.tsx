@@ -144,7 +144,7 @@ export function WelcomeOnboardingModal({ open }: Props) {
             <div className="space-y-3">
               <WelcomeTourIllustration
                 kind="tour"
-                className="h-[200px] w-full"
+                className="h-[280px] w-full sm:h-[320px]"
               />
               <div className="rounded-lg border bg-muted/40 px-4 py-3 text-center">
                 <p className="text-sm font-medium text-foreground">
@@ -158,7 +158,7 @@ export function WelcomeOnboardingModal({ open }: Props) {
           ) : (
             <WelcomeTourIllustration
               kind={card.illustration}
-              className="h-[200px] w-full"
+              className="h-[280px] w-full sm:h-[320px]"
             />
           )}
         </div>

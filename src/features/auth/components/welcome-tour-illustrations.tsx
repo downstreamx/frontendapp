@@ -9,7 +9,12 @@ function Frame({ children, className }: { children: React.ReactNode; className?:
     <div
       className={`overflow-hidden rounded-xl border border-border/60 bg-gradient-to-br from-slate-50 via-white to-emerald-50/60 ${className ?? ''}`}
     >
-      <svg viewBox="0 0 480 220" className={frameClass} aria-hidden>
+      <svg
+        viewBox="0 0 480 220"
+        preserveAspectRatio="xMidYMid meet"
+        className={frameClass}
+        aria-hidden
+      >
         {children}
       </svg>
     </div>
