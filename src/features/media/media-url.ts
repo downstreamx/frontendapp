@@ -1,5 +1,8 @@
 /**
- * Media path helpers — align SPA storage URLs with API `image_url_prefix` and legacy basename storage.
+ * Media path helpers — align SPA storage URLs with API `image_url_prefix`.
+ *
+ * Contract: `image_url_prefix` ends with `.../media/` (local `/storage/media/` or S3 `.../media/`).
+ * Stored logo/avatar values are usually basenames.
  */
 
 export function normalizeSelectedMediaPath(url: string): string {
@@ -37,18 +40,30 @@ function buildStorageMediaBase(prefix: string, isPackagePath = false): string {
   const normalized = prefix.endsWith('/') ? prefix : `${prefix}/`
 
   if (isPackagePath) {
-    return normalized.replace(/\/?storage\/media\/?$/, '').replace(/\/?storage\/?$/, '')
+    // Package assets live on the API host, never on the S3 media prefix.
+    const apiBase = import.meta.env.VITE_API_BASE_URL
+    if (typeof apiBase === 'string' && apiBase.startsWith('http')) {
+      return `${apiBase.replace(/\/api\/v\d+\/?$/, '')}/`
+    }
+
+    return normalized
+      .replace(/\/?storage\/media\/?$/, '/')
+      .replace(/\/media\/?$/, '/')
+      .replace(/\/?storage\/?$/, '/')
   }
 
-  if (normalized.includes('storage/media')) {
+  // Already a media root (S3 AWS_URL/media/ or local APP_URL/storage/media/)
+  if (/\/media\/?$/.test(normalized) || normalized.includes('storage/media')) {
     return normalized.endsWith('/') ? normalized : `${normalized}/`
   }
 
+  // Legacy API prefix ending in /storage/
   if (/\/storage\/?$/.test(normalized)) {
     return normalized.replace(/\/?storage\/?$/, '/storage/media/')
   }
 
-  return `${normalized.replace(/\/?$/, '')}/storage/media/`
+  // Bare origin / CDN root → media/
+  return `${normalized.replace(/\/?$/, '')}/media/`
 }
 
 function collapseSlashes(url: string): string {
@@ -65,10 +80,10 @@ export function getApiStoragePrefix(): string {
   const apiBase = import.meta.env.VITE_API_BASE_URL
   if (typeof apiBase === 'string' && apiBase.startsWith('http')) {
     const origin = apiBase.replace(/\/api\/v\d+\/?$/, '')
-    return `${origin}/storage/`
+    return `${origin}/storage/media/`
   }
 
-  return '/storage/'
+  return '/storage/media/'
 }
 
 function resolveEffectiveStoragePrefix(imageUrlPrefix?: string): string {
@@ -80,10 +95,10 @@ function resolveEffectiveStoragePrefix(imageUrlPrefix?: string): string {
   return getApiStoragePrefix()
 }
 
-function rewriteStorageUrl(url: string, imageUrlPrefix?: string): string {
+function rewriteLegacyStorageUrl(url: string, imageUrlPrefix?: string): string {
   try {
     const parsed = new URL(url)
-    if (!parsed.pathname.includes('/storage/')) {
+    if (!parsed.pathname.includes('/storage/') && !parsed.pathname.includes('/media/')) {
       return url
     }
 
@@ -92,8 +107,10 @@ function rewriteStorageUrl(url: string, imageUrlPrefix?: string): string {
       return url
     }
 
-    const targetBase = targetPrefix.replace(/\/?storage\/?$/, '')
-    return collapseSlashes(`${targetBase}${parsed.pathname}`)
+    const basename = normalizeSelectedMediaPath(parsed.pathname)
+    const base = buildStorageMediaBase(targetPrefix)
+
+    return collapseSlashes(`${base}${basename}`)
   } catch {
     return url
   }
@@ -105,26 +122,28 @@ export function resolveMediaUrl(path: string, imageUrlPrefix?: string): string {
   const prefix = resolveEffectiveStoragePrefix(imageUrlPrefix)
 
   if (path.startsWith('http://') || path.startsWith('https://')) {
-    return path.includes('/storage/') ? rewriteStorageUrl(path, imageUrlPrefix) : path
+    // Already on S3 / CDN — leave alone unless it is a legacy API /storage/ URL
+    if (path.includes('/storage/')) {
+      return rewriteLegacyStorageUrl(path, imageUrlPrefix)
+    }
+    return path
   }
+
   const isPackagePath = isPackageMediaPath(path)
 
   if (path.includes('storage/media') || path.startsWith('/storage/')) {
+    const basename = normalizeSelectedMediaPath(path)
+    const base = buildStorageMediaBase(prefix)
     if (prefix.startsWith('http')) {
-      const base = prefix.replace(/\/?storage\/?$/, '')
-      const normalizedPath = path.startsWith('/') ? path : `/${path}`
-      return collapseSlashes(`${base}${normalizedPath}`)
+      return collapseSlashes(`${base}${basename}`)
     }
 
     const apiPrefix = getApiStoragePrefix()
     if (apiPrefix.startsWith('http')) {
-      const base = apiPrefix.replace(/\/?storage\/?$/, '')
-      const normalizedPath = path.startsWith('/') ? path : `/${path}`
-      return collapseSlashes(`${base}${normalizedPath}`)
+      return collapseSlashes(`${buildStorageMediaBase(apiPrefix)}${basename}`)
     }
 
-    const localPath = path.startsWith('/') ? path : `/${path}`
-    return `${window.location.origin}${localPath}`
+    return `${window.location.origin}/storage/media/${basename}`
   }
 
   let relativePath = path.replace(/^\//, '')
