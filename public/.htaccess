@@ -1,0 +1,17 @@
+# SPA history fallback for Apache / SiteGround.
+# Deep links like /inventory/products/18 must serve index.html so React Router can render.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # Existing files and directories (assets, favicon, etc.)
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # Everything else → SPA entry
+  RewriteRule ^ index.html [L]
+</IfModule>
+
+# Optional: if rewrite is disabled, still avoid the host 404 skin for missing paths
+ErrorDocument 404 /index.html
