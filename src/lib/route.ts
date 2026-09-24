@@ -185,6 +185,10 @@ const explicit: Record<string, string> = {
   'recruitment.job-categories.index': '/recruitment/job-categories',
   'recruitment.job-types.index': '/recruitment/job-types',
   'recruitment.candidates.index': paths.recruitment.candidates,
+  'vendor-management.vendors.index': paths.vendorManagement.vendors,
+  'vendor-management.tenders.index': paths.vendorManagement.tenders,
+  'vendor-management.stage-templates.index': paths.vendorManagement.systemSetupPipelineStages,
+  'vendor-management.system-setup.index': paths.vendorManagement.systemSetup,
 }
 
 function routeNameToPath(name: string): string {

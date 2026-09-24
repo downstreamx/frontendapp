@@ -727,6 +727,26 @@ export const SYSTEM_SETUP_MODULES: SystemSetupModule[] = [
     ],
   },
   {
+    key: 'vendor-management',
+    title: 'Vendor Mgt. system setup',
+    hubPath: paths.vendorManagement.systemSetup,
+    defaultPath: paths.vendorManagement.systemSetupPipelineStages,
+    parentLabel: 'Vendor Mgt.',
+    parentPath: paths.vendorManagement.vendors,
+    items: [
+      {
+        key: 'pipeline-stages',
+        label: 'Pipeline stages',
+        path: paths.vendorManagement.systemSetupPipelineStages,
+        icon: List,
+        permission: 'manage-vendor-management',
+        title: 'Pipeline stages',
+        apiBase: '/vendor-management/stage-templates',
+        labelKeys: ['name', 'slug', 'sort_order'],
+      },
+    ],
+  },
+  {
     key: 'procurement',
     title: 'Procurement system setup',
     hubPath: paths.procurement.systemSetup,

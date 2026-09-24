@@ -1,4 +1,4 @@
-import { Route } from 'react-router-dom'
+import { Navigate, Route } from 'react-router-dom'
 import { SYSTEM_SETUP_MODULES } from '@/lib/system-setup-registry'
 import { SystemSetupHubRedirect } from '@/features/shared/components/SystemSetupHubRedirect'
 import { SystemSetupLayout } from '@/features/shared/components/SystemSetupLayout'
@@ -12,6 +12,7 @@ import { SalesPaymentReminderSettingsPage } from '@/features/sales/pages/SalesPa
 import { SalesCommercialLineItemSettingsPage } from '@/features/sales/pages/SalesCommercialLineItemSettingsPage'
 import { PurchaseCommercialLineItemSettingsPage } from '@/features/purchase/pages/PurchaseCommercialLineItemSettingsPage'
 import { PurchasePaymentReminderSettingsPage } from '@/features/purchase/pages/PurchasePaymentReminderSettingsPage'
+import { StageTemplatesPage } from '@/features/vendor-management/pages/StageTemplatesPage'
 import {
   SupportCategoriesInfoPage,
   SupportContactInformationPage,
@@ -299,6 +300,18 @@ export const systemSetupHubRoutes = (
           />
         </SystemSetupLayout>
       }
+    />
+    <Route
+      path={paths.vendorManagement.systemSetupPipelineStages}
+      element={
+        <SystemSetupLayout moduleKey="vendor-management">
+          <StageTemplatesPage />
+        </SystemSetupLayout>
+      }
+    />
+    <Route
+      path="/vendor-management/stage-templates"
+      element={<Navigate to={paths.vendorManagement.systemSetupPipelineStages} replace />}
     />
     <Route
       path={paths.procurement.systemSetupPaymentTerms}

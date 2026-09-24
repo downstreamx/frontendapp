@@ -7,6 +7,8 @@ export const paths = {
   forgotPassword: '/forgot-password',
   resetPassword: '/reset-password',
   careers: '/careers',
+  vendorTenders: (token: string | number) => `/vendor-tenders/${token}`,
+  vendorTenderSuccess: '/vendor-tenders/success',
   dashboard: '/dashboard',
   dashboards: {
     account: '/account',
@@ -308,6 +310,20 @@ export const paths = {
     dealShow: (id: string | number) => `/lead/deals/${id}`,
     dealEdit: (id: string | number) => `/lead/deals/${id}/edit`,
     pipelines: '/lead/pipelines',
+  },
+  vendorManagement: {
+    vendors: '/vendor-management/vendors',
+    vendorCreate: '/vendor-management/vendors/create',
+    vendorShow: (id: string | number) => `/vendor-management/vendors/${id}`,
+    vendorEdit: (id: string | number) => `/vendor-management/vendors/${id}/edit`,
+    tenders: '/vendor-management/tenders',
+    tenderCreate: '/vendor-management/tenders/create',
+    tenderShow: (id: string | number) => `/vendor-management/tenders/${id}`,
+    tenderEdit: (id: string | number) => `/vendor-management/tenders/${id}/edit`,
+    /** @deprecated use systemSetupPipelineStages */
+    stageTemplates: '/vendor-management/system-setup/pipeline-stages',
+    systemSetup: '/vendor-management/system-setup',
+    systemSetupPipelineStages: '/vendor-management/system-setup/pipeline-stages',
   },
   recruitment: {
     jobPostings: '/recruitment/job-postings',

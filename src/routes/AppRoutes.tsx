@@ -41,6 +41,7 @@ import { reportsRoutes } from '@/routes/modules/reports'
 import { portalRoutes } from '@/routes/modules/portal'
 import { integrationRoutes } from '@/routes/modules/integrations'
 import { publicCareerRoutes } from '@/routes/modules/public'
+import { vendorManagementRoutes } from '@/routes/modules/vendor-management'
 import { inventorySystemSetupRoutes, systemSetupHubRoutes } from '@/routes/modules/system-setup'
 
 export function AppRoutes() {
@@ -90,6 +91,7 @@ export function AppRoutes() {
 
           {fleetRoutes}
           {assetManagementRoutes}
+          {vendorManagementRoutes}
           {distributionRoutes}
           {hrmRoutes}
           {accountRoutes}

@@ -431,6 +431,33 @@ export const getCompanyMenu = (t: (key: string) => string): NavItem[] => [
     ],
   },
   {
+    title: t('Vendor Mgt.'),
+    icon: ClipboardList,
+    // Parent has no permission gate so fine-grained child perms (view-vm-*) work.
+    modules: ['VendorManagement'],
+    order: 51,
+    children: [
+      {
+        title: t('Vendors'),
+        href: route('vendor-management.vendors.index'),
+        icon: Building2,
+        permission: 'view-vm-vendors',
+      },
+      {
+        title: t('Tenders'),
+        href: route('vendor-management.tenders.index'),
+        icon: FileText,
+        permission: 'view-vm-tenders',
+      },
+      {
+        title: t('System Setup'),
+        href: route('vendor-management.system-setup.index'),
+        icon: Settings,
+        permission: 'manage-vendor-management',
+      },
+    ],
+  },
+  {
     title: t('Assets'),
     icon: Layers,
     permission: 'manage-assets',

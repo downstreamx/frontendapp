@@ -23,6 +23,7 @@ import iconSettings from '@/assets/nav-icons/icons-settings.png'
 import iconSubscriptions from '@/assets/nav-icons/icons-subscriptions.png'
 import iconTickets from '@/assets/nav-icons/icons-tickets.png'
 import iconUsers from '@/assets/nav-icons/icons-users.png'
+import iconVendorManagement from '@/assets/nav-icons/icons-vendor-management.png'
 
 /** Top-level mega menu nav icons keyed by menu permission. */
 export const MEGA_MENU_NAV_ICON_BY_PERMISSION: Record<string, string> = {
@@ -51,12 +52,27 @@ export const MEGA_MENU_NAV_ICON_BY_PERMISSION: Record<string, string> = {
   'manage-notification-templates': iconNotifications,
   'manage-add-on': iconAddons,
   'manage-settings': iconSettings,
+  'manage-vendor-management': iconVendorManagement,
 }
 
-export function resolveMegaMenuNavIconSrc(item: { permission?: string }): string | null {
-  if (!item.permission) {
-    return null
+/** Fallback when the top-level item has modules but no permission (e.g. Vendor Mgt.). */
+export const MEGA_MENU_NAV_ICON_BY_MODULE: Record<string, string> = {
+  VendorManagement: iconVendorManagement,
+}
+
+export function resolveMegaMenuNavIconSrc(item: {
+  permission?: string
+  modules?: string[]
+}): string | null {
+  if (item.permission) {
+    const byPermission = MEGA_MENU_NAV_ICON_BY_PERMISSION[item.permission]
+    if (byPermission) return byPermission
   }
 
-  return MEGA_MENU_NAV_ICON_BY_PERMISSION[item.permission] ?? null
+  for (const moduleName of item.modules ?? []) {
+    const byModule = MEGA_MENU_NAV_ICON_BY_MODULE[moduleName]
+    if (byModule) return byModule
+  }
+
+  return null
 }
